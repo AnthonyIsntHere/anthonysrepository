@@ -88,7 +88,7 @@ button {
 	background-clip: padding-box !important;
 }
 
-.none-2Eo-qx::-webkit-scrollbar {
+.none-2-_0dP::-webkit-scrollbar {
 	display: none !important;
 }
 
@@ -173,7 +173,7 @@ span[class^="expandedFolderBackground-"] {
 	left: 16px;
 }
 
-.wrapper-25eVIn {
+.wrapper-28eC3z {
 	zoom: .83334;
 }
 
@@ -294,7 +294,7 @@ div[class^='base-']>div {
 }
 
 #app-mount>div:not([class^="app-"]),
-.autocomplete-1vrmpx {
+.autocomplete-3NRXG8 {
 	--background-primary: var(--background-solid);
 	--background-secondary: var(--background-solid-dark);
 	--background-secondary-alt: var(--background-solid-darker);
@@ -438,7 +438,7 @@ div[id^="chat-messages-"][class*="cozy-"] div::before {
 	background-color: rgba(var(--accent), 0.3) !important;
 }
 
-#app-mount .container-1D34oG {
+#app-mount .container-2cd8Mz {
 	background: var(--background-primary);
 }
 
@@ -573,68 +573,68 @@ div[role="menuitem"]:active {
 
 /* These use hardcoded colors, no need to bother with strange selectors */
 
-#app-mount .footer-2gL1pp,
-#app-mount .footer-3mqk7D {
+#app-mount .footer-31IekZ,
+#app-mount .footer-VCsJQY {
 	background-color: var(--background-secondary);
 	box-shadow: none;
 }
 
-#app-mount .root-1gCeng,
-#app-mount .addGamePopout-2RY8Ju,
-#app-mount .keyboardShortcutsModal-3piNz7,
+#app-mount .root-g14mjS,
+#app-mount .addGamePopout-3yePJc,
+#app-mount .keyboardShortcutsModal-2CRmCm,
 #app-mount .emojiAliasInput-1y-NBz .emojiInput-1aLNse,
 .perksModal-fSYqOq .perk-2WeBWW,
-#app-mount .uploadModal-2ifh8j,
-#app-mount .contentWrapper-3WC1ID,
-#app-mount .contentWarningPopout-n5JsIs {
+#app-mount .uploadModal-2ie9O_,
+#app-mount .contentWrapper-3oy4Xo,
+#app-mount .contentWarningPopout-WKdbDG {
 	background-color: var(--background-primary);
 }
 
-#app-mount .codeRedemptionRedirect-1wVR4b,
-#app-mount .userSettingsVoice-iwdUCU .previewOverlay-2O7_KC,
-#app-mount .inset-3sAvek {
+#app-mount .codeRedemptionRedirect-3SBiCp,
+#app-mount .userSettingsVoice-1_dzjw .previewOverlay-2reuWf,
+#app-mount .inset-SbsSFp {
 	background-color: var(--background-tertiary);
 	border: none;
 }
 
-#app-mount .paymentPane-3bwJ6A,
+#app-mount .paymentPane-ut5qKZ,
 #app-mount .tierBody-x9kBBp,
 #app-mount .tierBody-16Chc9,
-#app-mount .barBackground-2EEiLw,
+#app-mount .barBackground-unEPDT,
 #app-mount .body-3iLsc4,
 #app-mount .footer-1fjuF6,
-#app-mount .container-3ayLPN,
-#app-mount .colorPickerCustom-2CWBn2,
-#app-mount .tierMarkerBackground-3q29am,
+#app-mount .container-2McqkF,
+#app-mount .colorPickerCustom-1swUKF,
+#app-mount .tierMarkerBackground-G8FoN4,
 .css-3vaxre-menu,
 .css-dwar6a-menu,
-#app-mount .autocomplete-1vrmpx,
-.categoryHeader-O1zU94,
-#app-mount .popoutList-T9CKZQ,
-#app-mount .quickSelectPopout-X1hvgV,
-.colorable-1bkp8v.primaryDark-3mSFDl,
-.tile-2naSqK,
-.videoWrapper-2v09vt,
-#app-mount .spoilerText-3p6IlD.hidden-HHr2R9 {
+#app-mount .autocomplete-3NRXG8,
+.categoryHeader-OpJ1Ly,
+#app-mount .popoutList-10IFAa,
+#app-mount .quickSelectPopout-2F0PXw,
+.colorable-3rVGna.primaryDark-2UJt1G,
+.tile-2TcwiO,
+.videoWrapper-3rtb_V,
+#app-mount .spoilerText-27bIiA.hidden-3B-Rum {
 	background-color: var(--background-solid);
 }
 
-#app-mount .expandedInfo-3kfShd,
+#app-mount .expandedInfo-1W31i3,
 #app-mount .tierHeaderLocked-1a2opw,
 #app-mount .tierHeaderLocked-1s2JJz,
 #app-mount .headerNormal-T_seeN,
-#app-mount .focused-2bY0OD,
-.colorable-1bkp8v.primaryDark-3mSFDl:hover {
+#app-mount .focused-2FU0YH,
+.colorable-3rVGna.primaryDark-2UJt1G:hover {
 	background-color: var(--background-solid-dark);
 }
 
-#app-mount .payment-xT17Mq {
+#app-mount .payment-2bOh4k {
 	background-color: transparent;
 	border-bottom-color: rgba(var(--white), 0.025);
 }
 
-#app-mount .bottomDivider-1K9Gao,
-#app-mount .focused-2bY0OD {
+#app-mount .bottomDivider-ZmTm-j,
+#app-mount .focused-2FU0YH {
 	border-bottom-color: var(--background-solid-dark);
 }
 
@@ -658,37 +658,37 @@ div[role="menuitem"]:active {
 	border-left-color: var(--background-secondary);
 }
 
-#app-mount .background-3xPPFc,
-#app-mount .tierInProgress-3mBoXq {
+#app-mount .background-3xJH_4,
+#app-mount .tierInProgress-1vFUnw {
 	color: var(--background-solid);
 }
 
-.option-96V44q:after {
+.option-2KkUJO:after {
 	content: none;
 }
 
-#app-mount .option-96V44q.selected-rZcOL-,
-#app-mount .selected-1Tbx07,
-#app-mount .quickSelectPopoutOption-opKBx9:hover,
-#app-mount .outer-1AjyKL.active-1xchHY,
-#app-mount .outer-1AjyKL.interactive-3B9GmY:hover {
+#app-mount .option-2KkUJO.selected-rZcOL-,
+#app-mount .selected-3H3-RC,
+#app-mount .quickSelectPopoutOption-2E2UmS:hover,
+#app-mount .outer-2JOHae.active-1W_Gl9,
+#app-mount .outer-2JOHae.interactive-2zD88a:hover {
 	background-color: var(--background-modifier-hover);
 }
 
 .css-3vaxre-menu,
-.tierMarker-5HkGJ_[style] {
+.tierMarker-Vw1C95[style] {
 	border-color: rgba(var(--white), 0.025) !important;
 }
 
-#app-mount .searchAnswer-3Dz2-q,
-#app-mount .searchFilter-2ESiM3,
-#app-mount .option-1B5ZV8,
-#app-mount .pill-2pQByF {
+#app-mount .searchAnswer-23w-CH,
+#app-mount .searchFilter-2UfsDk,
+#app-mount .option-Tt7anD,
+#app-mount .pill-1HLSrc {
 	background-color: rgba(var(--accent-alt), 1);
 	color: #fff;
 }
 
-#app-mount .keybindShortcut-1BD6Z1 span {
+#app-mount .keybindShortcut-3zF1P9 span {
 	background: var(--background-solid-dark);
 	box-shadow: inset 0 -4px 0 var(--background-solid-darker);
 }
@@ -697,7 +697,7 @@ div[role="menuitem"]:active {
 	background: rgba(var(--black), 0.7);
 }
 
-#app-mount .card-FDVird:before {
+#app-mount .card-2ART2V:before {
 	background: var(--background-modifier-hover);
 	border: none;
 }
@@ -730,14 +730,14 @@ div[class^="splashBackground"] img {
 	--USRBG-avatar-offset: 76px;
 }
 
-.userPopout-3XzG_A[style*="-user-"] .profileBanner-33-uE1 {
+.userPopout-3XzG_A[style*="-user-"] .profileBanner-1owKI5 {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: var(--user-popout-position, center) center;
 	background-image: var(--user-background);
 }
 
-.userPopout-3XzG_A[style*="-user-"] .profileBanner-33-uE1 {
+.userPopout-3XzG_A[style*="-user-"] .profileBanner-1owKI5 {
 	height: var(--USRBG-banner-height, 120px);
 }
 
