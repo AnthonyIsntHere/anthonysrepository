@@ -211,7 +211,7 @@ end, "NAME OF BUTTON)
 
 ]]--
 
-Message(string.format("🎀 %s 🎀", Version), "AutoExecuteGui  💝")
+Message(string.format("🎀 %s 🎀", Version), "AutoExecuteGui  💝", 10)
 
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
 getgenv().OldPos = nil
