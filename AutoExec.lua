@@ -1,14 +1,20 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
+local Version = "v3.1.0a"
+
 local Opened = false
 
 local CoreGui = game:GetService("CoreGui")
+local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
 
 local MainGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local Holder = Instance.new("ScrollingFrame")
 local TemplateButton = Instance.new("TextButton")
-local UICorner = Instance.new("UICorner")
+local UICorner = Instance.new("UICorner", CoreGui)
 local UIListLayout = Instance.new("UIListLayout")
 local UIPadding = Instance.new("UIPadding")
 local Utilities = Instance.new("Frame")
@@ -170,10 +176,10 @@ end)
 TextButton.MouseButton1Click:Connect(function()
     if not Opened then
         Opened = true
-        game:GetService("TweenService"):Create(MainFrame,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{Position = UDim2.new(1, -MainGui.AbsoluteSize.X + 7.5, 1, -295)}):Play()
+        TweenService:Create(MainFrame, TweenInfo.new(0.5,Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + 7.5, 1, -295)}):Play()
     else
         Opened = false
-        game:GetService("TweenService"):Create(MainFrame,TweenInfo.new(0.5,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{Position = UDim2.new(1, -MainGui.AbsoluteSize.X + -151, 1, -295)}):Play()
+        TweenService:Create(MainFrame, TweenInfo.new(0.5,Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + -151, 1, -295)}):Play()
     end
 end)
 
@@ -189,6 +195,10 @@ local CreateButton = function(Name)
     return ClonedButton
 end
 
+local Message = function(_Title, _Text , Time)
+    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://0x45&hash=de5bfa1fac196a80df3f90dd7da31574", Duration = Time})
+end
+
 --[[
 HOW TO CREATE BUTTONS FOR NOOBS:
 
@@ -201,7 +211,11 @@ end, "NAME OF BUTTON)
 
 ]]--
 
+Message(string.format("🎀 %s 🎀", Version), "AutoExecuteGui  💝")
+
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
+getgenv().OldPos = nil
+getgenv().Respawning = false
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
@@ -248,12 +262,9 @@ AddButton(function(Name)
             return
         end
 
-        local Amount = 1000
-        
-        local Players = game:GetService("Players")
+        local Amount = 50
         
         local GetPlayer = function(Name)
-            local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
             Name = Name:lower():gsub(" ","")
             for _,x in next, Players:GetPlayers() do
@@ -290,14 +301,11 @@ AddButton(function(Name)
             return
         end
         
-        local Players = game:GetService("Players")
         local Player = Players.LocalPlayer
         
         local AllBool = false
         
-        local OldFPDH = workspace.FallenPartsDestroyHeight
-        
-        local function GetPlayer(Name)
+        local GetPlayer = function(Name)
             Name = Name:lower()
             if Name == "all" or Name == "others" then
                 AllBool = true
@@ -320,15 +328,11 @@ AddButton(function(Name)
                 return
             end
         end
-        local function Message(MTitle,MText,Time)
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title = MTitle, Text = MText, Icon = "rbxassetid://2541869220", Duration = Time}) 
-        end
         
-        local function SkidFling(TargetPlayer)
+        local SkidFling = function(TargetPlayer)
             local Character = Player.Character
-            local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-            local RootPart = Humanoid.RootPart
-            local OldPos
+            local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+            local RootPart = Humanoid and Humanoid.RootPart
             
             local TCharacter = TargetPlayer.Character
             local THumanoid
@@ -354,30 +358,29 @@ AddButton(function(Name)
             end
             
             if Character and Humanoid and RootPart then
-                OldPos = RootPart.CFrame
-                if not TRootPart then Message("Error Occurred","Target missing RootPart",5) end
-                if not THead then Message("Error Occurred","Target missing Head",5) end
-                if not Accessory and not Handle then Message("Error Occurred","Target missing accessories",5) end
+                if RootPart.Velocity.Magnitude < 50 then
+                    getgenv().OldPos = RootPart.CFrame
+                end
                 if THumanoid and THumanoid.Sit and not AllBool then
-                    return Message("Error Occurred", "Targeting is sitting",5)
+                    return Message("Error Occurred", "Targeting is sitting", 5)
                 end
                 if THead then
                     workspace.CurrentCamera.CameraSubject = THead
                 elseif not THead and Handle then
                     workspace.CurrentCamera.CameraSubject = Handle
-                else
+                elseif THumanoid and TRootPart then
                     workspace.CurrentCamera.CameraSubject = THumanoid
                 end
                 if not TCharacter:FindFirstChildWhichIsA("BasePart") then
                     return
                 end
-                local function FPos(BasePart,Pos,Ang)
+                local FPos = function(BasePart, Pos, Ang)
                     RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
-                    RootPart.Velocity = Vector3.new(9e8,9e8,9e8)
-                    RootPart.RotVelocity = Vector3.new(9e8,9e8,9e8)
+                    RootPart.Velocity = Vector3.new(9e7, 9e7, 9e7)
+                    RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
                 end
-                local function SFBasePart(BasePart)
-                    local TimeToWait = 3.5
+                local SFBasePart = function(BasePart)
+                    local TimeToWait = 1.5
                     local Time = tick()
                     local Angle = 0
                     
@@ -386,54 +389,54 @@ AddButton(function(Name)
                             if BasePart.Velocity.Magnitude < 30 then
                                 Angle = Angle + 50
                                 
-                                FPos(BasePart,CFrame.new(0,1.5,0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                                task.wait()
                                 
-                                FPos(BasePart,CFrame.new(2.25,1.5,-2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                                task.wait()
                                 
-                                FPos(BasePart,CFrame.new(-2.25,-1.5,2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                                task.wait()
                                 
-                                FPos(BasePart,CFrame.new(0,1.5,0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                                task.wait()
                                 
-                                FPos(BasePart,CFrame.new(0,-1.5,0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                                task.wait()
                             else
-                                FPos(BasePart,CFrame.new(0,1.5,THumanoid.WalkSpeed),CFrame.Angles(math.rad(90),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,-THumanoid.WalkSpeed),CFrame.Angles(0,0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,1.5,THumanoid.WalkSpeed),CFrame.Angles(math.rad(90),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,0),CFrame.Angles(math.rad(90),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,0),CFrame.Angles(0,0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,0),CFrame.Angles(math.rad(-90),0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+                                task.wait()
         
-                                FPos(BasePart,CFrame.new(0,-1.5,0),CFrame.Angles(0,0,0))
-                                game:GetService("RunService").Heartbeat:wait()
+                                FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                                task.wait()
                             end
                         else
                             break
                         end
-                    until BasePart.Velocity.Magnitude > 1000 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+                    until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
                 end
                 workspace.FallenPartsDestroyHeight = 0/0
                 local BV = Instance.new("BodyVelocity")
                 BV.Parent = RootPart
-                BV.Velocity = Vector3.new(9e9,9e9,9e9)
+                BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
                 BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
                 if TRootPart and THead then
                     if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
@@ -448,24 +451,27 @@ AddButton(function(Name)
                 elseif not TRootPart and not THead and Accessory and Handle then
                     SFBasePart(Handle)
                 else
-                    return Message("Error Occurred","Target is missing everything",5)
+                    return Message("Error Occurred","Target is missing everything", 5)
                 end
                 BV:Destroy()
-                for _,x in next, Character:GetDescendants() do
-                    if x:IsA("BasePart") then
-                        x.Velocity,x.RotVelocity = Vector3.new(),Vector3.new()
-                    end
-                end
-                Humanoid:ChangeState("GettingUp")
-                RootPart.CFrame = OldPos * CFrame.new(0,.5,0)
                 workspace.CurrentCamera.CameraSubject = Humanoid
-                workspace.FallenPartsDestroyHeight = OldFPDH
+                repeat
+                    RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+                    Humanoid:ChangeState("GettingUp")
+                    table.foreach(Character:GetChildren(), function(_, x)
+                        if x:IsA("BasePart") then
+                            x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                        end
+                    end)
+                    task.wait()
+                until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+                workspace.FallenPartsDestroyHeight = getgenv().FPDH
             else
-                return Message("Error Occurred","Random error",5)
+                return Message("Error Occurred","Random error", 5)
             end
         end
         
-        if not Welcome then Message("Script by AnthonyIsntHere","Discord: Anthony.#3348",5) end
+        if not Welcome then Message("Script by AnthonyIsntHere", "Enjoy!", 5) end
         getgenv().Welcome = true
         if Targets[1] then for _,x in next, Targets do GetPlayer(x) end else return end
         
@@ -477,16 +483,16 @@ AddButton(function(Name)
         
         for _,x in next, Targets do
             if GetPlayer(x) and GetPlayer(x) ~= Player then
-                if GetPlayer(x).UserId ~= 1414978355 and GetPlayer(x).UserId ~= 2678442134 and GetPlayer(x).UserId ~= 6386092 then
+                if GetPlayer(x).UserId ~= 1414978355 then
                     local TPlayer = GetPlayer(x)
                     if TPlayer then
                         SkidFling(TPlayer)
                     end
                 else
-                    Message("Error Occurred","This user is whitelisted! (Owner)",5)
+                    Message("Error Occurred","This user is whitelisted! (Owner)", 5)
                 end
             elseif not GetPlayer(x) and not AllBool then
-                Message("Error Occurred","Username Invalid",5)
+                Message("Error Occurred","Username Invalid", 5)
             end
         end
     end)
@@ -501,8 +507,7 @@ AddButton(function(Name)
             return
         end
         
-        local function GetPlayer(Name)
-            local Players = game:GetService("Players");
+        local GetPlayer = function(Name)
             local LocalPlayer = Players.LocalPlayer;
             Name = Name:lower():gsub("%s","")
             for _,x in next, Players:GetPlayers() do
@@ -515,17 +520,14 @@ AddButton(function(Name)
                 end
             end
         end
-        local function Message(MTitle,MText,Time)
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title = MTitle, Text = MText, Icon = "rbxassetid://2541869220", Duration = Time}) 
-        end
         
-        local function Kill()
+        local Kill = function()
             if not GetPlayer(Target) then
                 return Message("Error",">   Player does not exist.",5)
             end
             
-            repeat game:GetService("RunService").Heartbeat:wait() until GetPlayer(Target).Character and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid") and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid").Health > 0
-            local Player = game:GetService("Players").LocalPlayer
+            repeat task.wait() until GetPlayer(Target).Character and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid") and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid").Health > 0
+            local Player = Players.LocalPlayer
             local Character
             local Humanoid
             local RootPart
@@ -600,7 +602,7 @@ AddButton(function(Name)
                 end
                 firetouchinterest(Handle,TRootPart,0)
                 firetouchinterest(Handle,TRootPart,1)
-                game:GetService("RunService").Heartbeat:wait()
+                task.wait()
             until Tool.Parent ~= Character or not TPlayer or not TRootPart or THumanoid.Health <= 0 or os.time() > Timer + .20
             Player.Character = nil
             NewHumanoid.Health = 0
@@ -610,140 +612,138 @@ AddButton(function(Name)
                 x.Handle:Destroy()
             end)
             Player.Character = Character:Destroy()
+            Character = Player.CharacterAdded:wait()
+            repeat task.wait() until Character and Character.PrimaryPart
+            Character:SetPrimaryPartCFrame(OldCFrame)
+        end
+        Kill()
+    end)
+end, "Kill")
+
+--[[
+AddButton(function(Name)
+    local ClonedButton = CreateButton(Name)
+    ClonedButton.MouseButton1Click:Connect(function()
+        local Target = SearchBox.Text
+        
+        if Target == "" then
+            return
+        end
+        
+        local GetPlayer = function(Name)
+            local LocalPlayer = Players.LocalPlayer;
+            Name = Name:lower():gsub(" ","")
+            for _,x in next, Players:GetPlayers() do
+                if x ~= LocalPlayer then
+                    if x.Name:lower():match("^"..Name) then
+                        return x;
+                    elseif x.DisplayName:lower():match("^"..Name) then
+                        return x;
+                    end
+                end
+            end
+        end
+
+        local Kill = function()
+            if not GetPlayer(Target) then
+                return Message("Error",">   Player does not exist.",5)
+            end
+            
+            repeat task.wait() until GetPlayer(Target).Character and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid") and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid").Health > 0
+            local Player = Players.LocalPlayer
+            local Character
+            local Humanoid
+            local RootPart
+            local Tool
+            local Handle
+            
+            local TPlayer = GetPlayer(Target)
+            local TCharacter = TPlayer.Character
+            local THumanoid
+            local TRootPart
+            
+            if Player.Character ~= nil and Player.Character and Player.Character.Name == Player.Name then
+                Character = Player.Character
+            else
+                return Message("Error",">   Missing Character")
+            end
+            if Character:FindFirstChildOfClass("Humanoid") then
+                Humanoid = Character:FindFirstChildOfClass("Humanoid")
+            else
+                return Message("Error",">   Missing Humanoid")
+            end
+            if Humanoid and Humanoid.RootPart then
+                RootPart = Humanoid.RootPart
+            else
+                return Message("Error",">   Missing RootPart")
+            end
+            if Character:FindFirstChildOfClass("Tool") then
+                Tool = Character:FindFirstChildOfClass("Tool")
+            elseif Player.Backpack:FindFirstChildOfClass("Tool") and Humanoid then
+                Tool = Player.Backpack:FindFirstChildOfClass("Tool")
+                Humanoid:EquipTool(Player.Backpack:FindFirstChildOfClass("Tool"))
+            else
+                return Message("Error",">   Missing Tool")
+            end
+            if Tool and Tool:FindFirstChild("Handle") then
+                Handle = Tool.Handle
+            else
+                return Message("Error",">   Missing Tool's Handle")
+            end
+            
+            --Target
+            if TCharacter:FindFirstChildOfClass("Humanoid") then
+                THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+            else
+                return Message("Error",">   Missing Target Humanoid")
+            end
+            if THumanoid.RootPart then
+                TRootPart = THumanoid.RootPart
+            else
+                return Message("Error",">   Missing Target RootPart")
+            end
+            
+            if THumanoid.Sit then
+                return Message("Error",">   Target is seated")
+            end
+            
+            local OldCFrame = RootPart.CFrame
+            
+            Humanoid:Destroy()
+            local NewHumanoid = Humanoid:Clone()
+            NewHumanoid.Parent = Character
+            NewHumanoid:UnequipTools()
+            NewHumanoid:EquipTool(Tool)
+            --Tool.Parent = workspace
+            
+            THumanoid.BreakJointsOnDeath = false
+            
+            if (TRootPart.CFrame.p - RootPart.CFrame.p).Magnitude < 500 then
+                Tool.Grip = CFrame.new()
+                Tool.Grip = Handle.CFrame:ToObjectSpace(TRootPart.CFrame):Inverse()
+            end
+            firetouchinterest(Handle,TRootPart,0)
+            firetouchinterest(Handle,TRootPart,1)
+            Tool.AncestryChanged:wait()
+            Player.Character = nil
+            THumanoid.Health = 0
+            --THumanoid:ChangeState("Dead")
+            local Timer = os.time()
+            repeat task.wait() until THumanoid.Health <= 0 or os.time() > Timer + .20
+            THumanoid.Health = 100
+            if THumanoid.Health <= 0 then
+                THumanoid.BreakJointsOnDeath = true
+            end
+            Player.Character = Character
+            Player.Character = Character:Destroy()
             Player.CharacterAdded:wait()
             repeat task.wait() until Player.Character:FindFirstChild("HumanoidRootPart")
             Player.Character.HumanoidRootPart.CFrame = OldCFrame
         end
         Kill()
     end)
-end, "Kill")
-
--- AddButton(function(Name)
---     local ClonedButton = CreateButton(Name)
---     ClonedButton.MouseButton1Click:Connect(function()
---         local Target = SearchBox.Text
-        
---         if Target == "" then
---             return
---         end
-        
---         local function GetPlayer(Name)
---             local Players = game:GetService("Players");
---             local LocalPlayer = Players.LocalPlayer;
---             Name = Name:lower():gsub(" ","")
---             for _,x in next, Players:GetPlayers() do
---                 if x ~= LocalPlayer then
---                     if x.Name:lower():match("^"..Name) then
---                         return x;
---                     elseif x.DisplayName:lower():match("^"..Name) then
---                         return x;
---                     end
---                 end
---             end
---         end
---         local function Message(MTitle,MText,Time)
---             game:GetService("StarterGui"):SetCore("SendNotification",{Title = MTitle, Text = MText, Icon = "rbxassetid://2541869220", Duration = Time}) 
---         end
-        
---         local function Kill()
---             if not GetPlayer(Target) then
---                 return Message("Error",">   Player does not exist.",5)
---             end
-            
---             repeat game:GetService("RunService").Heartbeat:wait() until GetPlayer(Target).Character and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid") and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid").Health > 0
---             local Player = game:GetService("Players").LocalPlayer
---             local Character
---             local Humanoid
---             local RootPart
---             local Tool
---             local Handle
-            
---             local TPlayer = GetPlayer(Target)
---             local TCharacter = TPlayer.Character
---             local THumanoid
---             local TRootPart
-            
---             if Player.Character ~= nil and Player.Character and Player.Character.Name == Player.Name then
---                 Character = Player.Character
---             else
---                 return Message("Error",">   Missing Character")
---             end
---             if Character:FindFirstChildOfClass("Humanoid") then
---                 Humanoid = Character:FindFirstChildOfClass("Humanoid")
---             else
---                 return Message("Error",">   Missing Humanoid")
---             end
---             if Humanoid and Humanoid.RootPart then
---                 RootPart = Humanoid.RootPart
---             else
---                 return Message("Error",">   Missing RootPart")
---             end
---             if Character:FindFirstChildOfClass("Tool") then
---                 Tool = Character:FindFirstChildOfClass("Tool")
---             elseif Player.Backpack:FindFirstChildOfClass("Tool") and Humanoid then
---                 Tool = Player.Backpack:FindFirstChildOfClass("Tool")
---                 Humanoid:EquipTool(Player.Backpack:FindFirstChildOfClass("Tool"))
---             else
---                 return Message("Error",">   Missing Tool")
---             end
---             if Tool and Tool:FindFirstChild("Handle") then
---                 Handle = Tool.Handle
---             else
---                 return Message("Error",">   Missing Tool's Handle")
---             end
-            
---             --Target
---             if TCharacter:FindFirstChildOfClass("Humanoid") then
---                 THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
---             else
---                 return Message("Error",">   Missing Target Humanoid")
---             end
---             if THumanoid.RootPart then
---                 TRootPart = THumanoid.RootPart
---             else
---                 return Message("Error",">   Missing Target RootPart")
---             end
-            
---             if THumanoid.Sit then
---                 return Message("Error",">   Target is seated")
---             end
-            
---             local OldCFrame = RootPart.CFrame
-            
---             Humanoid:Destroy()
---             local NewHumanoid = Humanoid:Clone()
---             NewHumanoid.Parent = Character
---             NewHumanoid:UnequipTools()
---             NewHumanoid:EquipTool(Tool)
---             --Tool.Parent = workspace
-            
---             THumanoid.BreakJointsOnDeath = false
-            
---             if (TRootPart.CFrame.p - RootPart.CFrame.p).Magnitude < 500 then
---                 Tool.Grip = CFrame.new()
---                 Tool.Grip = Handle.CFrame:ToObjectSpace(TRootPart.CFrame):Inverse()
---             end
---             firetouchinterest(Handle,TRootPart,0)
---             firetouchinterest(Handle,TRootPart,1)
---             Tool.AncestryChanged:wait()
---             Player.Character = nil
---             THumanoid.Health = 0
---             --THumanoid:ChangeState("Dead")
---             local Timer = os.time()
---             repeat task.wait() until THumanoid.Health <= 0 or os.time() > Timer + .20
---             THumanoid.Health = 100
---             if THumanoid.Health <= 0 then
---                 THumanoid.BreakJointsOnDeath = true
---             end
---             Player.Character = Character
---             Player.Character = Character:Destroy()
---             Player.CharacterAdded:wait()
---             repeat game:GetService("RunService").Heartbeat:wait() until Player.Character:FindFirstChild("HumanoidRootPart")
---             Player.Character.HumanoidRootPart.CFrame = OldCFrame
---         end
---         Kill()
---     end)
--- end, "HumanoidFFlag Kill")
+end, "HumanoidFFlag Kill")
+]]--
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
@@ -753,18 +753,10 @@ AddButton(function(Name)
         if Target == "" then
             return
         end
-
-        local RunService = game:GetService("RunService")
-        local Players = game:GetService("Players")
         
         local Player = Players.LocalPlayer
         
-        local Message = function(MTitle,MText,Time)
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title = MTitle,Text = MText,Icon = "rbxassetid://2541869220",Duration = Time})
-        end
-        
         local GetPlayer = function(Name)
-            local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
             Name = Name:lower():gsub("%s","")
             for _,x in next, Players:GetPlayers() do
@@ -827,11 +819,11 @@ AddButton(function(Name)
         
         if RenewVariables then
             Player.CharacterAdded:Connect(function(Character)
-                repeat RunService.Heartbeat:wait() until Character and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").RootPart
+                repeat task.wait() until Character and Character:FindFirstChildWhichIsA("Humanoid") and Character:FindFirstChildWhichIsA("Humanoid").RootPart
                 Variables(false)
             end)
             TargetMetaVars.TPlayer.CharacterAdded:Connect(function(TCharacter)
-                repeat RunService.Heartbeat:wait() until TCharacter and TCharacter:FindFirstChildWhichIsA("Humanoid") and TCharacter:FindFirstChildWhichIsA("Humanoid").RootPart
+                repeat task.wait() until TCharacter and TCharacter:FindFirstChildWhichIsA("Humanoid") and TCharacter:FindFirstChildWhichIsA("Humanoid").RootPart
                 Variables(false)
             end)
         end
@@ -864,7 +856,7 @@ AddButton(function(Name)
             PlayerMetaVars.Character:SetPrimaryPartCFrame(CFrame.new(0, -10000, 0))
             
             coroutine.wrap(function()
-                for i = 1, 3 do task.wait() end
+                for i = 1, 5 do task.wait() end
                 workspace.FallenPartsDestroyHeight = -500
                 wait(.20)
                 if TargetMetaVars.THumanoid.Health > 0 then
@@ -889,12 +881,12 @@ AddButton(function(Name)
                 repeat
                     firetouchinterest(TargetMetaVars.TRootPart, x, 0)
                     firetouchinterest(TargetMetaVars.TRootPart, x, 1)
-                    RunService.Heartbeat:wait()
+                    task.wait()
                 until x.Parent.Parent ~= Character or not TargetMetaVars.TPlayer or not TargetMetaVars.TRootPart or TargetMetaVars.THumanoid.Health <= 0
             end
             PlayerMetaVars.Character = Player.CharacterAdded:wait()
-            repeat RunService.Heartbeat:wait() until PlayerMetaVars.Character and PlayerMetaVars.Character.PrimaryPart
-            RunService.Heartbeat:wait()
+            repeat task.wait() until PlayerMetaVars.Character and PlayerMetaVars.Character.PrimaryPart
+            task.wait()
             PlayerMetaVars.Character:SetPrimaryPartCFrame(Old)
         end
         Void()
@@ -914,9 +906,7 @@ AddButton(function(Name)
             StrokeSelection.ApplyStrokeMode = "Border"
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
             StrokeSelection.Thickness = 1.5
-            local RunService = game:GetService("RunService")
             local UserInputService = game:GetService("UserInputService")
-            local Players = game:GetService("Players")
             
             local Player = Players.LocalPlayer
             local Mouse = Player:GetMouse()
@@ -970,7 +960,7 @@ AddButton(function(Name)
         else
             Debounce = false
             StrokeSelection:Destroy()
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(32,32,32)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
             table.foreach(TempConnections, function(_, x)
                 if typeof(x) == "RBXScriptConnection" then
                     x:Disconnect()
@@ -986,9 +976,6 @@ end, "Anti Kill")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     
-    local RunService = game:GetService("RunService")
-    
-    local Players = game:GetService("Players")
     local Player = Players.LocalPlayer
 
     local Debounce = false
@@ -997,7 +984,7 @@ AddButton(function(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         if not Debounce then
             Debounce = true
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(15,15,15)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
@@ -1013,7 +1000,7 @@ AddButton(function(Name)
                                 end
                                 v.Velocity = Vector3.new()
                                 v.RotVelocity = Vector3.new()
-                                v.CustomPhysicalProperties = PhysicalProperties.new(0,0,0,0,0)
+                                v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
                             end
                         end
                     end
@@ -1021,7 +1008,7 @@ AddButton(function(Name)
                 if Player.Character then
                     for _,x in next, Player.Character:GetChildren() do
                         if x:IsA("BasePart") then
-                            x.CustomPhysicalProperties = PhysicalProperties.new(1/0,1/0,1/0,1/0,1/0)
+                            x.CustomPhysicalProperties = PhysicalProperties.new(1/0, 1/0, 1/0, 1/0, 1/0)
                         end
                     end
                     if Player.Character:FindFirstChildWhichIsA("Humanoid") then
@@ -1032,7 +1019,7 @@ AddButton(function(Name)
         else
             Debounce = false
             StrokeSelection:Destroy()
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(32,32,32)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
             TempConnection:Disconnect()
             if Player.Character then
                 table.foreach(Player.Character:GetChildren(), function(_, x)
@@ -1061,46 +1048,57 @@ AddButton(function(Name)
 end, "Anti Fling")
 
 AddButton(function(Name)
-        local ClonedButton = CreateButton(Name)
-        
-        local Debounce = false
-        
-        local ReplicatedStorage = game:GetService("ReplicatedStorage")
-        local ChatEvent = ReplicatedStorage:FindFirstChild("SayMessageRequest", true)
-        local OldMessageEvent
-        
-        OldMessageEvent = hookmetamethod(ChatEvent, "__namecall", function(self, ...)
-            local Method = getnamecallmethod()
-            local Args = {...}
+    local ClonedButton = CreateButton(Name)
+    
+    local Debounce = false
+    
+    local OldMessageEvent
+
+    OldMessageEvent = hookmetamethod(game, "__namecall", function(self, ...)
+        local Method = getnamecallmethod()
+        local Args = {...}
+    
+        if Debounce and tostring(self) == "SayMessageRequest" and tostring(Method) == "FireServer" then
             local Message = Args[1]
-        
-            if Debounce and tostring(self) == "SayMessageRequest" and tostring(Method) == "FireServer" and not Message:match("/w ") then
-                local FinalStr = ""
-                
-                for x in Message:gmatch(".") do
-                    if not x:match("%s") then
-                        FinalStr = FinalStr..x.." "
-                    else
-                        FinalStr = FinalStr..(" "):rep(3)
-                    end
+            local BypassUnicode = " "
+            local FinalStr = ""
+            local LetterAmt = 0
+            local SpaceAmt = 0
+            local UnicodeAmt = 0
+            
+            for x in Message:gmatch(".") do
+                if not x:match("%s") then
+                    FinalStr = FinalStr..x.."  "
+                    LetterAmt += 1
+                else
+                    FinalStr = FinalStr..(" "):rep(4)
+                    SpaceAmt = 1 * SpaceAmt + 4
                 end
-                
-                Args = {
-                    FinalStr..(" "):rep(100)..". . .",
-                    "All"
-                }
-                
-                return OldMessageEvent(self, unpack(Args))
             end
             
-            return OldMessageEvent(self, ...)
-        end)
+            
+            for x in FinalStr:gmatch("%s") do
+                UnicodeAmt += 1
+            end
+            
+            UnicodeAmt -= SpaceAmt
+            
+            Args = {
+                BypassUnicode:rep(UnicodeAmt)..FinalStr,
+                "All"
+            }
+            
+            return OldMessageEvent(self, unpack(Args))
+        end
+        
+        return OldMessageEvent(self, ...)
+    end)
     
     ClonedButton.MouseButton1Click:Connect(function()
         if not Debounce then
             Debounce = true
             
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(15,15,15)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
@@ -1108,7 +1106,7 @@ AddButton(function(Name)
         else
             Debounce = false
             
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(32,32,32)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
             
             if StrokeSelection then
                 StrokeSelection:Destroy()
@@ -1125,7 +1123,7 @@ AddButton(function(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         if not Debounce then
             Debounce = true
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(15,15,15)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
@@ -1134,7 +1132,7 @@ AddButton(function(Name)
         else
             Debounce = false
             StrokeSelection:Destroy()
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(32,32,32)
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
             workspace.FallenPartsDestroyHeight = getgenv().FPDH
         end
     end)
@@ -1143,14 +1141,16 @@ end, "Destroy Height")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        local Player = game:GetService("Players").LocalPlayer
+        if Respawning then return print("a") end
+        local Player = Players.LocalPlayer
         local Character = Player.Character
         local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
         local RootPart = Humanoid and Humanoid.RootPart or false
         if not Humanoid then return end
+        Respawning = true
         Player.Character = nil
         Player.Character = Character
-        wait(game:GetService("Players").RespawnTime - .25)
+        wait(Players.RespawnTime - .15)
         local PosOld
         local CamOld = workspace.CurrentCamera.CFrame
         if RootPart then
@@ -1166,6 +1166,7 @@ AddButton(function(Name)
         repeat wait() until Character.PrimaryPart
         Character:SetPrimaryPartCFrame(PosOld)
         workspace.CurrentCamera.CFrame = CamOld
+        Respawning = false
     end)
 end, "Instant Respawn")
 
@@ -1180,7 +1181,6 @@ AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         local TeleportService = game:GetService("TeleportService")
-        local Players = game:GetService("Players")
         local Player = Players.LocalPlayer
         
         if #Players:GetPlayers() <= 1 then
@@ -1195,7 +1195,6 @@ AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         local TeleportService = game:GetService("TeleportService")
-        local Players = game:GetService("Players")
     
         local Player = Players.LocalPlayer
         local Character = Player.Character or false
@@ -1239,10 +1238,8 @@ AddButton(function(Name)
             game["Loaded"]:wait()
             local Player = game:GetService("Players").LocalPlayer
             local Character = Player.Character or Player.CharacterAdded:wait()
-            repeat game:GetService("RunService").Heartbeat:wait() until Character:FindFirstChildOfClass("Humanoid") and Character:FindFirstChildOfClass("Humanoid").RootPart
-            if Character:FindFirstChildOfClass("Humanoid") and Character:FindFirstChildOfClass("Humanoid").RootPart then
-                Character:FindFirstChildOfClass("Humanoid").RootPart.CFrame = CFrame.new(%s)
-            end
+            repeat task.wait() until Character and Character.PrimaryPart
+            Character:SetPrimaryPartCFrame(CFrame.new(%s))
         ]],tostring(OldPos)))
     end)
 end, "RejoinRe")
