@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.1.0a"
+local Version = "v3.1.0b"
 
 local Opened = false
 
@@ -317,9 +317,9 @@ AddButton(function(Name)
             elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
                 for _,x in next, Players:GetPlayers() do
                     if x ~= Player then
-                        if x.Name:lower():match(Name) then
+                        if x.Name:lower():match("^"..Name) then
                             return x;
-                        elseif x.DisplayName:lower():match(Name) then
+                        elseif x.DisplayName:lower():match("^"..Name) then
                             return x;
                         end
                     end
@@ -512,9 +512,9 @@ AddButton(function(Name)
             Name = Name:lower():gsub("%s","")
             for _,x in next, Players:GetPlayers() do
                 if x ~= LocalPlayer then
-                    if x.Name:lower():match(Name) then
+                    if x.Name:lower():match("^"..Name) then
                         return x;
-                    elseif x.DisplayName:lower():match(Name) then
+                    elseif x.DisplayName:lower():match("^"..Name) then
                         return x;
                     end
                 end
@@ -761,7 +761,7 @@ AddButton(function(Name)
             Name = Name:lower():gsub("%s","")
             for _,x in next, Players:GetPlayers() do
                 if x ~= LocalPlayer then
-                    if x.Name:lower():match(Name) then
+                    if x.Name:lower():match("^"..Name) then
                         return x
                     elseif x.DisplayName:lower():match("^"..Name) then
                         return x
