@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.1.0b"
+local Version = "v3.1.1a"
 
 local Opened = false
 
