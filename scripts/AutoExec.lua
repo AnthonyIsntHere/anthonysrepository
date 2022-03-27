@@ -159,7 +159,7 @@ local RainbowLoop = coroutine.wrap(function()
     local Cooldown = 10
     while true do
         local Hue = tick() % Cooldown / Cooldown
-        local Color = Color3.fromHSV(Hue,1,1)
+        local Color = Color3.fromHSV(Hue, 1, 1)
         TextButton.TextColor3 = Color
         wait()
     end
@@ -176,10 +176,10 @@ end)
 TextButton.MouseButton1Click:Connect(function()
     if not Opened then
         Opened = true
-        TweenService:Create(MainFrame, TweenInfo.new(0.5,Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + 7.5, 1, -295)}):Play()
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + 7.5, 1, -295)}):Play()
     else
         Opened = false
-        TweenService:Create(MainFrame, TweenInfo.new(0.5,Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + -151, 1, -295)}):Play()
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Position = UDim2.new(1, -MainGui.AbsoluteSize.X + -151, 1, -295)}):Play()
     end
 end)
 
@@ -451,7 +451,7 @@ AddButton(function(Name)
                 elseif not TRootPart and not THead and Accessory and Handle then
                     SFBasePart(Handle)
                 else
-                    return Message("Error Occurred","Target is missing everything", 5)
+                    return Message("Error Occurred", "Target is missing everything", 5)
                 end
                 BV:Destroy()
                 workspace.CurrentCamera.CameraSubject = Humanoid
@@ -467,7 +467,7 @@ AddButton(function(Name)
                 until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
                 workspace.FallenPartsDestroyHeight = getgenv().FPDH
             else
-                return Message("Error Occurred","Random error", 5)
+                return Message("Error Occurred", "Random error", 5)
             end
         end
         
@@ -489,10 +489,10 @@ AddButton(function(Name)
                         SkidFling(TPlayer)
                     end
                 else
-                    Message("Error Occurred","This user is whitelisted! (Owner)", 5)
+                    Message("Error Occurred", "This user is whitelisted! (Owner)", 5)
                 end
             elseif not GetPlayer(x) and not AllBool then
-                Message("Error Occurred","Username Invalid", 5)
+                Message("Error Occurred", "Username Invalid", 5)
             end
         end
     end)
