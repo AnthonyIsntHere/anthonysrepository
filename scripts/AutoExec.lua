@@ -155,7 +155,7 @@ TextButton.TextWrapped = true
 
 Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-local RainbowLoop = coroutine.wrap(function()
+local ChromaLoop = coroutine.wrap(function()
     local Cooldown = 10
     while true do
         local Hue = tick() % Cooldown / Cooldown
