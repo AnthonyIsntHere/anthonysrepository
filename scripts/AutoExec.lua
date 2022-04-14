@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.1.1a"
+local Version = "v3.1.1b"
 
 local Opened = false
 
@@ -196,7 +196,7 @@ local CreateButton = function(Name)
 end
 
 local Message = function(_Title, _Text , Time)
-    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://0x45&hash=de5bfa1fac196a80df3f90dd7da31574", Duration = Time})
+    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://0&hash=de5bfa1fac196a80df3f90dd7da31574", Duration = Time})
 end
 
 --[[
