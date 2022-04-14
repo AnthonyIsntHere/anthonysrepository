@@ -196,7 +196,7 @@ local CreateButton = function(Name)
 end
 
 local Message = function(_Title, _Text , Time)
-    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://0&hash=de5bfa1fac196a80df3f90dd7da31574", Duration = Time})
+    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
 end
 
 --[[
