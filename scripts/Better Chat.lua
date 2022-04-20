@@ -5,10 +5,11 @@ local Settings = {
     DarkTheme = true, --needs new bubble chat ;-;
     NewBubbleChatEnabled = true,
     BubbleChatSettings = {
-        BackgroundColor3 = Color3.fromRGB(10, 10, 10),
+        BackgroundColor3 = Color3.fromRGB(20, 20, 20),
         TextColor3 = Color3.fromRGB(255, 255, 255)
     },
     ChatSettings = {
+        BubbleChatEnabled = false,
         ChatWindowBackgroundFadeOutTime = .1,
         MessageHistoryLengthPerChannel = 5000,
         PlayerDisplayNamesEnabled = false
