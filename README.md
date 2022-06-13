@@ -1,6 +1,6 @@
 ## About me
 - I script lego hacks for Roblox
-- Creator of best character fling script [Skid Flinger Showcase](https://cdn.discordapp.com/attachments/915762737819320330/986013880134291507/Skid_Flinger.mp4)
+- Creator of best character fling script [Skid Flinger Showcase](https://www.youtube.com/watch?v=iLP4z3hgXQw)
 - Creator of one of the fastest void scripts (Credits to [Scotty](https://www.roblox.com/users/2040633702/profile) for inspiring me)
 - Creator of [AutoExecGui](https://github.com/AnthonyIsntHere/anthonysrepository/blob/main/scripts/AutoExec.lua)
 
