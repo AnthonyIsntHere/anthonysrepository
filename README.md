@@ -1,6 +1,6 @@
 ## About me
 - I script lego hacks for Roblox
-- Creator of best character fling script
+- Creator of best character fling script (Skid Flinger)
 - Creator of second fastest void script (Scotty #1)
 
 ## Socials
