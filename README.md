@@ -1,5 +1,7 @@
 ## About me
 - I script lego hacks for Roblox
+- Creator of best character fling script
+- Creator of second fastest void script (Scotty #1)
 
 ## Socials
 - My Discord id is **<@915677553069539358>**
