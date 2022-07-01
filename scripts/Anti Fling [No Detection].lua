@@ -1,5 +1,6 @@
 -- Made in 2 minutes, don't feel like improving cuz lazy
 -- This isn't detected on most games, unless they have some shitty anti cheat that detects you setting velocity on other players
+
 while true do
     for _,x in next, game:GetService("Players"):GetPlayers() do
         if x and x ~= game:GetService("Players").LocalPlayer and x.Character then
