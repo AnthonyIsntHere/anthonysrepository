@@ -1,3 +1,4 @@
+-- This script still works, it's just that roblox has patched almost every working audio that can be played by boombox lol.
 local ID = 694201337
 
 local AssetVersionId = game:HttpGet("https://www.roblox.com/studio/plugins/info?assetId="..ID):match("value=.(%d+)")
