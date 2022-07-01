@@ -1,3 +1,6 @@
+-- This script prevents roblox from logging your chat messages, which means you won't be banned for saying bad stuff!
+-- Put script in autoexec folder and join a game.
+
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
