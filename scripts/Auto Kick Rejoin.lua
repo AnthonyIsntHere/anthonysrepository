@@ -8,5 +8,5 @@ ClientReplicator.AncestryChanged:Connect(function()
     TeleportService:TeleportToPlaceInstance(game["PlaceId"], CurrentServer)
 end)
 
---Line 10 is for testing
+--Line 12 is for testing
 --game:GetService("Players").LocalPlayer:Kick()
