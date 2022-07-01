@@ -7,8 +7,10 @@ local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
 local Notify = function(_Title, _Text , Time)
-    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://0x45&hash=de5bfa1fac196a80df3f90dd7da31574", Duration = Time})
+    StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
 end
+
+repeat task.wait() until StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat)
 
 local PostMessage = require(Player:WaitForChild("PlayerScripts"):WaitForChild("ChatScript"):WaitForChild("ChatMain")).MessagePosted
 local MessageEvent = Instance.new("BindableEvent")
