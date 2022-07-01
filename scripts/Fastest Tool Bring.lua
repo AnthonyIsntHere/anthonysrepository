@@ -1,4 +1,5 @@
 -- This is my fastest bring script!
+
 local Target = [[ AnthonyIsntHere ]]
 
 local Players = game:GetService("Players")
