@@ -1,4 +1,5 @@
 -- This is my best Tool Kill script (outdated but still works!)
+
 local Target = [[ AnthonyIsntHere ]]
 
 local LoopKill = false
