@@ -13,7 +13,8 @@ local Notify = function(_Title, _Text , Time)
     StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
 end
 
-repeat task.wait() until StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat)
+local OldTime = tick()
+repeat task.wait() until StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) or tick() > OldTime + 10
 
 local PostMessage = require(Player:WaitForChild("PlayerScripts"):WaitForChild("ChatScript"):WaitForChild("ChatMain")).MessagePosted
 local MessageEvent = Instance.new("BindableEvent")
