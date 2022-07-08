@@ -1,3 +1,5 @@
+-- Sitting (weld) and spamming foil to lunge will also work
+
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
