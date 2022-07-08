@@ -14,7 +14,7 @@ for _, x in next, Player.Backpack:GetChildren() do
 end
 
 for i = 1, 2 do
-    for _, x in next, Characterr:GetChildren() do
+    for _, x in next, Character:GetChildren() do
         if x:IsA("Tool") and tostring(x):lower():match("foil") then
             local handle = x:FindFirstChild("Handle")
 
