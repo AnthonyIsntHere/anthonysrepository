@@ -12,7 +12,7 @@ local Tool = Character:FindFirstChildWhichIsA("Tool") or Player.Backpack:FindFir
 Humanoid:UnequipTools()
 
 for _, x in next, Player.Backpack:GetChildren() do
-    if _ > 0 then
+    if _ > 0 and x ~= Tool then
         x.Parent = Character
         x.Parent = Tool
         x.Parent = Player.Backpack
