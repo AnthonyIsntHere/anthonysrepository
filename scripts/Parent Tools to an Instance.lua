@@ -7,15 +7,15 @@ local Player = Players.LocalPlayer
 local Character = Player.Character
 
 local Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
-local Tool = Character:FindFirstChildWhichIsA("Tool") or Player.Backpack:FindFirstChildWhichIsA("Tool")
+local NewParent = Character:FindFirstChildWhichIsA("Tool") or Player.Backpack:FindFirstChildWhichIsA("Tool") -- This can be anything that replicates within Character E.g. Player, Head, etc.
 
 Humanoid:UnequipTools()
 
 for _, x in next, Player.Backpack:GetChildren() do
-    if _ > 0 and x ~= Tool then
+    if _ > 0 and x ~= NewParent then
         x.Parent = Character
-        x.Parent = Tool
-        x.Parent = Player.Backpack
-        x.Parent = Tool
+        x.Parent = NewParent
+        x.Parent = Player.Backpack -- required to finish change
+        x.Parent = NewParent
     end
 end
