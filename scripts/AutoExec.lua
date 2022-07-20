@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.1.1b"
+local Version = "v3.1.2"
 
 local Opened = false
 
@@ -29,7 +29,9 @@ local Title = Instance.new("TextLabel")
 local Frame = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
 
-syn.protect_gui(MainGui)
+if syn then
+    syn.protect_gui(MainGui)
+end
 
 MainGui.Name = "MainGui"
 MainGui.Parent = CoreGui
