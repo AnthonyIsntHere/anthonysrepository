@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.1.2"
+local Version = "v3.3"
 
 local Opened = false
 
@@ -29,13 +29,13 @@ local Title = Instance.new("TextLabel")
 local Frame = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
 
-if syn then
+if syn then -- if u dont have synapse then you're bad
     syn.protect_gui(MainGui)
 end
 
 MainGui.Name = "MainGui"
 MainGui.Parent = CoreGui
-MainGui.DisplayOrder = 100000
+MainGui.DisplayOrder = 69420
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = MainGui
@@ -207,9 +207,9 @@ HOW TO CREATE BUTTONS FOR NOOBS:
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        print("CODE GOES HERE")"
+        print("CODE GOES HERE")
     end)
-end, "NAME OF BUTTON)
+end, "NAME OF BUTTON")
 
 ]]--
 
@@ -258,41 +258,6 @@ end, "BoomBox Hub")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        local Target = SearchBox.Text
-        
-        if Target == "" then
-            return
-        end
-
-        local Amount = 50
-        
-        local GetPlayer = function(Name)
-            local LocalPlayer = Players.LocalPlayer
-            Name = Name:lower():gsub(" ","")
-            for _,x in next, Players:GetPlayers() do
-                if x ~= LocalPlayer then
-                    if x.Name:lower():match("^"..Name) then
-                        return x
-                    elseif x.DisplayName:lower():match("^"..Name) then
-                        return x
-                    end
-                end
-            end
-        end
-        
-        local TPlayer = GetPlayer(Target)
-        if TPlayer == Players.LocalPlayer then return end
-        
-        for i = 1, Amount do
-            Players:ReportAbuse(TPlayer, "Inappropriate Language", "")
-            Players:ReportAbuse(TPlayer, "Bullying", "")
-        end
-    end)
-end, "Mass Report")
-
-AddButton(function(Name)
-    local ClonedButton = CreateButton(Name)
-    ClonedButton.MouseButton1Click:Connect(function()
         local Targets = {}
         
         if SearchBox.Text ~= "" then
@@ -335,6 +300,7 @@ AddButton(function(Name)
             local Character = Player.Character
             local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
             local RootPart = Humanoid and Humanoid.RootPart
+            local BV
             
             local TCharacter = TargetPlayer.Character
             local THumanoid
@@ -346,26 +312,35 @@ AddButton(function(Name)
             if TCharacter:FindFirstChildOfClass("Humanoid") then
                 THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
             end
+            
             if THumanoid and THumanoid.RootPart then
                 TRootPart = THumanoid.RootPart
             end
+            
             if TCharacter:FindFirstChild("Head") then
                 THead = TCharacter.Head
             end
+            
             if TCharacter:FindFirstChildOfClass("Accessory") then
                 Accessory = TCharacter:FindFirstChildOfClass("Accessory")
             end
+            
             if Accessoy and Accessory:FindFirstChild("Handle") then
                 Handle = Accessory.Handle
             end
             
             if Character and Humanoid and RootPart then
-                if RootPart.Velocity.Magnitude < 50 then
+                if RootPart.Velocity.Magnitude <= 35 then
                     getgenv().OldPos = RootPart.CFrame
                 end
+                
                 if THumanoid and THumanoid.Sit and not AllBool then
-                    return Message("Error Occurred", "Targeting is sitting", 5)
+                    Message("Error Occurred", "Targeting is sitting", 5)
+                    if THumanoid.SeatPart ~= nil then
+                       return
+                    end
                 end
+                
                 if THead then
                     workspace.CurrentCamera.CameraSubject = THead
                 elseif not THead and Handle then
@@ -373,22 +348,38 @@ AddButton(function(Name)
                 elseif THumanoid and TRootPart then
                     workspace.CurrentCamera.CameraSubject = THumanoid
                 end
+                
                 if not TCharacter:FindFirstChildWhichIsA("BasePart") then
                     return
                 end
+                
                 local FPos = function(BasePart, Pos, Ang)
                     RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
                     RootPart.Velocity = Vector3.new(9e7, 9e7, 9e7)
                     RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
                 end
+                
                 local SFBasePart = function(BasePart)
-                    local TimeToWait = 1.5
+                    local TimeToWait = 2
                     local Time = tick()
                     local Angle = 0
                     
+                    if workspace.FallenPartsDestroyHeight ~= 0/0 then
+                        workspace.FallenPartsDestroyHeight = 0/0
+                    end
+                    
+                    BV = Instance.new("BodyVelocity")
+                    BV.Parent = RootPart
+                    BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+                    BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+                    
                     repeat
                         if RootPart and THumanoid then
-                            if BasePart.Velocity.Magnitude < 30 then
+                            if tick() > Time + (TimeToWait / 2) and BasePart.Velocity.Magnitude > 500 then
+                                break
+                            end
+                            
+                            if BasePart.Velocity.Magnitude < 35 then
                                 Angle = Angle + 50
                                 
                                 FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
@@ -397,16 +388,16 @@ AddButton(function(Name)
                                 FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                                 
-                                FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                                FPos(BasePart, CFrame.new(2.25, 2, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                                 
-                                FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                                FPos(BasePart, CFrame.new(-2.25, -2, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                                 
-                                FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                                FPos(BasePart, CFrame.new(0, 2.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                                 
-                                FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                                FPos(BasePart, CFrame.new(0, -2.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                             else
                                 FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
@@ -433,15 +424,11 @@ AddButton(function(Name)
                         else
                             break
                         end
-                    until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+                    until BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
                 end
-                workspace.FallenPartsDestroyHeight = 0/0
-                local BV = Instance.new("BodyVelocity")
-                BV.Parent = RootPart
-                BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
-                BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+                
                 if TRootPart and THead then
-                    if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+                    if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 3 then
                         SFBasePart(THead)
                     else
                         SFBasePart(TRootPart)
@@ -455,8 +442,13 @@ AddButton(function(Name)
                 else
                     return Message("Error Occurred", "Target is missing everything", 5)
                 end
-                BV:Destroy()
+                
+                if BV then
+                    BV:Destroy()
+                end
+                
                 workspace.CurrentCamera.CameraSubject = Humanoid
+                
                 repeat
                     RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
                     Humanoid:ChangeState("GettingUp")
@@ -467,6 +459,7 @@ AddButton(function(Name)
                     end)
                     task.wait()
                 until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+                
                 workspace.FallenPartsDestroyHeight = getgenv().FPDH
             else
                 return Message("Error Occurred", "Random error", 5)
@@ -529,6 +522,7 @@ AddButton(function(Name)
             end
             
             repeat task.wait() until GetPlayer(Target).Character and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid") and GetPlayer(Target).Character:FindFirstChildOfClass("Humanoid").Health > 0
+            
             local Player = Players.LocalPlayer
             local Character
             local Humanoid
@@ -546,16 +540,19 @@ AddButton(function(Name)
             else
                 return Message("Error",">   Missing Character")
             end
+            
             if Character:FindFirstChildOfClass("Humanoid") then
                 Humanoid = Character:FindFirstChildOfClass("Humanoid")
             else
                 return Message("Error",">   Missing Humanoid")
             end
+            
             if Humanoid and Humanoid.RootPart then
                 RootPart = Humanoid.RootPart
             else
                 return Message("Error",">   Missing RootPart")
             end
+            
             if Character:FindFirstChildOfClass("Tool") then
                 Tool = Character:FindFirstChildOfClass("Tool")
             elseif Player.Backpack:FindFirstChildOfClass("Tool") and Humanoid then
@@ -564,6 +561,7 @@ AddButton(function(Name)
             else
                 return Message("Error",">   Missing Tool")
             end
+            
             if Tool and Tool:FindFirstChild("Handle") then
                 Handle = Tool.Handle
             else
@@ -576,6 +574,7 @@ AddButton(function(Name)
             else
                 return Message("Error",">   Missing Target Humanoid")
             end
+            
             if THumanoid.RootPart then
                 TRootPart = THumanoid.RootPart
             else
@@ -588,9 +587,9 @@ AddButton(function(Name)
             
             local OldCFrame = RootPart.CFrame
             
-            Humanoid:Destroy()
             local NewHumanoid = Humanoid:Clone()
             NewHumanoid.Parent = Character
+            Humanoid:Destroy()
             NewHumanoid:UnequipTools()
             NewHumanoid:EquipTool(Tool)
             Tool.Parent = workspace
@@ -602,20 +601,27 @@ AddButton(function(Name)
                     Tool.Grip = CFrame.new()
                     Tool.Grip = Handle.CFrame:ToObjectSpace(TRootPart.CFrame):Inverse()
                 end
-                firetouchinterest(Handle,TRootPart,0)
-                firetouchinterest(Handle,TRootPart,1)
+                firetouchinterest(Handle, TRootPart, 0)
+                firetouchinterest(Handle, TRootPart, 1)
                 task.wait()
             until Tool.Parent ~= Character or not TPlayer or not TRootPart or THumanoid.Health <= 0 or os.time() > Timer + .20
+            
             Player.Character = nil
             NewHumanoid.Health = 0
+            
             repeat task.wait() until THumanoid.Health <= 0 or tick() > Timer + .20
+            
             Player.Character = Character
+            
             table.foreach(NewHumanoid:GetAccessories(), function(_, x)
                 x.Handle:Destroy()
             end)
+            
             Player.Character = Character:Destroy()
             Character = Player.CharacterAdded:wait()
+            
             repeat task.wait() until Character and Character.PrimaryPart
+            
             Character:SetPrimaryPartCFrame(OldCFrame)
         end
         Kill()
@@ -674,9 +680,13 @@ AddButton(function(Name)
                         end)()
                         if Character and PrimaryPart and Humanoid and CurrentPosition then
                             task.wait()
-                            Character:SetPrimaryPartCFrame(CurrentPosition)
-                            PrimaryPart.Velocity = Vector3.new()
-                            Humanoid:ChangeState("GettingUp")
+                            PrimaryPart.Velocity = Vector3.new(0, 10000, 0)
+                            for i = 1, 5 do
+                                PrimaryPart.Velocity = Vector3.new()
+                                Character:SetPrimaryPartCFrame(CurrentPosition)
+                                Humanoid:ChangeState("GettingUp")
+                                task.wait()
+                            end
                         end
                         table.insert(WhitelistedTools, Tool)
                     end
@@ -710,6 +720,7 @@ AddButton(function(Name)
     local Debounce = false
     local TempConnection
     local StrokeSelection
+    
     ClonedButton.MouseButton1Click:Connect(function()
         if not Debounce then
             Debounce = true
@@ -724,9 +735,6 @@ AddButton(function(Name)
                         for _,v in next, x.Character:GetDescendants() do
                             if v:IsA("BasePart") and v.CanCollide then
                                 v.CanCollide = false
-                                if v.Name == "Torso" and v:FindFirstChildWhichIsA("Motor6D") then
-                                    v.Massless = true
-                                end
                                 v.Velocity = Vector3.new()
                                 v.RotVelocity = Vector3.new()
                                 v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
@@ -764,9 +772,6 @@ AddButton(function(Name)
                 if x and x ~= Player and x.Character then
                     for _,v in next, x.Character:GetChildren() do
                         if v:IsA("BasePart") and v.CanCollide then
-                            if v.Name == "Torso" and v:FindFirstChildWhichIsA("Motor6D") then
-                                v.Massless = false
-                            end
                             v.CustomPhysicalProperties = nil
                         end
                     end
@@ -778,71 +783,65 @@ end, "Anti Fling")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
+    ClonedButton.MouseButton1Click:Connect(function()
+        local Target = SearchBox.Text
     
-    local Debounce = false
-    
-    local OldMessageEvent
-
-    OldMessageEvent = hookmetamethod(game, "__namecall", function(self, ...)
-        local Method = getnamecallmethod()
-        local Args = {...}
-    
-        if Debounce and tostring(self) == "SayMessageRequest" and tostring(Method) == "FireServer" then
-            local Message = Args[1]
-            local BypassUnicode = " "
-            local FinalStr = ""
-            local LetterAmt = 0
-            local SpaceAmt = 0
-            local UnicodeAmt = 0
-            
-            for x in Message:gmatch(".") do
-                if not x:match("%s") then
-                    FinalStr = FinalStr..x.."  "
-                    LetterAmt += 1
-                else
-                    FinalStr = FinalStr..(" "):rep(4)
-                    SpaceAmt = 1 * SpaceAmt + 4
-                end
-            end
-            
-            
-            for x in FinalStr:gmatch("%s") do
-                UnicodeAmt += 1
-            end
-            
-            UnicodeAmt -= SpaceAmt
-            
-            Args = {
-                BypassUnicode:rep(UnicodeAmt)..FinalStr,
-                "All"
-            }
-            
-            return OldMessageEvent(self, unpack(Args))
+        if Target == "" then
+            return
         end
         
-        return OldMessageEvent(self, ...)
-    end)
-    
-    ClonedButton.MouseButton1Click:Connect(function()
-        if not Debounce then
-            Debounce = true
-            
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-            
-            StrokeSelection = Instance.new("UIStroke", ClonedButton)
-            StrokeSelection.ApplyStrokeMode = "Border"
-            StrokeSelection.Color = Color3.fromRGB(255,255,255)
-        else
-            Debounce = false
-            
-            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-            
-            if StrokeSelection then
-                StrokeSelection:Destroy()
+        local RunService = game:GetService("RunService")
+        local Players = game:GetService("Players")
+        
+        local Player = Players.LocalPlayer
+        
+        local GetPlayer = function(Name)
+            local Players = game:GetService("Players")
+            local LocalPlayer = Players.LocalPlayer
+            Name = Name:lower():gsub(" ","")
+            for _,x in next, Players:GetPlayers() do
+                if x ~= LocalPlayer then
+                    if x.Name:lower():match("^"..Name) then
+                        return x
+                    elseif x.DisplayName:lower():match("^"..Name) then
+                        return x
+                    end
+                end
             end
         end
+        
+        if not GetPlayer(Target) then
+            return Message("Error:","Target not valid.")
+        elseif GetPlayer(Target).Name == Player.Name then
+            return Message("Error:","Target is equal to Player.")
+        end
+        
+        local TargetMetaVars = {}
+        
+        TargetMetaVars["TPlayer"] = GetPlayer(Target)
+        
+        local ErrorCheck = false
+        
+        for _,x in next, TargetMetaVars do
+            if not x then
+                Message("Error:", "Target".._.." not valid.")
+                ErrorCheck = true
+            end
+        end
+        
+        if ErrorCheck then return end
+        
+        local Set_Hidden = sethiddenproperty
+        
+        RunService.Stepped:Connect(function()
+            for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
+                if x:IsA("BasePart") then
+                    Set_Hidden(x, "NetworkIsSleeping", true)
+                end
+            end
+        end)
     end)
-end, "Chat Bypass")
+end, "Network Sleep")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
@@ -858,10 +857,14 @@ AddButton(function(Name)
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
             StrokeSelection.Thickness = 1.5
             workspace.FallenPartsDestroyHeight = 0/0
+            TempConnection = workspace:GetPropertyChangedSignal("FallenPartsDestroyHeight"):Connect(function()
+                workspace.FallenPartsDestroyHeight = 0/0
+            end)
         else
             Debounce = false
             StrokeSelection:Destroy()
             ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+            TempConnection:Disconnect()
             workspace.FallenPartsDestroyHeight = getgenv().FPDH
         end
     end)
@@ -870,32 +873,53 @@ end, "Destroy Height")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        if Respawning then return print("a") end
+        if Respawning then return end
+        
         local Player = Players.LocalPlayer
         local Character = Player.Character
         local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
         local RootPart = Humanoid and Humanoid.RootPart or false
+        
         if not Humanoid then return end
+        
         Respawning = true
+        
         Player.Character = nil
         Player.Character = Character
+        
         wait(Players.RespawnTime - .15)
-        local PosOld
-        local CamOld = workspace.CurrentCamera.CFrame
-        if RootPart then
-            PosOld = RootPart.CFrame
-        else
-            PosOld = workspace.CurrentCamera.Focus
+        
+        if Humanoid.Parent == Player.Character then
+            local PosOld
+            local CamOld = workspace.CurrentCamera.CFrame
+            
+            if RootPart then
+                PosOld = RootPart.CFrame
+            else
+                PosOld = workspace.CurrentCamera.Focus
+            end
+            
+            table.foreach(Humanoid:GetAccessories(), function(_, x)
+                local Handle = x:FindFirstChild("Handle")
+                if Handle then
+                    Handle:Destroy()
+                end
+            end)
+            
+            Player.Character = Character:Destroy()
+            Character = Player.CharacterAdded:wait()
+            
+            repeat task.wait() until Character.PrimaryPart
+            
+            for i = 1, 5 do
+                Character:SetPrimaryPartCFrame(PosOld)
+                task.wait()
+            end
+            
+            workspace.CurrentCamera.CFrame = CamOld
+            
+            Respawning = false
         end
-        table.foreach(Humanoid:GetAccessories(), function(_, x)
-            x.Handle:Destroy()
-        end)
-        Player.Character = Character:Destroy()
-        Character = Player.CharacterAdded:wait()
-        repeat wait() until Character.PrimaryPart
-        Character:SetPrimaryPartCFrame(PosOld)
-        workspace.CurrentCamera.CFrame = CamOld
-        Respawning = false
     end)
 end, "Instant Respawn")
 
