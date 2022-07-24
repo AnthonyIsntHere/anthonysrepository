@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.3"
+local Version = "v3.4"
 
 local Opened = false
 
@@ -833,11 +833,15 @@ AddButton(function(Name)
         
         local Set_Hidden = sethiddenproperty
         
-        RunService.Stepped:Connect(function()
-            for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
-                if x:IsA("BasePart") then
-                    Set_Hidden(x, "NetworkIsSleeping", true)
+        local TempConnection; TempConnection = RunService.Stepped:Connect(function()
+            if TargetMetaVars.TPlayer and TargetMetaVars.TPlayer.Character then
+                for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
+                    if x:IsA("BasePart") then
+                        Set_Hidden(x, "NetworkIsSleeping", true)
+                    end
                 end
+            else
+                TempConnection:Disconnect()
             end
         end)
     end)
@@ -909,7 +913,7 @@ AddButton(function(Name)
             Player.Character = Character:Destroy()
             Character = Player.CharacterAdded:wait()
             
-            repeat task.wait() until Character.PrimaryPart
+            repeat wait() until Character.PrimaryPart
             
             for i = 1, 5 do
                 Character:SetPrimaryPartCFrame(PosOld)
