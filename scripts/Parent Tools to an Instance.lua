@@ -12,7 +12,7 @@ local NewParent = Character:FindFirstChildWhichIsA("Tool") or Player.Backpack:Fi
 Humanoid:UnequipTools()
 
 for _, x in next, Player.Backpack:GetChildren() do
-    if _ > 0 and x ~= NewParent then
+    if x:IsA("Tool") and _ > 0 and x ~= NewParent then
         x.Parent = Character
         x.Parent = NewParent
         x.Parent = Player.Backpack -- required to finish change
