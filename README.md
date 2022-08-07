@@ -1,3 +1,5 @@
+## Hello script kiddies and leeches, welcome to my repository!
+
 ## About me
 - I script lego hacks for Roblox
 - Creator of best character fling script [Skid Flinger Showcase](https://www.youtube.com/watch?v=iLP4z3hgXQw) ([Script](https://github.com/AnthonyIsntHere/anthonysrepository/blob/main/scripts/Skid%20Flinger.lua))
