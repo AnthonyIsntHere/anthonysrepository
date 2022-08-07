@@ -1,0 +1,169 @@
+/**
+ * @name Darkcord+
+ * @author Anthony
+ * @version 1.0.1
+ * @description Very cool, dark and moody theme. Great for learning to create own themes.
+ */
+
+
+/* Rounded MessageBox */
+.form-3gdLxP .channelTextArea-1FufC0 .scrollableContainer-15eg7h {
+  max-height: 45vh;
+  border-radius: 22px;
+}
+
+/* SmallStatusArea */
+.container-YkUktl {
+  height: 85px;
+}
+
+/* Profile Pciture */
+.container-YkUktl .avatarWrapper-1B9FTW {
+  position: absolute;
+  bottom: 45px;
+}
+
+/* Username */
+.container-YkUktl .nameTag-sc-gpq {
+  position: absolute;
+  bottom: -4px;
+  left: 35px;
+}
+
+.container-YkUktl > .noWrap-hBpHBz {
+  width: 224px;
+  bottom: 5px;
+  position: absolute;
+}
+.container-YkUktl > .noWrap-hBpHBz button {
+  width: 100%;
+  justify-content: space-evenly;
+}
+
+/* Status */
+.customStatus-1UAQAK {
+  width: 170px;
+}
+
+/* Video and Screenshare */
+.button-1EGGcP.buttonColor-3bP3fX,
+.button-1EGGcP .buttonColor-3bP3fX {
+  color: #48ff83;
+}
+
+.lookFilled-yCfaCM.colorBrand-I6CyqQ {
+    background-color: rgb(35 35 35 / 35%);
+}
+
+/*Fix Serverlist Transparency*/
+.container-2o3qEW {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background: #00000000;
+    height: 100%;
+}
+
+/* Top Right Buttons */
+.winButton-3UMjdg {
+    color: #48ff83;
+}
+
+/* Discord Home Button */
+.wrapper-3kah-n.selected-1Drb7Z .childWrapper-1j_1ub,
+ .wrapper-3kah-n:hover .childWrapper-1j_1ub {
+    color: #6a6a6a;
+    background-color: #1c1c1c;
+}
+
+/* Select User */
+.theme-dark .autocomplete-3NRXG8 {
+    background-color: #0c0c0c;
+}
+
+.theme-dark .selected-3H3-RC {
+    background-color: #1a1a1a;
+}
+
+/* Chat Logger */
+.theme-dark .root-g14mjS {
+    background-color: #161616;
+}
+
+.theme-dark .footer-31IekZ {
+    background-color: #0c0c0c;
+}
+
+/* Spotify Buttons */
+theme-dark .lookFilled-yCfaCM.colorGrey-2iAG-B {
+    color: #18ff69;
+    background-color: #1c1c1c;
+}
+
+/* Friends */
+.theme-dark .container-2cd8Mz {
+    background-color: #0c0c0c;
+}
+
+/* Search */
+.theme-dark .container-2McqkF {
+    background-color: #0e0e0e;
+}
+
+.theme-dark .option-2KkUJO:after {
+    background:transparent;
+}
+
+
+/* Home Button
+.childWrapper-1j_1ub {
+  content: url("https://i.imgur.com/83VoTcN.gif")
+}
+*/
+
+/* Friends Bar */
+.container-ZMc96U.themed-Hp1KC_ {
+    background: #151515;
+}
+
+/* Help Page */
+.auto-2K3UW5.scrollerBase-_bVAAt.fade-1R6FHN {
+    background-color: #111111
+}
+
+.modalTitle-2skSKy {
+    background-color: #0c0c0c;
+}
+
+.modalSubtitle-2lx7qk {
+    background-color: #0c0c0c;
+}
+
+.theme-dark .keyboardShortcutsModal-2CRmCm {
+    background: #0c0c0c;
+}
+
+/* Global Settings */
+
+/* Background */
+:root {
+  --scroll-bar-color: #ffffff1c;
+  --background-primary: #0c0c0c;
+  --background-secondary: #080808;
+  --background-secondary-alt: #050505;
+  --background-tertiary: #050505;
+  --background-accent: #050505;
+  --background-floating: #0b0b0b;
+  --channeltextarea-background: #060606;
+  --scrollbar-auto-track: transparent;
+  --scrollbar-auto-thumb: #232323;
+  --scrollbar-thin-thumb: #232323;
+}
+
+/* Icons */
+/*
+.theme-dark {
+  --status-danger: #f744b8;
+}
+*/
