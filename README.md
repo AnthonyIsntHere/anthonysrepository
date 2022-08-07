@@ -1,4 +1,4 @@
-## Hello script kiddies and leeches, welcome to my repository!
+### Hello script kiddies and leeches, welcome to my repository!
 
 ## About me
 - I script lego hacks for Roblox
