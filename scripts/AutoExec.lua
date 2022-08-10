@@ -1,6 +1,7 @@
+-- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.1"
+local Version = "v3.4.2"
 
 local Opened = false
 
@@ -583,6 +584,16 @@ AddButton(function(Name)
                 return Message("Error",">   Target is seated")
             end
             
+            if THumanoid.RigType == Enum.HumanoidRigType.R6 then
+                if not (TCharacter:FindFirstChild("Right Shoulder") or TCharacter:FindFirstChild("Right Arm")) then
+                    return Message("Error", ">   Missing Target Arm/Motor6d")
+                end
+            else
+                if not (TCharacter:FindFirstChild("RightWrist") or TCharacter:FindFirstChild("RightHandle")) then
+                    return Message("Error", ">   Missing Target Hand/Motor6d")
+                end
+            end
+            
             local OldCFrame = RootPart.CFrame
             
             local NewHumanoid = Humanoid:Clone()
@@ -590,24 +601,27 @@ AddButton(function(Name)
             Humanoid:Destroy()
             NewHumanoid:UnequipTools()
             NewHumanoid:EquipTool(Tool)
-            Tool.Parent = workspace
+            Tool.Parent = workspace --most likely not needed LOL
+            
+            if (TRootPart.CFrame.p - RootPart.CFrame.p).Magnitude < 500 then
+                Handle.Massless = true
+                Tool.Grip = CFrame.new()
+                Tool.Grip = Handle.CFrame:ToObjectSpace(TRootPart.CFrame):Inverse()
+            end
             
             local Timer = tick()
             
             repeat
-                if (TRootPart.CFrame.p - RootPart.CFrame.p).Magnitude < 500 then
-                    Tool.Grip = CFrame.new()
-                    Tool.Grip = Handle.CFrame:ToObjectSpace(TRootPart.CFrame):Inverse()
-                end
                 firetouchinterest(Handle, TRootPart, 0)
                 firetouchinterest(Handle, TRootPart, 1)
                 task.wait()
             until Tool.Parent ~= Character or not TPlayer or not TRootPart or THumanoid.Health <= 0 or os.time() > Timer + .20
             
+            RootPart.Velocity = Vector3.new()
             Player.Character = nil
             NewHumanoid.Health = 0
             
-            repeat task.wait() until THumanoid.Health <= 0 or tick() > Timer + .10
+            repeat task.wait() until THumanoid.Health <= 0 or tick() > Timer + .25
             
             Player.Character = Character
             
@@ -834,8 +848,10 @@ AddButton(function(Name)
         local TempConnection; TempConnection = RunService.Stepped:Connect(function()
             if TargetMetaVars.TPlayer and TargetMetaVars.TPlayer.Character then
                 for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
-                    if x:IsA("BasePart") and not x.Name ~= "HumanoidRootPart" or "Head" then
+                    if x:IsA("BasePart") and x.Name ~= ("HumanoidRootPart") then
                         Set_Hidden(x, "NetworkIsSleeping", true)
+                        x.Velocity = Vector3.new(420, 9e8, 420)
+                        x.CanCollide = false
                     end
                 end
             else
