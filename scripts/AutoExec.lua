@@ -1,6 +1,6 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4"
+local Version = "v3.4.1"
 
 local Opened = false
 
@@ -296,51 +296,45 @@ AddButton(function(Name)
             end
         end
         
+        local Message = function(_Title, _Text, Time)
+            game:GetService("StarterGui"):SetCore("SendNotification", {Title = _Title, Text = _Text, Duration = Time})
+        end
+        
         local SkidFling = function(TargetPlayer)
             local Character = Player.Character
             local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
             local RootPart = Humanoid and Humanoid.RootPart
-            local BV
-            
+        
             local TCharacter = TargetPlayer.Character
             local THumanoid
             local TRootPart
             local THead
             local Accessory
             local Handle
-            
+        
             if TCharacter:FindFirstChildOfClass("Humanoid") then
                 THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
             end
-            
             if THumanoid and THumanoid.RootPart then
                 TRootPart = THumanoid.RootPart
             end
-            
             if TCharacter:FindFirstChild("Head") then
                 THead = TCharacter.Head
             end
-            
             if TCharacter:FindFirstChildOfClass("Accessory") then
                 Accessory = TCharacter:FindFirstChildOfClass("Accessory")
             end
-            
             if Accessoy and Accessory:FindFirstChild("Handle") then
                 Handle = Accessory.Handle
             end
-            
+        
             if Character and Humanoid and RootPart then
-                if RootPart.Velocity.Magnitude <= 35 then
+                if RootPart.Velocity.Magnitude < 50 then
                     getgenv().OldPos = RootPart.CFrame
                 end
-                
-                if THumanoid and THumanoid.Sit and not AllBool then
-                    Message("Error Occurred", "Targeting is sitting", 5)
-                    if THumanoid.SeatPart ~= nil then
-                       return
-                    end
+                if THumanoid and THumanoid.Sit and THumanoid.SeatPart ~= nil and not AllBool then
+                    return Message("Error Occurred", "Targeting is sitting", 5) -- u can remove dis part if u want lol
                 end
-                
                 if THead then
                     workspace.CurrentCamera.CameraSubject = THead
                 elseif not THead and Handle then
@@ -348,14 +342,14 @@ AddButton(function(Name)
                 elseif THumanoid and TRootPart then
                     workspace.CurrentCamera.CameraSubject = THumanoid
                 end
-                
                 if not TCharacter:FindFirstChildWhichIsA("BasePart") then
                     return
                 end
                 
                 local FPos = function(BasePart, Pos, Ang)
                     RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
-                    RootPart.Velocity = Vector3.new(9e7, 9e7, 9e7)
+                    Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+                    RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
                     RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
                 end
                 
@@ -363,41 +357,28 @@ AddButton(function(Name)
                     local TimeToWait = 2
                     local Time = tick()
                     local Angle = 0
-                    
-                    if workspace.FallenPartsDestroyHeight ~= 0/0 then
-                        workspace.FallenPartsDestroyHeight = 0/0
-                    end
-                    
-                    BV = Instance.new("BodyVelocity")
-                    BV.Parent = RootPart
-                    BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
-                    BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
-                    
+        
                     repeat
                         if RootPart and THumanoid then
-                            if tick() > Time + (TimeToWait / 2) and BasePart.Velocity.Magnitude > 500 then
-                                break
-                            end
-                            
-                            if BasePart.Velocity.Magnitude < 35 then
-                                Angle = Angle + 50
-                                
+                            if BasePart.Velocity.Magnitude < 50 then
+                                Angle = Angle + 100
+        
                                 FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
                                 task.wait()
         
                                 FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
-                                
-                                FPos(BasePart, CFrame.new(2.25, 2, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+        
+                                FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
-                                
-                                FPos(BasePart, CFrame.new(-2.25, -2, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+        
+                                FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
-                                
-                                FPos(BasePart, CFrame.new(0, 2.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+        
+                                FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
-                                
-                                FPos(BasePart, CFrame.new(0, -2.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+        
+                                FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
                                 task.wait()
                             else
                                 FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
@@ -407,6 +388,15 @@ AddButton(function(Name)
                                 task.wait()
         
                                 FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                                task.wait()
+                                
+                                FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                                task.wait()
+        
+                                FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+                                task.wait()
+        
+                                FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
                                 task.wait()
         
                                 FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
@@ -424,11 +414,21 @@ AddButton(function(Name)
                         else
                             break
                         end
-                    until BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+                    until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
                 end
                 
+                workspace.FallenPartsDestroyHeight = 0/0
+                
+                local BV = Instance.new("BodyVelocity")
+                BV.Name = "EpixVel"
+                BV.Parent = RootPart
+                BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+                BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+                
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+                
                 if TRootPart and THead then
-                    if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 3 then
+                    if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
                         SFBasePart(THead)
                     else
                         SFBasePart(TRootPart)
@@ -443,14 +443,13 @@ AddButton(function(Name)
                     return Message("Error Occurred", "Target is missing everything", 5)
                 end
                 
-                if BV then
-                    BV:Destroy()
-                end
-                
+                BV:Destroy()
+                Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
                 workspace.CurrentCamera.CameraSubject = Humanoid
                 
                 repeat
                     RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+                    Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
                     Humanoid:ChangeState("GettingUp")
                     table.foreach(Character:GetChildren(), function(_, x)
                         if x:IsA("BasePart") then
@@ -459,7 +458,6 @@ AddButton(function(Name)
                     end)
                     task.wait()
                 until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
-                
                 workspace.FallenPartsDestroyHeight = getgenv().FPDH
             else
                 return Message("Error Occurred", "Random error", 5)
@@ -609,7 +607,7 @@ AddButton(function(Name)
             Player.Character = nil
             NewHumanoid.Health = 0
             
-            repeat task.wait() until THumanoid.Health <= 0 or tick() > Timer + .20
+            repeat task.wait() until THumanoid.Health <= 0 or tick() > Timer + .10
             
             Player.Character = Character
             
@@ -836,7 +834,7 @@ AddButton(function(Name)
         local TempConnection; TempConnection = RunService.Stepped:Connect(function()
             if TargetMetaVars.TPlayer and TargetMetaVars.TPlayer.Character then
                 for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
-                    if x:IsA("BasePart") then
+                    if x:IsA("BasePart") and not x.Name ~= "HumanoidRootPart" or "Head" then
                         Set_Hidden(x, "NetworkIsSleeping", true)
                     end
                 end
@@ -941,6 +939,7 @@ AddButton(function(Name)
         local Player = Players.LocalPlayer
         
         if #Players:GetPlayers() <= 1 then
+            Player:Kick("Rejoining Experience Shortly")
             TeleportService:Teleport(game["PlaceId"])
         else
             TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
@@ -974,7 +973,7 @@ AddButton(function(Name)
         end
         
         if #Players:GetPlayers() <= 1 then
-            Player:Kick()
+            Player:Kick("...")
             coroutine.wrap(function()
                 local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
                 local ErrorTitle = PromptGui:FindFirstChild("ErrorTitle", true)
