@@ -1,7 +1,9 @@
 -- Made by AnthonyIsntHere (got leaked and skids are claiming it as their own LOL)
 -- Now supports r15 originalsize rescale!
 
-local Targets = {"AnthonyIsntHere", "ArianBlaack"} -- "All", "Target Name", "arian_was_here"
+-- Made by AnthonyIsntHere (got leaked and skids are claiming it as their own LOL)
+
+local Targets = {"AnthonyIsntHere"} -- "All", "Target Name", "arian_was_here"
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -30,6 +32,10 @@ local GetPlayer = function(Name)
     else
         return
     end
+end
+
+local Message = function(_Title, _Text, Time)
+    game:GetService("StarterGui"):SetCore("SendNotification", {Title = _Title, Text = _Text, Duration = Time})
 end
 
 local SkidFling = function(TargetPlayer)
