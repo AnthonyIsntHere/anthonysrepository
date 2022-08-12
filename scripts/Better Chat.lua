@@ -2,7 +2,7 @@
 repeat wait() until game:IsLoaded()
 
 local Settings = {
-    DarkTheme = true,
+    DarkTheme = true, -- requires new bubble chat to be on
     NewBubbleChatEnabled = true,
     BubbleChatSettings = {
         BackgroundColor3 = Color3.fromRGB(20, 20, 20),
@@ -11,12 +11,11 @@ local Settings = {
     ChatSettings = {
         BubbleChatEnabled = false,
         ChatWindowBackgroundFadeOutTime = .1,
-        MessageHistoryLengthPerChannel = 5000,
+        --MessageHistoryLengthPerChannel = 5000,
         PlayerDisplayNamesEnabled = false
     }
 }
 
-local CoreGui = game:GetService("CoreGui")
 local ChatService = game:GetService("Chat")
 local ChatModule = ChatService:WaitForChild("ClientChatModules", 1/0):WaitForChild("ChatSettings", 1/0)
 
@@ -29,5 +28,8 @@ for _, x in next, Settings.ChatSettings do
 end
 
 if Settings.DarkTheme and Settings.NewBubbleChatEnabled then
-    ChatService:SetBubbleChatSettings(Settings.BubbleChatSettings)
+    for i = 1, 10 do
+        pcall(ChatService.SetBubbleChatSettings, ChatService, Settings.BubbleChatSettings)
+        task.wait()
+    end
 end
