@@ -2,7 +2,7 @@
 repeat wait() until game:IsLoaded()
 
 local Settings = {
-    DarkTheme = true, -- requires new bubble chat to be on
+    DarkTheme = true, -- requires new bubblechat
     NewBubbleChatEnabled = true,
     BubbleChatSettings = {
         BackgroundColor3 = Color3.fromRGB(20, 20, 20),
