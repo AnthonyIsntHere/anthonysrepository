@@ -1,3 +1,6 @@
+-- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
+-- Store in autoexec folder
+-- Credits: AnthonyIsntHere and ArianBlaack
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
@@ -17,6 +20,18 @@ end
 local Tween = function(Object, Time, Style, Direction, Property)
 	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
+
+local ChatFix
+local ChatFixToggle = true
+
+ChatFix = hookmetamethod(StarterGui, "__namecall", function(self, ...)
+    local Method = getnamecallmethod()
+    
+    if not checkcaller() and ChatFixToggle and Method == "SetCoreGuiEnabled" then
+        return
+    end
+    return ChatFix(self, ...)
+end)
 
 local ACLWarning = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
@@ -210,10 +225,6 @@ local ExitCooldown = function()
     Exit.Visible = true
 end
 
-if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-    repeat task.wait() until StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat)
-end
-
 local PlayerScripts = Player:WaitForChild("PlayerScripts")
 local ChatMain = PlayerScripts:FindFirstChild("ChatMain", true) or false
 
@@ -242,20 +253,20 @@ end
 
 local MessageEvent = Instance.new("BindableEvent")
 local OldFunctionHook
-
-local PostMessageHook = function(self, Message)
+OldFunctionHook = hookfunction(PostMessage.fire, function(self, Message)
     if not checkcaller() and self == PostMessage then
         MessageEvent:Fire(Message)
         return
     end
     return OldFunctionHook(self, Message)
-end
-OldFunctionHook = hookfunction(PostMessage.fire, PostMessageHook)
+end)
 
 if setfflag then
     setfflag("AbuseReportScreenshot", "False")
     setfflag("AbuseReportScreenshotPercentage", 0)
 end
 
-Notify("Loaded Successfully", "Anti Chat and Screenshot Logger Loaded!", 15)
+ChatFixToggle = false
 ACLWarning:Destroy()
+Notify("Loaded Successfully", "Anti Chat and Screenshot Logger Loaded!", 15)
+print("Anti Chat-Log loaded.")
