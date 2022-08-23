@@ -1,9 +1,17 @@
 -- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
 -- Store in autoexec folder
 -- Credits: AnthonyIsntHere and ArianBlaack
+
+--[[
+    Change-logs:
+    8/22/2022 - Fixed Chat gui glitching on some games such as Prison Life.
+]]--
+
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
+
+local ACL_LoadTime = tick()
 
 local CoreGui = game:GetService("CoreGui")
 local StarterGui = game:GetService("StarterGui")
@@ -11,7 +19,13 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
+
+local PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui") do
+    if not PlayerGui then
+        repeat task.wait() until Player:FindFirstChildWhichIsA("PlayerGui")
+        PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui")
+    end
+end
 
 local Notify = function(_Title, _Text , Time)
     StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
@@ -21,15 +35,30 @@ local Tween = function(Object, Time, Style, Direction, Property)
 	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
 
-local ChatFix
+local Insert = function(Tbl, ...)
+    for _, x in next, {...} do
+        table.insert(Tbl, x) 
+    end
+end
+
 local ChatFixToggle = true
+local CoreGuiSettings = {}
+local ChatFix
 
 ChatFix = hookmetamethod(StarterGui, "__namecall", function(self, ...)
     local Method = getnamecallmethod()
+    local Arguments = {...}
     
     if not checkcaller() and ChatFixToggle and Method == "SetCoreGuiEnabled" then
-        return
+        local CoreGuiType = Arguments[1]
+        local SettingValue = Arguments[2]
+        
+        if CoreGuiType == ("All" or "Chat") then
+            Insert(CoreGuiSettings, CoreGuiType, SettingValue)
+            return
+        end
     end
+    
     return ChatFix(self, ...)
 end)
 
@@ -268,5 +297,8 @@ end
 
 ChatFixToggle = false
 ACLWarning:Destroy()
+if OldSetting then
+    StarterGui:SetCoreGuiEnabled(CoreGuiSettings[1], CoreGuiSettings[2])
+end
 Notify("Loaded Successfully", "Anti Chat and Screenshot Logger Loaded!", 15)
-print("Anti Chat-Log loaded.")
+print(string.format("Anti Chat-Logger has loaded in %s seconds.", tostring(tick() - ACL_LoadTime):sub(1, 4)))
