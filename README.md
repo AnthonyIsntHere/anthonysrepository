@@ -9,7 +9,6 @@
 - Creator of [AutoExecGui](https://github.com/AnthonyIsntHere/anthonysrepository/blob/main/scripts/AutoExec.lua)
 
 ## Socials
-- My Discord id is **<@915677553069539358>**
 - My Roblox account is [AnthonyIsntHere](https://www.roblox.com/users/1414978355/profile)
 - My V3rm account is [AnthonyIsntHere](https://v3rmillion.net/member.php?action=profile&uid=1921086)
 
