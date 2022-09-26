@@ -1,4 +1,4 @@
-return Bypasses = {
+return {
     ["ass"] = "as{{AIeIXzVZx:s}}",
     ["beaner"] = "beane{{AIeIXzVZx:r}}", -- Unstable
     ["bitch"] = "bit{{AIeIXzVZx:ch}}",
