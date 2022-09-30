@@ -1,3 +1,5 @@
+-- This rightfully belongs to AnthonyIsntHere and DecayedSpirits (steal if skid XD)
+
 return {
     ["ass"] = "as{{AIeIXzVZx:s}}",
     ["beaner"] = "beane{{AIeIXzVZx:r}}", -- Unstable
