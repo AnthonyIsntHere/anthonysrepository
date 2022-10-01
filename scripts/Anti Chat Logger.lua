@@ -5,16 +5,70 @@
 --[[
     Change-logs:
     8/22/2022 - Fixed Chat gui glitching on some games such as Prison Life.
+    9/30/2022 - Fixed chat gui glitching AGAIN... (added better checks too)
 ]]--
+
+local ACL_LoadTime = tick()
+
+local ChatChanged = false
+local WhitelistedCoreTypes = {
+    "Chat",
+    "All",
+    Enum.CoreGuiType.Chat,
+    Enum.CoreGuiType.All
+}
+
+local StarterGui = game:GetService("StarterGui")
+
+local FixCore = function(x)
+    local CoreHook; CoreHook = hookmetamethod(x, "__namecall", function(self, ...)
+        local Method = getnamecallmethod()
+        local Arguments = {...}
+        
+        if self == x and Method == "SetCoreGuiEnabled" and not checkcaller() then
+            local CoreType = Arguments[1]
+            local Enabled = Arguments[2]
+            
+            if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
+                ChatChanged = true
+            end
+        end
+        
+        return CoreHook(self, ...)
+    end)
+    
+    x.CoreGuiChangedSignal:Connect(function(Type)
+        if table.find(WhitelistedCoreTypes, Type) and ChatChanged then
+            task.spawn(function()
+                task.wait()
+                if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
+                    x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+                end
+                ChatChanged = false
+            end)
+        end
+    end)
+end
+
+if StarterGui then
+    FixCore(StarterGui)
+    if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
+        StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+    end
+else
+    local Connection; Connection = game.ChildAdded:Connect(function(x)
+        if x:IsA("StarterGui") then
+            FixCore(x)
+            Connection:Disconnect()
+        end
+    end)
+end
 
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
-local ACL_LoadTime = tick()
-
 local CoreGui = game:GetService("CoreGui")
-local StarterGui = game:GetService("StarterGui")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -34,33 +88,6 @@ end
 local Tween = function(Object, Time, Style, Direction, Property)
 	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
-
-local Insert = function(Tbl, ...)
-    for _, x in next, {...} do
-        table.insert(Tbl, x) 
-    end
-end
-
-local ChatFixToggle = true
-local CoreGuiSettings = {}
-local ChatFix
-
-ChatFix = hookmetamethod(StarterGui, "__namecall", function(self, ...)
-    local Method = getnamecallmethod()
-    local Arguments = {...}
-    
-    if not checkcaller() and ChatFixToggle and Method == "SetCoreGuiEnabled" then
-        local CoreGuiType = Arguments[1]
-        local SettingValue = Arguments[2]
-        
-        if CoreGuiType == ("All" or "Chat") then
-            Insert(CoreGuiSettings, CoreGuiType, SettingValue)
-            return
-        end
-    end
-    
-    return ChatFix(self, ...)
-end)
 
 local ACLWarning = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
@@ -246,8 +273,8 @@ local MakeGuiThread = coroutine.wrap(function()
 end)()
 
 local ExitCooldown = function()
-    wait(3)
-    local Tween = Tween(Bar, 5, "Quad", "InOut", {Size = UDim2.new(1, 0, 1, 0)})
+    wait(.5)
+    local Tween = Tween(Bar, 3, "Quad", "InOut", {Size = UDim2.new(1, 0, 1, 0)})
     Tween:Play()
     Tween.Completed:wait()
     Loading:Destroy()
@@ -295,10 +322,6 @@ if setfflag then
     setfflag("AbuseReportScreenshotPercentage", 0)
 end
 
-ChatFixToggle = false
 ACLWarning:Destroy()
-if OldSetting then
-    StarterGui:SetCoreGuiEnabled(CoreGuiSettings[1], CoreGuiSettings[2])
-end
-Notify("Loaded Successfully", "Anti Chat and Screenshot Logger Loaded!", 15)
+Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
 print(string.format("Anti Chat-Logger has loaded in %s seconds.", tostring(tick() - ACL_LoadTime):sub(1, 4)))
