@@ -1,14 +1,17 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.2"
+local Version = "v3.4.5"
+local CurrenChangelog = "-Fixed and updated"
 
 local Opened = false
 
 local CoreGui = game:GetService("CoreGui")
 local StarterGui = game:GetService("StarterGui")
-local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
 local MainGui = Instance.new("ScreenGui")
@@ -158,7 +161,7 @@ TextButton.TextWrapped = true
 
 Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-local ChromaLoop = coroutine.wrap(function()
+local ChromaLoop = task.spawn(function()
     local Cooldown = 10
     while true do
         local Hue = tick() % Cooldown / Cooldown
@@ -166,7 +169,7 @@ local ChromaLoop = coroutine.wrap(function()
         TextButton.TextColor3 = Color
         wait()
     end
-end)()
+end)
 
 MainGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
     if Opened then
@@ -215,6 +218,7 @@ end, "NAME OF BUTTON")
 ]]--
 
 Message(string.format("🎀 %s 🎀", Version), "AutoExecuteGui  💝", 10)
+Message("✨ Changelog: ", CurrenChangelog, 10)
 
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
 getgenv().OldPos = nil
@@ -686,10 +690,10 @@ AddButton(function(Name)
                     local CurrentPosition = PrimaryPart and PrimaryPart.CFrame or false
                     if Tool:IsA("Tool") and not table.find(WhitelistedTools, Tool) then
                         if workspace["FallenPartsDestroyHeight"] ~= 0/0 then workspace["FallenPartsDestroyHeight"] = 0/0 end
-                        coroutine.wrap(function()
+                        task.spawn(function()
                             repeat task.wait() until Tool
                             Tool.Parent = Player.Backpack
-                        end)()
+                        end)
                         if Character and PrimaryPart and Humanoid and CurrentPosition then
                             task.wait()
                             PrimaryPart.Velocity = Vector3.new(0, 10000, 0)
@@ -802,17 +806,12 @@ AddButton(function(Name)
             return
         end
         
-        local RunService = game:GetService("RunService")
-        local Players = game:GetService("Players")
-        
         local Player = Players.LocalPlayer
         
         local GetPlayer = function(Name)
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
             Name = Name:lower():gsub(" ","")
             for _,x in next, Players:GetPlayers() do
-                if x ~= LocalPlayer then
+                if x ~= Player then
                     if x.Name:lower():match("^"..Name) then
                         return x
                     elseif x.DisplayName:lower():match("^"..Name) then
@@ -850,8 +849,6 @@ AddButton(function(Name)
                 for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
                     if x:IsA("BasePart") and x.Name ~= ("HumanoidRootPart") then
                         Set_Hidden(x, "NetworkIsSleeping", true)
-                        x.Velocity = Vector3.new(420, 9e8, 420)
-                        x.CanCollide = false
                     end
                 end
             else
@@ -944,7 +941,17 @@ end, "Instant Respawn")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/063qVuiz"))()
+        local x = {}
+        for _,v in next, HttpService:JSONDecode(game:HttpGet(string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", game["PlaceId"]))).data do
+        	if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game["JobId"] then
+        		x[#x + 1] = v.id
+        	end
+        end
+        if #x > 0 then
+        	TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1,#x)])
+        else
+            Message("Error", "No available servers.", 5)
+        end
     end)
 end, "Server Hop")
 
@@ -960,6 +967,13 @@ AddButton(function(Name)
         else
             TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
         end
+        
+        syn.queue_on_teleport([[
+            game["Loaded"]:wait()
+            
+            local ReplicatedFirst = game:GetService("ReplicatedFirst")
+            ReplicatedFirst:RemoveDefaultLoadingScreen()
+        ]])
     end)
 end, "Rejoin")
 
@@ -990,7 +1004,8 @@ AddButton(function(Name)
         
         if #Players:GetPlayers() <= 1 then
             Player:Kick("...")
-            coroutine.wrap(function()
+            
+            task.spawn(function()
                 local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
                 local ErrorTitle = PromptGui:FindFirstChild("ErrorTitle", true)
                 local ErrorMessage = PromptGui:FindFirstChild("ErrorMessage", true)
@@ -1001,17 +1016,25 @@ AddButton(function(Name)
                         wait(1)
                     end
                 end
-            end)()
+            end)
+            
             TeleportService:Teleport(game["PlaceId"])
         else
             TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
         end
+        
         syn.queue_on_teleport(string.format([[
             game["Loaded"]:wait()
-            local Player = game:GetService("Players").LocalPlayer
+            local Players = game:GetService("Players")
+            local ReplicatedFirst = game:GetService("ReplicatedFirst")
+            
+            ReplicatedFirst:RemoveDefaultLoadingScreen()
+            
+            local Player = Players.LocalPlayer
             local Character = Player.Character or Player.CharacterAdded:wait()
+            
             repeat task.wait() until Character and Character.PrimaryPart
             Character:SetPrimaryPartCFrame(CFrame.new(%s))
-        ]],tostring(OldPos)))
+        ]], tostring(OldPos)))
     end)
 end, "RejoinRe")
