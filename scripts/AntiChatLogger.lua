@@ -6,11 +6,13 @@
     Change-logs:
     8/22/2022 - Fixed Chat gui glitching on some games such as Prison Life.
     9/30/2022 - Fixed chat gui glitching AGAIN... (added better checks too)
+    10/10/2022 - Added gethui() function and fix for Synapse v3.
 ]]--
 
 local ACL_LoadTime = tick()
 
 local ChatChanged = false
+local OldSetting = nil
 local WhitelistedCoreTypes = {
     "Chat",
     "All",
@@ -30,6 +32,9 @@ local FixCore = function(x)
             local Enabled = Arguments[2]
             
             if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
+                if CoreType == ("Chat" or Enum.CoreGuiType.Chat) then
+                    OldSetting = Enabled
+                end
                 ChatChanged = true
             end
         end
@@ -39,13 +44,15 @@ local FixCore = function(x)
     
     x.CoreGuiChangedSignal:Connect(function(Type)
         if table.find(WhitelistedCoreTypes, Type) and ChatChanged then
-            task.spawn(function()
-                task.wait()
-                if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-                    x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
-                end
-                ChatChanged = false
-            end)
+            task.wait()
+            if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
+                x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+            end
+            wait(1)
+             if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
+                x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, OldSetting) -- probably defaults to false i am too tired for the making of this lol
+            end
+            ChatChanged = false
         end
     end)
 end
@@ -106,8 +113,14 @@ local Reason_2 = Instance.new("TextLabel")
 local Trollge = Instance.new("ImageLabel")
 local UIPadding = Instance.new("UIPadding")
 
-local MakeGuiThread = coroutine.wrap(function()    
-    syn.protect_gui(ACLWarning)
+local MakeGuiThread = coroutine.wrap(function()
+    if syn then
+        if gethui then
+            gethui(ACLwarning)
+        else
+            syn.protect_gui(ACLWarning)
+        end
+    end
     
     ACLWarning.Name = "ACL Warning"
     ACLWarning.Parent = CoreGui
@@ -319,9 +332,13 @@ end)
 
 if setfflag then
     setfflag("AbuseReportScreenshot", "False")
-    setfflag("AbuseReportScreenshotPercentage", 0)
+    setfflag("AbuseReportScreenshotPercentage", "0")
 end
 
+ChatFixToggle = false
 ACLWarning:Destroy()
+if OldSetting then
+    StarterGui:SetCoreGuiEnabled(CoreGuiSettings[1], CoreGuiSettings[2])
+end
 Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
 print(string.format("Anti Chat-Logger has loaded in %s seconds.", tostring(tick() - ACL_LoadTime):sub(1, 4)))
