@@ -1,8 +1,8 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.5"
-local CurrenChangelog = "-Fixed and updated"
+local Version = "v3.4.5a"
+local CurrenChangelog = "-Added better function for gui protection"
 
 local Opened = false
 
@@ -33,8 +33,12 @@ local Title = Instance.new("TextLabel")
 local Frame = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
 
-if syn then -- if u dont have synapse then you're bad
-    syn.protect_gui(MainGui)
+if syn then
+    if gethui then
+        gethui(MainGui) -- for da synapse v3 users
+    else
+        syn.protect_gui(MainGui)
+    end
 end
 
 MainGui.Name = "MainGui"
