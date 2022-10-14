@@ -1,8 +1,8 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.5a"
-local CurrenChangelog = "-Added better function for gui protection"
+local Version = "v3.4.5b"
+local CurrenChangelog = "-Fixed kill script error"
 
 local Opened = false
 
@@ -10,8 +10,8 @@ local CoreGui = game:GetService("CoreGui")
 local StarterGui = game:GetService("StarterGui")
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
-local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 local MainGui = Instance.new("ScreenGui")
@@ -593,11 +593,11 @@ AddButton(function(Name)
             end
             
             if THumanoid.RigType == Enum.HumanoidRigType.R6 then
-                if not (TCharacter:FindFirstChild("Right Shoulder") or TCharacter:FindFirstChild("Right Arm")) then
+                if not (TCharacter:FindFirstChild("Right Shoulder", true) or TCharacter:FindFirstChild("Right Arm")) then
                     return Message("Error", ">   Missing Target Arm/Motor6d")
                 end
             else
-                if not (TCharacter:FindFirstChild("RightWrist") or TCharacter:FindFirstChild("RightHandle")) then
+                if not (TCharacter:FindFirstChild("RightWrist", true) or TCharacter:FindFirstChild("RightHandle")) then
                     return Message("Error", ">   Missing Target Hand/Motor6d")
                 end
             end
