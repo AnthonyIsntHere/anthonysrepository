@@ -1,6 +1,11 @@
 -- This rightfully belongs to AnthonyIsntHere and DecayedSpirits (steal if skid XD)
 
 return {
+    -- COMBINATIONS
+    ["dickhead"] = "di{{vzxzczxczvz:ck}}he{{AIeIXzVZx:ad}}",
+    ["fucking"] = "fu{{AIeIXzVZx:ck}}in{{AIeIXzVZx:g}}",
+    ["motherfucking"] = "motherf{{zczxczvzaiei:uc}}kin{{AIeIXzVZx:g}}",
+    -- NORMALS
     ["ass"] = "as{{AIeIXzVZx:s}}",
     ["beaner"] = "beane{{AIeIXzVZx:r}}", -- Unstable
     ["bitch"] = "bit{{AIeIXzVZx:ch}}",
@@ -11,14 +16,12 @@ return {
     ["cunt"] = "cu{{AIeIXzVZx:nt}}",
     ["cum"] = "cu{{AIeIXzVZx:m}}",
     ["dick"] = "di{{zczxczvz:ck}}",
-    ["dickhead"] = "di{{vzxzczxczvz:ck}}he{{AIeIXzVZx:ad}}", -- Fix
     ["dildo"] = "di{{AIeIXzVZx:ldo}}",
     ["dumb"] = "du{{AIeIXzVZx:mb}}", -- Unstable
     ["dumbass"] = "dumba{{AIeIXzVZx:ss}}", -- Unstable
     ["dyke"] = "dy{{AIeIXzVZx:ke}}",
     ["fag"] = "fa{{AIeIXzVZx:g}}",
     ["fuck"] = "fu{{AIeIXzVZx:ck}}",
-    ["fucking"] = "fu{{AIeIXzVZx:ck}}in{{AIeIXzVZx:g}}", -- Fix
     ["gaylord"] = "gayl{{AIeIXzVZx:ord}}",
     ["hoe"] = "h{{zczxczvz:oe}}",
     ["jew"] = "je{{zczxczvz:w}}",
@@ -28,7 +31,6 @@ return {
     ["kyke"] = "ky{{AIeIXzVZx:ke}}",
     ["masturbat"] = "mastur{{AIeIXzVZx:bat}}",
     ["motherfucker"] = "motherf{{zczxczvzaiei:ucker}}",
-    ["motherfucking"] = "motherf{{zczxczvzaiei:uc}}kin{{AIeIXzVZx:g}}",
     ["nazi"] = "na{{AIeIXzVZx:zi}}",
     ["nigga"] = "ni{{AIeIXzVZx:gga}}",
     ["nigger"] = "ni{{AIeIXzVZx:gger}}",
