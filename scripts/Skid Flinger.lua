@@ -1,8 +1,6 @@
 -- Made by AnthonyIsntHere (got leaked and skids are claiming it as their own LOL)
 -- Now supports r15 originalsize rescale!
 
--- Made by AnthonyIsntHere (got leaked and skids are claiming it as their own LOL)
-
 local Targets = {"AnthonyIsntHere"} -- "All", "Target Name", "arian_was_here"
 
 local Players = game:GetService("Players")
