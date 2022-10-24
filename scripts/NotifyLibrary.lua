@@ -1,3 +1,5 @@
+-- Made by AnthonyIsntHere
+-- Simple notify module
 local NotifyModule = {}
 
 local Players = game:GetService("Players")
