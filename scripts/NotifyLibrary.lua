@@ -38,13 +38,17 @@ local Tween = function(Object, Time, Style, Direction, Property)
 	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
 
-function NotifyModule:Notify(Text, TextColor, Duration)
+function NotifyModule:Notify(Text, Duration)
     local Clone = Template:Clone()
     Clone.Name = "ClonedNotification"
     Clone.Parent = NotifyGui
     Clone.Text = Text
-    Clone.TextColor3 = TextColor
+    Clone.TextColor3 = Color3.fromRGB(255, 25, 25)
     
+    if not Duration then
+	Duration = 5
+    end
+	
     local FinalPosition = 0
     
     for _, x in next, NotifyGui:GetChildren() do
