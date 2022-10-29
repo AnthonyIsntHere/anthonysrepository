@@ -1,8 +1,8 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.5b"
-local CurrenChangelog = "-Fixed kill script error"
+local Version = "v3.4.5"
+local CurrenChangelog = "-Removed boombox hub"
 
 local Opened = false
 
@@ -256,13 +256,6 @@ AddButton(function(Name)
         loadstring(game:HttpGet("https://pastebin.com/raw/m5HUithC"))()
     end)
 end, "Audio Logger")
-
-AddButton(function(Name)
-    local ClonedButton = CreateButton(Name)
-    ClonedButton.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGetAsync('https://riptxde.dev/u/hub/script.lua'))()
-    end)
-end, "BoomBox Hub")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
