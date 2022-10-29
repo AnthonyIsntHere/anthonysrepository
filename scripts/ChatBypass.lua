@@ -1,3 +1,5 @@
+-- Unpatched with fn XD
+
 -- Execute and say bad words to your hearts content! You can also add more if you know a bit of lua and how this works lol
 -- Made by AnthonyIsntHere and DecayedK!
 -- Anyone who says otherwise is stupid :p
@@ -44,10 +46,10 @@ local ChatBypass; ChatBypass = hookmetamethod(Remote, "__namecall", function(sel
                 if x:lower() == _ then
                     if x:upper() ~= x then
                         Message = Message:gsub(x, Bypass)
-                        FinalMessage = Message .. " ng"
+                        FinalMessage = Message .. " fn"
                     else
                         Message = Message:gsub(x, Bypass):upper()
-                        FinalMessage = Message:gsub(x, Bypass):upper() .. " ng"
+                        FinalMessage = Message:gsub(x, Bypass):upper() .. " fn"
                     end
                 end
             end
