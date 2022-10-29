@@ -2,7 +2,7 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
 local Version = "v3.4.5"
-local CurrenChangelog = "-Removed boombox hub"
+local CurrenChangelog = "-Removed boombox hub and fixed black screen on rejoin"
 
 local Opened = false
 
@@ -1009,7 +1009,7 @@ AddButton(function(Name)
                 ErrorTitle.Text = "Rejoining Experience Shortly"
                 while true do
                     for i = 1, 3 do
-                        ErrorMessage.Text = "You are currently reconnecting to this game"..string.rep(".", i).."\n".."PlaceId: "..game["PlaceId"]
+                        ErrorMessage.Text = "You are currently reconnecting to this game" .. string.rep(".", i) .. "\n".."PlaceId: " .. game["PlaceId"]
                         wait(1)
                     end
                 end
@@ -1023,9 +1023,6 @@ AddButton(function(Name)
         syn.queue_on_teleport(string.format([[
             game["Loaded"]:wait()
             local Players = game:GetService("Players")
-            local ReplicatedFirst = game:GetService("ReplicatedFirst")
-            
-            ReplicatedFirst:RemoveDefaultLoadingScreen()
             
             local Player = Players.LocalPlayer
             local Character = Player.Character or Player.CharacterAdded:wait()
