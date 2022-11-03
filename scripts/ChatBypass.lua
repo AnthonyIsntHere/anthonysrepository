@@ -1,6 +1,6 @@
 -- Easy unpatch with fn XD
 -- Execute and say bad words to your hearts content! You can also add more if you know a bit of lua and how this works lol
--- Made by AnthonyIsntHere and DecayedK!
+-- Made by AnthonyIsntHere and Not Scary!
 -- Anyone who says otherwise is stupid :p
 
 local Bypasses = loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/misc/Bypasses.lua"))()
