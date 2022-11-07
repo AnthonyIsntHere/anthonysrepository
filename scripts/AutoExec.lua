@@ -1,8 +1,8 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.5"
-local CurrenChangelog = "-Removed boombox hub and fixed black screen on rejoin"
+local Version = "v3.4.6a"
+local CurrenChangelog = "-Removed NetworkSleep cuz its useless now"
 
 local Opened = false
 
@@ -793,67 +793,6 @@ AddButton(function(Name)
         end
     end)
 end, "Anti Fling")
-
-AddButton(function(Name)
-    local ClonedButton = CreateButton(Name)
-    ClonedButton.MouseButton1Click:Connect(function()
-        local Target = SearchBox.Text
-    
-        if Target == "" then
-            return
-        end
-        
-        local Player = Players.LocalPlayer
-        
-        local GetPlayer = function(Name)
-            Name = Name:lower():gsub(" ","")
-            for _,x in next, Players:GetPlayers() do
-                if x ~= Player then
-                    if x.Name:lower():match("^"..Name) then
-                        return x
-                    elseif x.DisplayName:lower():match("^"..Name) then
-                        return x
-                    end
-                end
-            end
-        end
-        
-        if not GetPlayer(Target) then
-            return Message("Error:","Target not valid.")
-        elseif GetPlayer(Target).Name == Player.Name then
-            return Message("Error:","Target is equal to Player.")
-        end
-        
-        local TargetMetaVars = {}
-        
-        TargetMetaVars["TPlayer"] = GetPlayer(Target)
-        
-        local ErrorCheck = false
-        
-        for _,x in next, TargetMetaVars do
-            if not x then
-                Message("Error:", "Target".._.." not valid.")
-                ErrorCheck = true
-            end
-        end
-        
-        if ErrorCheck then return end
-        
-        local Set_Hidden = sethiddenproperty
-        
-        local TempConnection; TempConnection = RunService.Stepped:Connect(function()
-            if TargetMetaVars.TPlayer and TargetMetaVars.TPlayer.Character then
-                for _,x in next, TargetMetaVars.TPlayer.Character:GetDescendants() do
-                    if x:IsA("BasePart") and x.Name ~= ("HumanoidRootPart") then
-                        Set_Hidden(x, "NetworkIsSleeping", true)
-                    end
-                end
-            else
-                TempConnection:Disconnect()
-            end
-        end)
-    end)
-end, "Network Sleep")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
