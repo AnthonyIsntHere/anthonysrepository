@@ -47,7 +47,7 @@ function NotifyModule:Notify(Text, Duration)
         Clone.TextColor3 = Color3.fromRGB(255, 25, 25)
         
         if not Duration or Duration == nil then
-    	Duration = 5
+    	    Duration = 5
         end
     	
         local FinalPosition = 0
