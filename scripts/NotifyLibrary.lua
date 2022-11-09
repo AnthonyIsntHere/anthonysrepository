@@ -35,39 +35,41 @@ if not NotifyGui then
 end
 
 local Tween = function(Object, Time, Style, Direction, Property)
-	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
+    return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
 
 function NotifyModule:Notify(Text, Duration)
-    local Clone = Template:Clone()
-    Clone.Name = "ClonedNotification"
-    Clone.Parent = NotifyGui
-    Clone.Text = Text
-    Clone.TextColor3 = Color3.fromRGB(255, 25, 25)
-    
-    if not Duration or Duration == nil then
-	Duration = 5
-    end
-	
-    local FinalPosition = 0
-    
-    for _, x in next, NotifyGui:GetChildren() do
-        if x.Name ~= "Template" then
-            FinalPosition += .125
+    task.spawn(function()
+        local Clone = Template:Clone()
+        Clone.Name = "ClonedNotification"
+        Clone.Parent = NotifyGui
+        Clone.Text = Text
+        Clone.TextColor3 = Color3.fromRGB(255, 25, 25)
+        
+        if not Duration or Duration == nil then
+    	Duration = 5
         end
-    end
-    
-    local TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, .95 - FinalPosition, 0)})
-    TweenPos:Play()
-    TweenPos.Completed:wait()
-    
-    wait(Duration)
-    
-    TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, 1.5, 0)})
-    TweenPos:Play()
-    TweenPos.Completed:wait()
-    
-    Clone:Destroy()
+    	
+        local FinalPosition = 0
+        
+        for _, x in next, NotifyGui:GetChildren() do
+            if x.Name ~= "Template" then
+                FinalPosition += .125
+            end
+        end
+        
+        local TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, .95 - FinalPosition, 0)})
+        TweenPos:Play()
+        TweenPos.Completed:wait()
+        
+        wait(Duration)
+        
+        TweenPos = Tween(Clone, 1, "Quart", "InOut", {Position = UDim2.new(.5, 0, 1.5, 0)})
+        TweenPos:Play()
+        TweenPos.Completed:wait()
+        
+        Clone:Destroy()
+    end)
 end
 
 return NotifyModule
