@@ -7,6 +7,7 @@
     8/22/2022 - Fixed Chat gui glitching on some games such as Prison Life.
     9/30/2022 - Fixed chat gui glitching AGAIN... (added better checks too)
     10/10/2022 - Added gethui() function and fix for Synapse v3.
+    11/11/2022 - Idk what happened but it stopped working... I fixed it though.
 ]]--
 
 local ACL_LoadTime = tick()
@@ -336,7 +337,10 @@ if setfflag then
 end
 
 ChatFixToggle = false
-ACLWarning:Destroy()
+task.spawn(function()
+    wait(1)
+    ACLWarning:Destroy()
+end)
 if OldSetting then
     StarterGui:SetCoreGuiEnabled(CoreGuiSettings[1], CoreGuiSettings[2])
 end
