@@ -1,8 +1,8 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.6a"
-local CurrenChangelog = "-Removed NetworkSleep cuz its useless now"
+local Version = "v3.4.6"
+local CurrenChangelog = "-Added Improved Dex"
 
 local Opened = false
 
@@ -35,7 +35,7 @@ local TextButton = Instance.new("TextButton")
 
 if syn then
     if gethui then
-        gethui(MainGui) -- for da synapse v3 users
+        gethui(MainGui)
     else
         syn.protect_gui(MainGui)
     end
@@ -165,7 +165,7 @@ TextButton.TextWrapped = true
 
 Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-local ChromaLoop = task.spawn(function()
+local ChromaLoop = coroutine.wrap(function()
     local Cooldown = 10
     while true do
         local Hue = tick() % Cooldown / Cooldown
@@ -173,7 +173,7 @@ local ChromaLoop = task.spawn(function()
         TextButton.TextColor3 = Color
         wait()
     end
-end)
+end)()
 
 MainGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
     if Opened then
@@ -222,7 +222,7 @@ end, "NAME OF BUTTON")
 ]]--
 
 Message(string.format("🎀 %s 🎀", Version), "AutoExecuteGui  💝", 10)
-Message("✨ Changelog: ", CurrenChangelog, 10)
+Message("✨ Changelog:", CurrenChangelog, 10)
 
 getgenv().FPDH = workspace.FallenPartsDestroyHeight
 getgenv().OldPos = nil
@@ -245,7 +245,7 @@ end, "Remote Spy")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/fPP8bZ8Z"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua"))()
     end)
 end, "Dex v4")
 
@@ -687,10 +687,10 @@ AddButton(function(Name)
                     local CurrentPosition = PrimaryPart and PrimaryPart.CFrame or false
                     if Tool:IsA("Tool") and not table.find(WhitelistedTools, Tool) then
                         if workspace["FallenPartsDestroyHeight"] ~= 0/0 then workspace["FallenPartsDestroyHeight"] = 0/0 end
-                        task.spawn(function()
+                        coroutine.wrap(function()
                             repeat task.wait() until Tool
                             Tool.Parent = Player.Backpack
-                        end)
+                        end)()
                         if Character and PrimaryPart and Humanoid and CurrentPosition then
                             task.wait()
                             PrimaryPart.Velocity = Vector3.new(0, 10000, 0)
@@ -724,6 +724,85 @@ AddButton(function(Name)
         end
     end)
 end, "Anti Kill")
+
+-- AddButton(function(Name)
+--     local ClonedButton = CreateButton(Name)
+    
+--     local Debounce = false
+--     local StrokeSelection
+    
+--     local OldCollisionProperties = ""
+--     local OldCollisionIds = {}
+--     local TempConnection
+    
+--     local Humanoid
+    
+--     ClonedButton.MouseButton1Click:Connect(function()
+--         if not Debounce then
+--             Debounce = true
+--             ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+--             StrokeSelection = Instance.new("UIStroke", ClonedButton)
+--             StrokeSelection.ApplyStrokeMode = "Border"
+--             StrokeSelection.Color = Color3.fromRGB(255,255,255)
+--             StrokeSelection.Thickness = 1.5
+            
+--             local Player = Players.LocalPlayer
+--             local Character = Player.Character
+--             Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid") or false
+            
+--             if not (setscriptable or Humanoid) then
+--                 return warn("Anti fling error.")
+--             end
+            
+--             local PlayerNames = {}
+            
+--             for _, x in next, Players:GetPlayers() do
+--                 table.insert(PlayerNames, tostring(x))
+--             end
+            
+--             for _, x in next, workspace:GetDescendants() do
+--                 if x:IsA("BasePart") then
+--                     if not x:IsA("Terrain") then
+--                         local Model = x:FindFirstAncestorWhichIsA("Model")
+--                         if not table.find(PlayerNames, tostring(Model)) then
+--                             table.insert(OldCollisionIds, {x, x.CollisionGroupId})
+--                             x.CollisionGroupId = 1
+--                         end
+--                     end
+--                 end
+--             end
+            
+--             setscriptable(workspace, "CollisionGroups", true)
+            
+--             OldCollisionProperties = workspace.CollisionGroups
+--             workspace.CollisionGroups = "0"
+            
+--             if Humanoid then
+--                 Humanoid.NameOcclusion = Enum.NameOcclusion.NoOcclusion
+--             end
+            
+--             TempConnection = Player.CharacterAdded:Connect(function(Character)
+--                 repeat task.wait() until Character:FindFirstChildWhichIsA("Humanoid")
+--                 Character.Humanoid.NameOcclusion = Enum.NameOcclusion.NoOcclusion
+--             end)
+--         else
+--             Debounce = false
+--             StrokeSelection:Destroy()
+--             ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+--             TempConnection:Disconnect()
+            
+--             if Humanoid then
+--                 Humanoid.NameOcclusion = Enum.NameOcclusion.OccludeAll
+--             end
+            
+--             workspace.CollisionGroups = OldCollisionProperties
+            
+--             for _, x in next, OldCollisionIds do
+--                 x[1].CollisionGroupId = x[2] 
+--             end
+--         end
+--     end)
+-- end, "Anti Fling")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
@@ -884,7 +963,12 @@ AddButton(function(Name)
         	end
         end
         if #x > 0 then
-        	TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1,#x)])
+            for _ = 1, 30 do
+                for i = 1, 10 do
+        	        TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1,#x)])
+                end
+    	        task.wait()
+    	    end
         else
             Message("Error", "No available servers.", 5)
         end
@@ -894,14 +978,23 @@ end, "Server Hop")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        local TeleportService = game:GetService("TeleportService")
         local Player = Players.LocalPlayer
         
         if #Players:GetPlayers() <= 1 then
             Player:Kick("Rejoining Experience Shortly")
-            TeleportService:Teleport(game["PlaceId"])
+            for _ = 1, 30 do
+                for i = 1, 10 do
+                    TeleportService:Teleport(game["PlaceId"])
+                end
+                task.wait()
+            end
         else
-            TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
+            for _ = 1, 30 do
+                for i = 1, 10 do
+                    TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
+                end
+                task.wait()
+            end
         end
         
         syn.queue_on_teleport([[
@@ -916,8 +1009,6 @@ end, "Rejoin")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        local TeleportService = game:GetService("TeleportService")
-    
         local Player = Players.LocalPlayer
         local Character = Player.Character or false
         local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
@@ -941,22 +1032,32 @@ AddButton(function(Name)
         if #Players:GetPlayers() <= 1 then
             Player:Kick("...")
             
-            task.spawn(function()
+            coroutine.wrap(function()
                 local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
                 local ErrorTitle = PromptGui:FindFirstChild("ErrorTitle", true)
                 local ErrorMessage = PromptGui:FindFirstChild("ErrorMessage", true)
                 ErrorTitle.Text = "Rejoining Experience Shortly"
                 while true do
                     for i = 1, 3 do
-                        ErrorMessage.Text = "You are currently reconnecting to this game" .. string.rep(".", i) .. "\n".."PlaceId: " .. game["PlaceId"]
+                        ErrorMessage.Text = "You are currently reconnecting to this game"..string.rep(".", i).."\n".."PlaceId: "..game["PlaceId"]
                         wait(1)
                     end
                 end
-            end)
+            end)()
             
-            TeleportService:Teleport(game["PlaceId"])
+            for _ = 1, 30 do
+                for i = 1, 10 do
+                    TeleportService:Teleport(game["PlaceId"])
+                end
+                task.wait()
+            end
         else
-            TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
+            for _ = 1, 30 do
+                for i = 1, 10 do
+                    TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
+                end
+                task.wait()
+            end
         end
         
         syn.queue_on_teleport(string.format([[
