@@ -1,11 +1,9 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
-
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
-
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.6"
-local CurrenChangelog = "-Added Improved Dex"
+local Version = "v3.4.7"
+local CurrenChangelog = "-Updated Anti Kill!"
 
 local Opened = false
 
@@ -657,6 +655,7 @@ AddButton(function(Name)
             StrokeSelection.ApplyStrokeMode = "Border"
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
             StrokeSelection.Thickness = 1.5
+            
             local UserInputService = game:GetService("UserInputService")
             
             local Player = Players.LocalPlayer
@@ -666,10 +665,12 @@ AddButton(function(Name)
                 if Player.Character and Player.Character:FindFirstChildWhichIsA("Humanoid") and Player.Character:FindFirstChildWhichIsA("Humanoid").RootPart and workspace.CurrentCamera then
                     local Humanoid = Player.Character:FindFirstChildWhichIsA("Humanoid")
                     local RootPart = Humanoid.RootPart
+                    
                     if UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter and not RootPart:FindFirstChildWhichIsA("BodyMover") then
                         local X, Y, Z = workspace.CurrentCamera.CFrame:ToEulerAnglesYXZ()
             	        RootPart.CFrame = CFrame.new(RootPart.Position) * CFrame.Angles(0, Y, 0)
                     end
+                    
                     Humanoid.Sit = true
                     Humanoid:SetStateEnabled("Seated", false)
                     TempConnections["Humanoid"] = Humanoid
@@ -684,26 +685,33 @@ AddButton(function(Name)
                         table.insert(WhitelistedTools, x)
                     end
                 end)
+                
                 TempConnections["AntiTool"] = Character.ChildAdded:Connect(function(Tool)
                     local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid") or false
+                    local RootPart = Humanoid and Humanoid.RootPart or false
                     local PrimaryPart = Character and Character.PrimaryPart or false
                     local CurrentPosition = PrimaryPart and PrimaryPart.CFrame or false
+                    
                     if Tool:IsA("Tool") and not table.find(WhitelistedTools, Tool) then
                         if workspace["FallenPartsDestroyHeight"] ~= 0/0 then workspace["FallenPartsDestroyHeight"] = 0/0 end
-                        coroutine.wrap(function()
+                        
+                        task.spawn(function()
+                            Humanoid:UnequipTools()
                             repeat task.wait() until Tool
                             Tool.Parent = Player.Backpack
-                        end)()
-                        if Character and PrimaryPart and Humanoid and CurrentPosition then
-                            task.wait()
-                            PrimaryPart.Velocity = Vector3.new(0, 10000, 0)
-                            for i = 1, 5 do
-                                PrimaryPart.Velocity = Vector3.new()
+                        end)
+                        
+                        if Character and PrimaryPart and Humanoid and RootPart and CurrentPosition then
+                            for i = 1, 7 do
+                                RootPart.Velocity = Vector3.new()
+                                RootPart.RotVelocity = Vector3.new()
                                 Character:SetPrimaryPartCFrame(CurrentPosition)
-                                Humanoid:ChangeState("GettingUp")
+                                Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
                                 task.wait()
                             end
+                            RootPart.Velocity = Vector3.new()
                         end
+                        
                         table.insert(WhitelistedTools, Tool)
                     end
                 end)
