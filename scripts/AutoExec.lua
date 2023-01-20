@@ -1,4 +1,7 @@
 -- // Auto Exec Gui by AnthonyIsntHere // --
+
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
+
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
 local Version = "v3.4.6"
