@@ -166,7 +166,7 @@ TextButton.TextWrapped = true
 
 Holder.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-local ChromaLoop = coroutine.wrap(function()
+local ChromaLoop = task.spawn(function()
     local Cooldown = 10
     while true do
         local Hue = tick() % Cooldown / Cooldown
@@ -174,7 +174,7 @@ local ChromaLoop = coroutine.wrap(function()
         TextButton.TextColor3 = Color
         wait()
     end
-end)()
+end)
 
 MainGui:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
     if Opened then
