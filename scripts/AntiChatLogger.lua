@@ -1,19 +1,16 @@
 -- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
 -- Store in autoexec folder
--- Credits: AnthonyIsntHere and ArianBlaack
+-- Credits: AnthonyIsntHere
 
---[[
-    Change-logs:
-    8/22/2022 - Fixed Chat gui glitching on some games such as Prison Life.
-    9/30/2022 - Fixed chat gui glitching AGAIN... (added better checks too)
-    10/10/2022 - Added gethui() function and fix for Synapse v3.
-    11/11/2022 - Idk what happened but it stopped working... I fixed it though.
-]]--
+-- 4/1/2023 - Rewritten
+
+if not game:IsLoaded() then
+    game.Loaded:wait()
+end
 
 local ACL_LoadTime = tick()
 
-local ChatChanged = false
-local OldSetting = nil
+local OldCoreTypeSettings = {}
 local WhitelistedCoreTypes = {
     "Chat",
     "All",
@@ -21,63 +18,12 @@ local WhitelistedCoreTypes = {
     Enum.CoreGuiType.All
 }
 
-local StarterGui = game:GetService("StarterGui")
-
-local FixCore = function(x)
-    local CoreHook; CoreHook = hookmetamethod(x, "__namecall", function(self, ...)
-        local Method = getnamecallmethod()
-        local Arguments = {...}
-        
-        if self == x and Method == "SetCoreGuiEnabled" and not checkcaller() then
-            local CoreType = Arguments[1]
-            local Enabled = Arguments[2]
-            
-            if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
-                if CoreType == ("Chat" or Enum.CoreGuiType.Chat) then
-                    OldSetting = Enabled
-                end
-                ChatChanged = true
-            end
-        end
-        
-        return CoreHook(self, ...)
-    end)
-    
-    x.CoreGuiChangedSignal:Connect(function(Type)
-        if table.find(WhitelistedCoreTypes, Type) and ChatChanged then
-            task.wait()
-            if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-                x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
-            end
-            wait(1)
-             if StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-                x:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, OldSetting) -- probably defaults to false i am too tired for the making of this lol
-            end
-            ChatChanged = false
-        end
-    end)
-end
-
-if StarterGui then
-    FixCore(StarterGui)
-    if not StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat) then
-        StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
-    end
-else
-    local Connection; Connection = game.ChildAdded:Connect(function(x)
-        if x:IsA("StarterGui") then
-            FixCore(x)
-            Connection:Disconnect()
-        end
-    end)
-end
-
-if not game:IsLoaded() then
-    game.Loaded:wait()
-end
+local OldCoreSetting = nil
 
 local CoreGui = game:GetService("CoreGui")
+local StarterGui = game:GetService("StarterGui")
 local TweenService = game:GetService("TweenService")
+local TextChatService = game:GetService("TextChatService")
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
@@ -93,206 +39,222 @@ local Notify = function(_Title, _Text , Time)
     StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
 end
 
-local Tween = function(Object, Time, Style, Direction, Property)
-	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
-end
+local Metatable = getrawmetatable(StarterGui)
+setreadonly(Metatable, false)
 
-local ACLWarning = Instance.new("ScreenGui")
-local Background = Instance.new("Frame")
-local Top = Instance.new("Frame")
-local Exit = Instance.new("TextButton")
-local UICorner = Instance.new("UICorner")
-local WarningLbl = Instance.new("TextLabel")
-local Loading = Instance.new("Frame")
-local Bar = Instance.new("Frame")
-local WarningBackground = Instance.new("Frame")
-local WarningFrame = Instance.new("Frame")
-local Despair = Instance.new("TextLabel")
-local UIListLayout = Instance.new("UIListLayout")
-local Reason_1 = Instance.new("TextLabel")
-local Reason_2 = Instance.new("TextLabel")
-local Trollge = Instance.new("ImageLabel")
-local UIPadding = Instance.new("UIPadding")
-
-local MakeGuiThread = coroutine.wrap(function()
-    if syn then
-        if gethui then
-            gethui(ACLwarning)
-        else
-            syn.protect_gui(ACLWarning)
+local CoreHook; CoreHook = hookmetamethod(StarterGui, "__namecall", function(self, ...)
+    local Method = getnamecallmethod()
+    local Arguments = {...}
+    
+    if self == StarterGui and not checkcaller() then
+        if Method == "SetCoreGuiEnabled" then
+            local CoreType = Arguments[1]
+            local Enabled = Arguments[2]
+            
+            if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
+                OldCoreTypeSettings[CoreType] = Enabled
+                return
+            end
+        elseif Method == "SetCore" then
+            local Core = Arguments[1]
+            local Connection = Arguments[2]
+            
+            if Core == "CoreGuiChatConnections" then
+                OldCoreSetting = Connection
+                return
+            end
         end
     end
     
-    ACLWarning.Name = "ACL Warning"
-    ACLWarning.Parent = CoreGui
-    ACLWarning.Enabled = false
-    ACLWarning.DisplayOrder = -2147483648
+    return CoreHook(self, ...)
+end)
+
+local EnabledChat = task.spawn(function()
+    repeat
+        StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+        task.wait()
+    until StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType.Chat)
+end)
+
+local WarningGuiThread = task.spawn(function()
+    WarningUI = Instance.new("ScreenGui")
+    Main = Instance.new("Frame")
+    BackgroundHolder = Instance.new("Frame")
+    Background = Instance.new("Frame")
+    TopBar = Instance.new("Frame")
+    UIGradient = Instance.new("UIGradient")
+    TitleHolder = Instance.new("Frame")
+    Title = Instance.new("TextLabel")
+    Holder = Instance.new("Frame")
+    UIListLayout = Instance.new("UIListLayout")
+    Reason_1 = Instance.new("TextLabel")
+    Reason_2 = Instance.new("TextLabel")
+    Reason_3 = Instance.new("TextLabel")
+    WarningText = Instance.new("TextLabel")
+    Exit = Instance.new("TextButton")
+    ImageLabel = Instance.new("ImageLabel")
+    
+    if syn then
+        syn.protect_gui(WarningUI)
+    end
+    
+    WarningUI.Enabled = false
+    WarningUI.Name = "WarningUI"
+    WarningUI.Parent = CoreGui
+    
+    Main.Name = "Main"
+    Main.Parent = WarningUI
+    Main.AnchorPoint = Vector2.new(.5, .5)
+    Main.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Main.BackgroundTransparency = 1
+    Main.Position = UDim2.new(.5, 0, .5, 0)
+    Main.Size = UDim2.new(0, 400, 0, 400)
+    
+    BackgroundHolder.Name = "BackgroundHolder"
+    BackgroundHolder.Parent = Main
+    BackgroundHolder.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    BackgroundHolder.BackgroundTransparency = .25
+    BackgroundHolder.BorderSizePixel = 0
+    BackgroundHolder.Size = UDim2.new(1, 0, 1, 0)
     
     Background.Name = "Background"
-    Background.Parent = ACLWarning
-    Background.AnchorPoint = Vector2.new(0.5, 0.5)
-    Background.BackgroundColor3 = Color3.fromRGB(21, 0, 0)
+    Background.Parent = BackgroundHolder
+    Background.AnchorPoint = Vector2.new(.5, .5)
+    Background.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     Background.BorderSizePixel = 0
-    Background.Position = UDim2.new(0.5, 0, 0.5, 0)
-    Background.Size = UDim2.new(0.300000012, 0, 0.5, 0)
+    Background.Position = UDim2.new(.5, 0, .5, 0)
+    Background.Size = UDim2.new(.96, 0, .96, 0)
     
-    Top.Name = "Top"
-    Top.Parent = Background
-    Top.AnchorPoint = Vector2.new(0.5, 0.5)
-    Top.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
-    Top.BorderSizePixel = 0
-    Top.Position = UDim2.new(0.5, 0, 0.100000001, 0)
-    Top.Size = UDim2.new(0.899999976, 0, 0.100000001, 0)
+    TopBar.Name = "TopBar"
+    TopBar.Parent = Background
+    TopBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TopBar.BorderSizePixel = 0
+    TopBar.Size = UDim2.new(1, 0, 0, 2)
     
-    Exit.Name = "Exit"
-    Exit.Parent = Top
-    Exit.AnchorPoint = Vector2.new(0.5, 0.5)
-    Exit.BackgroundColor3 = Color3.fromRGB(38, 0, 0)
-    Exit.Position = UDim2.new(0.949999988, 0, 0.5, 0)
-    Exit.Size = UDim2.new(0.100000001, -6, 1, -9)
-    Exit.Visible = false
-    Exit.Font = Enum.Font.Arcade
-    Exit.Text = "X"
-    Exit.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Exit.TextScaled = true
-    Exit.TextSize = 14.000
-    Exit.TextWrapped = true
+    UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(53, 149, 146)), ColorSequenceKeypoint.new(.29, Color3.fromRGB(93, 86, 141)), ColorSequenceKeypoint.new(.50, Color3.fromRGB(126, 64, 138)), ColorSequenceKeypoint.new(.75, Color3.fromRGB(143, 112, 112)), ColorSequenceKeypoint.new(1, Color3.fromRGB(159, 159, 80))}
+    UIGradient.Parent = TopBar
     
-    UICorner.CornerRadius = UDim.new(0.200000003, 0)
-    UICorner.Parent = Exit
+    TitleHolder.Name = "TitleHolder"
+    TitleHolder.Parent = Background
+    TitleHolder.AnchorPoint = Vector2.new(.5, .5)
+    TitleHolder.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    TitleHolder.BorderColor3 = Color3.fromRGB(44, 44, 44)
+    TitleHolder.BorderSizePixel = 2
+    TitleHolder.Position = UDim2.new(.5, 0, .5, 0)
+    TitleHolder.Size = UDim2.new(.9, 0, .9, 0)
     
-    WarningLbl.Name = "WarningLbl"
-    WarningLbl.Parent = Top
-    WarningLbl.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    WarningLbl.BackgroundTransparency = 1.000
-    WarningLbl.Position = UDim2.new(0, 17, 0, 0)
-    WarningLbl.Size = UDim2.new(0.5, 0, 1, 0)
-    WarningLbl.Font = Enum.Font.Arcade
-    WarningLbl.Text = "Warning!"
-    WarningLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-    WarningLbl.TextScaled = true
-    WarningLbl.TextSize = 14.000
-    WarningLbl.TextWrapped = true
-    WarningLbl.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Name = "Title"
+    Title.Parent = TitleHolder
+    Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Title.BorderSizePixel = 0
+    Title.Position = UDim2.new(0, 15, 0, -12)
+    Title.Size = UDim2.new(0, 75, 0, 20)
+    Title.Font = Enum.Font.SourceSansBold
+    Title.Text = "Warning"
+    Title.TextColor3 = Color3.fromRGB(235, 235, 235)
+    Title.TextScaled = true
+    Title.TextWrapped = true
     
-    Loading.Name = "Loading"
-    Loading.Parent = Top
-    Loading.AnchorPoint = Vector2.new(0.5, 0.5)
-    Loading.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
-    Loading.BorderSizePixel = 0
-    Loading.Position = UDim2.new(0.699999988, 0, 0.5, 0)
-    Loading.Size = UDim2.new(0.349999994, 0, 0.0199999996, 0)
+    Holder.Name = "Holder"
+    Holder.Parent = TitleHolder
+    Holder.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Holder.BackgroundTransparency = 1
+    Holder.Position = UDim2.new(0, 30, .125, 0)
+    Holder.Size = UDim2.new(1, -30, .875, 0)
     
-    Bar.Name = "Bar"
-    Bar.Parent = Loading
-    Bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Bar.BorderSizePixel = 0
-    Bar.Size = UDim2.new(0, 0, 1, 0)
-    
-    WarningBackground.Name = "WarningBackground"
-    WarningBackground.Parent = Background
-    WarningBackground.AnchorPoint = Vector2.new(0.5, 0.5)
-    WarningBackground.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
-    WarningBackground.BorderSizePixel = 0
-    WarningBackground.Position = UDim2.new(0.5, 0, 0.550000012, 0)
-    WarningBackground.Size = UDim2.new(0.899999976, 0, 0.800000012, 0)
-    
-    WarningFrame.Name = "WarningFrame"
-    WarningFrame.Parent = WarningBackground
-    WarningFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    WarningFrame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-    WarningFrame.BorderSizePixel = 0
-    WarningFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    WarningFrame.Size = UDim2.new(0.899999976, 0, 0.899999976, 0)
-    
-    Despair.Name = "Despair"
-    Despair.Parent = WarningFrame
-    Despair.AnchorPoint = Vector2.new(0.5, 0.5)
-    Despair.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-    Despair.BackgroundTransparency = 1.000
-    Despair.BorderColor3 = Color3.fromRGB(27, 42, 53)
-    Despair.BorderSizePixel = 0
-    Despair.Position = UDim2.new(0.5, 0, 0.100000001, 0)
-    Despair.Size = UDim2.new(0.949999988, 0, 0.119999997, 0)
-    Despair.Font = Enum.Font.Oswald
-    Despair.Text = "Anti Chat Logger will not work here!"
-    Despair.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Despair.TextScaled = true
-    Despair.TextSize = 50.000
-    Despair.TextWrapped = true
-    Despair.TextYAlignment = Enum.TextYAlignment.Top
-    
-    UIListLayout.Parent = WarningFrame
-    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.Parent = Holder
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 15)
     
     Reason_1.Name = "Reason_1"
-    Reason_1.Parent = WarningFrame
-    Reason_1.AnchorPoint = Vector2.new(0.5, 0.5)
-    Reason_1.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-    Reason_1.BackgroundTransparency = 1.000
-    Reason_1.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Reason_1.Parent = Holder
+    Reason_1.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Reason_1.BackgroundTransparency = 1
     Reason_1.BorderSizePixel = 0
-    Reason_1.Position = UDim2.new(0.5, 0, 0.100000001, 0)
-    Reason_1.Size = UDim2.new(0.949999988, 0, 0.100000001, 0)
-    Reason_1.Visible = false
-    Reason_1.Font = Enum.Font.Oswald
-    Reason_1.Text = "-Chat Module was not found."
-    Reason_1.TextColor3 = Color3.fromRGB(255, 0, 0)
+    Reason_1.Size = UDim2.new(1, 0, 0, 20)
+    Reason_1.Font = Enum.Font.SourceSans
+    Reason_1.Text = "- TextChatService is enabled"
+    Reason_1.TextColor3 = Color3.fromRGB(199, 40, 42)
     Reason_1.TextScaled = true
-    Reason_1.TextSize = 50.000
     Reason_1.TextWrapped = true
-    Reason_1.TextYAlignment = Enum.TextYAlignment.Top
+    Reason_1.TextXAlignment = Enum.TextXAlignment.Left
+    Reason_1.Visible = false
     
     Reason_2.Name = "Reason_2"
-    Reason_2.Parent = WarningFrame
-    Reason_2.AnchorPoint = Vector2.new(0.5, 0.5)
-    Reason_2.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-    Reason_2.BackgroundTransparency = 1.000
-    Reason_2.BorderColor3 = Color3.fromRGB(27, 42, 53)
+    Reason_2.Parent = Holder
+    Reason_2.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Reason_2.BackgroundTransparency = 1
     Reason_2.BorderSizePixel = 0
-    Reason_2.Position = UDim2.new(0.5, 0, 0.100000001, 0)
-    Reason_2.Size = UDim2.new(0.949999988, 0, 0.100000001, 0)
-    Reason_2.Visible = false
-    Reason_2.Font = Enum.Font.Oswald
-    Reason_2.Text = "-MessagePosted function is invalid."
-    Reason_2.TextColor3 = Color3.fromRGB(255, 0, 0)
+    Reason_2.Size = UDim2.new(1, 0, 0, 20)
+    Reason_2.Font = Enum.Font.SourceSans
+    Reason_2.Text = "- Legacy chat module was not found"
+    Reason_2.TextColor3 = Color3.fromRGB(199, 40, 42)
     Reason_2.TextScaled = true
-    Reason_2.TextSize = 50.000
     Reason_2.TextWrapped = true
-    Reason_2.TextYAlignment = Enum.TextYAlignment.Top
+    Reason_2.TextXAlignment = Enum.TextXAlignment.Left
+    Reason_2.Visible = false
     
-    Trollge.Name = "Trollge"
-    Trollge.Parent = WarningFrame
-    Trollge.AnchorPoint = Vector2.new(0.5, 0.5)
-    Trollge.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Trollge.BackgroundTransparency = 1.000
-    Trollge.Position = UDim2.new(0.5, 0, 0.670000017, 0)
-    Trollge.Size = UDim2.new(0.449999988, 0, 0.5, 0)
-    Trollge.Image = "rbxassetid://10104834800"
+    Reason_3.Name = "Reason_3"
+    Reason_3.Parent = Holder
+    Reason_3.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Reason_3.BackgroundTransparency = 1
+    Reason_3.BorderSizePixel = 0
+    Reason_3.Size = UDim2.new(1, 0, 0, 20)
+    Reason_3.Font = Enum.Font.SourceSans
+    Reason_3.Text = "- MessagePosted function was not found"
+    Reason_3.TextColor3 = Color3.fromRGB(199, 40, 42)
+    Reason_3.TextScaled = true
+    Reason_3.TextWrapped = true
+    Reason_3.TextXAlignment = Enum.TextXAlignment.Left
+    Reason_3.Visible = false
     
-    UIPadding.Parent = WarningFrame
-    UIPadding.PaddingTop = UDim.new(0, 10)
+    WarningText.Name = "WarningText"
+    WarningText.Parent = TitleHolder
+    WarningText.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    WarningText.BackgroundTransparency = 1
+    WarningText.BorderSizePixel = 0
+    WarningText.Position = UDim2.new(0, 30, .05, 0)
+    WarningText.RichText = true
+    WarningText.Size = UDim2.new(1, -30, 0, 20)
+    WarningText.Font = Enum.Font.SourceSans
+    WarningText.Text = "> Anti-<font color=\"#6ea644\">Chat Logger</font> will not work here!"
+    WarningText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    WarningText.TextScaled = true
+    WarningText.TextWrapped = true
+    WarningText.TextXAlignment = Enum.TextXAlignment.Left
     
-    Exit.MouseButton1Click:Connect(function()
-        local UpTween = Tween(Background, .2, "Quint", "Out", {Position = UDim2.new(0.5, 0, 0.45, 0)})
-        local DownTween = Tween(Background, 1, "Quad", "Out", {Position = UDim2.new(0.5, 0, 2, 0)})
-        UpTween:Play()
-        UpTween.Completed:wait()
-        DownTween:Play()
-        DownTween.Completed:wait()
-        ACLWarning:Destroy()
+    Exit.Name = "Exit"
+    Exit.Parent = TitleHolder
+    Exit.AnchorPoint = Vector2.new(.5, .5)
+    Exit.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+    Exit.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    Exit.Position = UDim2.new(.5, 0, .899999976, 0)
+    Exit.Size = UDim2.new(0, 250, 0, 20)
+    Exit.Font = Enum.Font.SourceSans
+    Exit.Text = "Ok"
+    Exit.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Exit.TextScaled = true
+    Exit.TextWrapped = true
+    
+    ImageLabel.Parent = TitleHolder
+    ImageLabel.AnchorPoint = Vector2.new(.5, .5)
+    ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ImageLabel.BackgroundTransparency = 1
+    ImageLabel.Position = UDim2.new(.5, 0, .6, 0)
+    ImageLabel.Size = UDim2.new(.3, 0, .3, 0)
+    ImageLabel.ZIndex = 1
+    ImageLabel.Image = "rbxassetid://12969025384"
+    ImageLabel.ImageColor3 = Color3.fromRGB(40, 40, 40)
+    ImageLabel.ImageTransparency = .5
+    
+    Exit.MouseButton1Down:Connect(function()
+        WarningUI:Destroy()
     end)
-end)()
+end)
 
-local ExitCooldown = function()
-    wait(.5)
-    local Tween = Tween(Bar, 3, "Quad", "InOut", {Size = UDim2.new(1, 0, 1, 0)})
-    Tween:Play()
-    Tween.Completed:wait()
-    Loading:Destroy()
-    Exit.Visible = true
+if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+    WarningUI.Enabled = true
+    Reason_1.Visible = true
+    return
 end
 
 local PlayerScripts = Player:WaitForChild("PlayerScripts")
@@ -300,14 +262,13 @@ local ChatMain = PlayerScripts:FindFirstChild("ChatMain", true) or false
 
 if not ChatMain then
     local Timer = tick()
-    repeat
-        task.wait()
-    until PlayerScripts:FindFirstChild("ChatMain", true) or tick() > (Timer + 3)
+    
+    repeat task.wait() until PlayerScripts:FindFirstChild("ChatMain", true) or tick() > (Timer + 3)
     ChatMain = PlayerScripts:FindFirstChild("ChatMain", true)
+    
     if not ChatMain then
-        ACLWarning.Enabled = true
-        Reason_1.Visible = true
-        ExitCooldown()
+        WarningUI.Enabled = true
+        Reason_2.Visible = true
         return
     end
 end
@@ -315,15 +276,13 @@ end
 local PostMessage = require(ChatMain).MessagePosted
 
 if not PostMessage then
-    ACLWarning.Enabled = true
-    Reason_2.Visible = true
-    ExitCooldown()
+    WarningUI.Enabled = true
+    Reason_3.Visible = true
     return
 end
 
 local MessageEvent = Instance.new("BindableEvent")
-local OldFunctionHook
-OldFunctionHook = hookfunction(PostMessage.fire, function(self, Message)
+local OldFunctionHook; OldFunctionHook = hookfunction(PostMessage.fire, function(self, Message)
     if not checkcaller() and self == PostMessage then
         MessageEvent:Fire(Message)
         return
@@ -334,15 +293,23 @@ end)
 if setfflag then
     setfflag("AbuseReportScreenshot", "False")
     setfflag("AbuseReportScreenshotPercentage", "0")
+end -- To disallow roblox from viewing screenshots.
+
+task.delay(1, function() WarningUI:Destroy() end)
+
+for _, x in next, OldCoreTypeSettings do
+    if not x then
+        StarterGui:SetCore("ChatActive", false)
+    end
+    StarterGui:SetCoreGuiEnabled(_, x)
 end
 
-ChatFixToggle = false
-task.spawn(function()
-    wait(1)
-    ACLWarning:Destroy()
-end)
-if OldSetting then
-    StarterGui:SetCoreGuiEnabled(CoreGuiSettings[1], CoreGuiSettings[2])
+if OldCoreSetting then
+    StarterGui:SetCore("CoreGuiChatConnections", OldCoreSetting)
 end
+
+Metatable.__namecall = CoreHook
+setreadonly(Metatable, true)
+
 Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
 print(string.format("Anti Chat-Logger has loaded in %s seconds.", tostring(tick() - ACL_LoadTime):sub(1, 4)))
