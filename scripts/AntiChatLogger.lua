@@ -1,8 +1,11 @@
 -- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
--- Store in autoexec folder
+-- Store the loadstring (line 5) in your autoexec folder into a text/lua file for auto updates
 -- Credits: AnthonyIsntHere
 
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
+
 -- 4/1/2023 - Rewritten
+-- 4/4/2023 - Fixed scrollbar visibility issue
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -306,6 +309,11 @@ end
 
 if OldCoreSetting then
     StarterGui:SetCore("CoreGuiChatConnections", OldCoreSetting)
+end
+
+if StarterGui:GetCore("ChatActive") then
+    StarterGui:SetCore("ChatActive", false)
+    StarterGui:SetCore("ChatActive", true)
 end
 
 Metatable.__namecall = CoreHook
