@@ -35,11 +35,7 @@ local Frame = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
 
 if syn then
-    if gethui then
-        gethui(MainGui)
-    else
-        syn.protect_gui(MainGui)
-    end
+    syn.protect_gui(MainGui)
 end
 
 MainGui.Name = "MainGui"
