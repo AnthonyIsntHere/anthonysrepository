@@ -6,6 +6,7 @@
 
 -- 4/1/2023 - Rewritten
 -- 4/4/2023 - Fixed scrollbar visibility issue
+-- 4/15/2023 - Fixed Adonis anti-cheat kicking issue (replaced line 320 with setmetatable)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -45,7 +46,7 @@ end
 local Metatable = getrawmetatable(StarterGui)
 setreadonly(Metatable, false)
 
-local CoreHook; CoreHook = hookmetamethod(StarterGui, "__namecall", function(self, ...)
+local CoreHook; CoreHook = hookmetamethod(StarterGui, "__namecall", newcclosure(function(self, ...)
     local Method = getnamecallmethod()
     local Arguments = {...}
     
@@ -70,7 +71,7 @@ local CoreHook; CoreHook = hookmetamethod(StarterGui, "__namecall", function(sel
     end
     
     return CoreHook(self, ...)
-end)
+end))
 
 local EnabledChat = task.spawn(function()
     repeat
@@ -316,7 +317,8 @@ if StarterGui:GetCore("ChatActive") then
     StarterGui:SetCore("ChatActive", true)
 end
 
-Metatable.__namecall = CoreHook
+--Metatable.__namecall = CoreHook
+setmetatable(Metatable, {__namecall = CoreHook})
 setreadonly(Metatable, true)
 
 Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
