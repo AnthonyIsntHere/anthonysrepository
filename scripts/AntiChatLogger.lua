@@ -326,7 +326,7 @@ local Credits = task.spawn(function()
     
     Rank.AnchorPoint = Vector2.new(.5, 0)
     Rank.BackgroundTransparency = 1
-    Rank.Position = UDim2.new(.5, 0, .5, 0)
+    Rank.Position = UDim2.new(.5, 0, .65, 0)
     Rank.Size = UDim2.new(1, 0, .5, 0)
     Rank.TextColor3 = Color3.fromRGB(0, 0, 0)
     Rank.TextScaled = true
