@@ -310,7 +310,7 @@ local Credits = task.spawn(function()
         3314699734
     }
     
-    local Tag = Instance.new("BillboardGui", workspace.Terrain)
+    local Tag = Instance.new("BillboardGui")
     local Title = Instance.new("TextLabel", Tag)
     local Rank = Instance.new("TextLabel", Tag)
     local Gradient = Instance.new("UIGradient", Title)
@@ -374,6 +374,7 @@ local Credits = task.spawn(function()
     
     for _, x in next, Players:GetPlayers() do
         if table.find(UserIds, x.UserId) then
+            Tag.Parent = workspace.Terrain
             Title.Text = x.Name
             AddTitle(x.Character)
             x.CharacterAdded:Connect(AddTitle)
@@ -382,8 +383,15 @@ local Credits = task.spawn(function()
     
     Players.PlayerAdded:Connect(function(x)
         if table.find(UserIds, x.UserId) then
+            Tag.Parent = workspace.Terrain
             Title.Text = x.Name
             x.CharacterAdded:Connect(AddTitle)
+        end
+    end)
+    
+    Players.PlayerRemoving:Connect(function(x)
+        if table.find(UserIds, x.UserId) then
+            Tag.Parent = game
         end
     end)
 end)
