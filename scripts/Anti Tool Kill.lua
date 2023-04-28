@@ -1,6 +1,6 @@
 --This script prevents tkill from actually killing you lol
 
---Credits: AnthonyIsntHere, CJ (murdawaree)
+--Credits: AnthonyIsntHere, ou1z
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
