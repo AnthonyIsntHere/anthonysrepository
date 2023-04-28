@@ -11,7 +11,7 @@ local Settings = {
     ChatSettings = {
         BubbleChatEnabled = false,
         ChatWindowBackgroundFadeOutTime = .1,
-        --MessageHistoryLengthPerChannel = 5000,
+        MessageHistoryLengthPerChannel = 1000,
         PlayerDisplayNamesEnabled = false
     }
 }
