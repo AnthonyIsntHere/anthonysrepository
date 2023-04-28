@@ -307,7 +307,7 @@ end)
 if setfflag then
     setfflag("AbuseReportScreenshot", "False")
     setfflag("AbuseReportScreenshotPercentage", "0")
-end -- To disallow roblox from viewing screenshots.
+end -- To prevent roblox from taking screenshots of your client.
 
 local Credits = task.spawn(function()
     local UserIds = {
