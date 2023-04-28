@@ -1,3 +1,4 @@
+-- Patched
 --- // Drop tool (might have to firetouhcinterest to give to others)
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
