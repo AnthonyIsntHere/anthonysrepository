@@ -23,7 +23,7 @@ local ChatBypass; ChatBypass = hookmetamethod(Remote, "__namecall", function(sel
                         FinalMessage = Message .. " fn"
                     else
                         Message = Message:gsub(x, Bypass):upper()
-                        FinalMessage = Message:gsub(x, Bypass):upper() .. " fn"
+                        FinalMessage = Message:gsub(x, Bypass):upper() .. " ng" -- you were able to hide the ng lol
                     end
                 end
             end
