@@ -1,4 +1,4 @@
---Made to assist scripters that are new to metamethods
+--Made to assist scripters that are new to hooking metamethods
 local OldIndex
 local OldNamecall
 
