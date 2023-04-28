@@ -1,5 +1,5 @@
---This script retreives the hash and image id of a decal id
---Credits: AnthonyIsntHere, CJ (murdawaree)
+--This script converts a decal id to an imageid along with the hashed version.
+--Credits: AnthonyIsntHere, ou1z
 
 local DecalId = 3032537368
 
