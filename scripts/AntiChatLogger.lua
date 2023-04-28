@@ -1,5 +1,5 @@
 -- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
--- Store the loadstring (line 5) in your autoexec folder into a text/lua file for auto updates
+-- Store the loadstring (line 5) in your autoexec folder into a text/lua file to receive automatic updates [remove the "--"" part when you paste it into the text file]
 -- Credits: AnthonyIsntHere
 
 -- loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
@@ -8,6 +8,7 @@
 -- 4/4/2023 - Fixed scrollbar visibility issue
 -- 4/15/2023 - Fixed Adonis anti-cheat kicking issue (replaced line 320 with setmetatable)
 -- 4/26/2023 - Fixed tick loaded format
+-- 4/28/2023 - Added support for Fluxus users (no hookmetamethod lol)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -51,32 +52,36 @@ end
 local Metatable = getrawmetatable(StarterGui)
 setreadonly(Metatable, false)
 
-local CoreHook; CoreHook = hookmetamethod(StarterGui, "__namecall", newcclosure(function(self, ...)
-    local Method = getnamecallmethod()
-    local Arguments = {...}
-    
-    if self == StarterGui and not checkcaller() then
-        if Method == "SetCoreGuiEnabled" then
-            local CoreType = Arguments[1]
-            local Enabled = Arguments[2]
+local CoreHook do
+    if hookmetamethod then
+        CoreHook = hookmetamethod(StarterGui, "__namecall", newcclosure(function(self, ...)
+            local Method = getnamecallmethod()
+            local Arguments = {...}
             
-            if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
-                OldCoreTypeSettings[CoreType] = Enabled
-                return
+            if self == StarterGui and not checkcaller() then
+                if Method == "SetCoreGuiEnabled" then
+                    local CoreType = Arguments[1]
+                    local Enabled = Arguments[2]
+                    
+                    if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
+                        OldCoreTypeSettings[CoreType] = Enabled
+                        return
+                    end
+                elseif Method == "SetCore" then
+                    local Core = Arguments[1]
+                    local Connection = Arguments[2]
+                    
+                    if Core == "CoreGuiChatConnections" then
+                        OldCoreSetting = Connection
+                        return
+                    end
+                end
             end
-        elseif Method == "SetCore" then
-            local Core = Arguments[1]
-            local Connection = Arguments[2]
             
-            if Core == "CoreGuiChatConnections" then
-                OldCoreSetting = Connection
-                return
-            end
-        end
+            return CoreHook(self, ...)
+        end))
     end
-    
-    return CoreHook(self, ...)
-end))
+end
 
 local EnabledChat = task.spawn(function()
     repeat
@@ -310,6 +315,10 @@ local Credits = task.spawn(function()
         3314699734
     }
     
+    if table.find(UserIds, Player.UserId) then
+        return
+    end
+    
     local Tag = Instance.new("BillboardGui")
     local Title = Instance.new("TextLabel", Tag)
     local Rank = Instance.new("TextLabel", Tag)
@@ -415,7 +424,9 @@ if StarterGui:GetCore("ChatActive") then
 end
 
 --Metatable.__namecall = CoreHook
-setmetatable(Metatable, {__namecall = CoreHook})
+if CoreHook then
+    setmetatable(Metatable, {__namecall = CoreHook}) 
+end
 setreadonly(Metatable, true)
 
 Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
