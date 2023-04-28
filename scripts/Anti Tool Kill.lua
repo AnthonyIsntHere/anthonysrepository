@@ -22,7 +22,7 @@ local AntiKill = function()
     if Character and Humanoid and RootPart and Camera then
         if UserInputService.MouseBehavior == Enum.MouseBehavior.LockCenter then
             local X, Y, Z = Camera.CFrame:ToEulerAnglesYXZ()
-	        RootPart.CFrame = CFrame.new(RootPart.Position) * CFrame.Angles(0, Y, 0)
+	    RootPart.CFrame = CFrame.new(RootPart.Position) * CFrame.Angles(0, Y, 0)
         end
         
         Humanoid.Sit = true
