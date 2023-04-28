@@ -1,7 +1,8 @@
--- This is for r15 only
+-- This is for R15 only
 -- Place in autoexec
 -- It utilizes animations made by roblox
--- You can change the ids to whatever you like (only if you know what ur doing lol)
+-- You can change the ids to whatever you like only if you know what ur doing lol
+
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
