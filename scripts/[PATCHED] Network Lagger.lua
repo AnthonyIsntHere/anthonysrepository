@@ -1,3 +1,4 @@
+-- Patched
 -- This script makes players, who are using velocity to manipulate baseparts, appear laggy!
 -- Perfect for trolling annoying skids/leeches!
 
