@@ -1,4 +1,3 @@
--- Made by AnthonyIsntHere
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
@@ -32,7 +31,7 @@ end
 local ChatAdded = Scroller.ChildAdded:Connect(function(x)
     local MessageTextLabel = x:FindFirstChildWhichIsA("TextLabel")
     local SenderTextButton = MessageTextLabel and MessageTextLabel:FindFirstChildWhichIsA("TextButton")
-    if MessageTextLabel then
+    if MessageTextLabel and SenderTextButton then
         repeat task.wait() until not MessageTextLabel.Text:match("__+")
 
         local Message = Gsub(MessageTextLabel.Text, "^%s+", "")
