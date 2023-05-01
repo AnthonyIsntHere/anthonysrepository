@@ -33,21 +33,7 @@ local ChatAdded = Scroller.ChildAdded:Connect(function(x)
     local SenderTextButton = MessageTextLabel and MessageTextLabel:FindFirstChildWhichIsA("TextButton")
     if MessageTextLabel and SenderTextButton then
         repeat task.wait() until not MessageTextLabel.Text:match("__+")
-
         local Message = Gsub(MessageTextLabel.Text, "^%s+", "")
-        local Sender = Gsub(SenderTextButton.Text, "[%[%]:]", "")
-
-        if Players:FindFirstChild(Sender) then
-            Sender = Players:FindFirstChild(Sender)
-        else
-            for _,x in next, Players:GetPlayers() do
-                if Sender == x.DisplayName then
-                    Sender = x
-                end
-            end
-        end
-
-        if type(Sender) == "string" then return end
         
         if Message:match(" ") then
             x:Destroy()
