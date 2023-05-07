@@ -1,5 +1,4 @@
 --[[
-    Method originally discovered by ShownApe (Discord: <@891867365892038657>)
     Main things to keep in mind:
         -BackendAccoutrementState is a hidden replicated property similar to NetworkIsSleeping.
         -ChildAdded or ChildRemoving needs to be triggered in order to update the character.
