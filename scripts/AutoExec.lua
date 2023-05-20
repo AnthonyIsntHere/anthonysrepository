@@ -682,7 +682,7 @@ AddButton(function(Name)
         Player.Character = nil
         Player.Character = Character
         
-        wait(Players.RespawnTime - .15)
+        wait(Players.RespawnTime - .01)
         
         if Humanoid.Parent == Player.Character then
             local PosOld
@@ -701,7 +701,7 @@ AddButton(function(Name)
                 end
             end)
             
-            Player.Character = Character:Destroy()
+            Humanoid.Health = 0
             Character = Player.CharacterAdded:wait()
             
             repeat wait() until Character.PrimaryPart
