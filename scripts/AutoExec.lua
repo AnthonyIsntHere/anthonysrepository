@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.7"
-local CurrenChangelog = "-Updated Anti Kill!"
+local Version = "v3.4.8"
+local CurrenChangelog = "-Rip TKill"
 
 local Opened = false
 
