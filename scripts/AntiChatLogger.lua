@@ -9,6 +9,7 @@
 -- 4/15/2023 - Fixed Adonis anti-cheat kicking issue (replaced line 320 with setmetatable)
 -- 4/26/2023 - Fixed tick loaded format
 -- 4/28/2023 - Added support for Fluxus users (no hookmetamethod lol)
+-- 6/14/2023 - Added support for Evon users (checkcaller doens't work properly LOL)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -297,7 +298,7 @@ end
 
 local MessageEvent = Instance.new("BindableEvent")
 local OldFunctionHook; OldFunctionHook = hookfunction(PostMessage.fire, function(self, Message)
-    if not checkcaller() and self == PostMessage then
+    if self == PostMessage then
         MessageEvent:Fire(Message)
         return
     end
