@@ -10,6 +10,7 @@
 -- 4/26/2023 - Fixed tick loaded format
 -- 4/28/2023 - Added support for Fluxus users (no hookmetamethod lol)
 -- 6/14/2023 - Added support for Evon users (checkcaller doens't work properly LOL)
+-- 7/7/2023 - Added support for Valyse users "FLAG IS NOT EXIST" LMFAO
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -306,8 +307,10 @@ local OldFunctionHook; OldFunctionHook = hookfunction(PostMessage.fire, function
 end)
 
 if setfflag then
-    setfflag("AbuseReportScreenshot", "False")
-    setfflag("AbuseReportScreenshotPercentage", "0")
+    pcall(function()
+        setfflag("AbuseReportScreenshot", "False")
+        setfflag("AbuseReportScreenshotPercentage", "0")
+    end)
 end -- To prevent roblox from taking screenshots of your client.
 
 local Credits = task.spawn(function()
