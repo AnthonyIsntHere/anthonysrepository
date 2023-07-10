@@ -40,7 +40,7 @@ local SwimIdle = "http://www.roblox.com/asset/?id=507785072"
 local Player = game:GetService("Players").LocalPlayer
 local Bool = false
 
-game:GetService("StarterPlayer").AllowCustomAnimations = true
+game:GetService("StarterPlayer").AllowCustomAnimations = true -- THANKS PEW
 
 local function Animate(Character)
     local Humanoid
