@@ -1,6 +1,7 @@
 -- Control Tool
 -- Made by AnthonyIsntHere
 
+-- Hold tool out for instant ownership when loading (optional)
 -- Movement (Flight-Based): Q, E, W, A, S, D
 -- Fling is toggleable
 -- You can reset normally using roblox menu
