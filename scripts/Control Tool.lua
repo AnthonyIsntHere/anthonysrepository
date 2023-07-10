@@ -178,7 +178,6 @@ local Control = function()
     task.spawn(function()
         while Player.Character == Character do
             if FlingDebounce then
-                print("Flingingg")
                 local Velocity = Handle.Velocity
                 Handle.Velocity = Velocity + (Handle.CFrame.LookVector * FlingPower) + Vector3.new(0, FlingPower, 0)
                 RunService.RenderStepped:wait()
