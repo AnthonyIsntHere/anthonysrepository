@@ -7,26 +7,40 @@ if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
-local Walk = "http://www.roblox.com/asset/?id=2510202577"
+--local Walk = "http://www.roblox.com/asset/?id=2510202577" -- Rthro
+--local Walk = "http://www.roblox.com/asset/?id=4211223236" -- new R15
+--local Walk = "http://www.roblox.com/asset/?id=3489174223" -- new Zombie
+local Walk = "http://www.roblox.com/asset/?id=507767714" -- R15
 
-local Run = "http://www.roblox.com/asset/?id=507777826"
+--local Run = "http://www.roblox.com/asset/?id=10921261968" -- Rthro
+--local Run = "http://www.roblox.com/asset/?id=616163682" -- new Zombie
+--local Run = "http://www.roblox.com/asset/?id=4211220381" -- new R15
+--local Run = "http://www.roblox.com/asset/?id=616163682" -- Zombie
+local Run = "https://www.roblox.com/asset/?id=507767714" -- R15
 
-local Jump = "http://www.roblox.com/asset/?id=2510197830"
+--local Jump = "http://www.roblox.com/asset/?id=2510197830" -- Rthro
+local Jump = "http://www.roblox.com/asset/?id=507765000" -- R15
 
-local Idle_A = "http://www.roblox.com/asset/?id=742637544"
+--local Idle_A = "http://www.roblox.com/asset/?id=10921258489" -- Rthro
+--local Idle_A = "http://www.roblox.com/asset/?id=4211217646" -- new R15
+--local Idle_A = "http://www.roblox.com/asset/?id=10921344533" -- Zombie
+local Idle_A = "http://www.roblox.com/asset/?id=507766951" -- R15IdleYawn
 
-local Idle_B = "http://www.roblox.com/asset/?id=5230599789"
+--local Idle_B = "http://www.roblox.com/asset/?id=4211218409" -- new R15
+local Idle_B = "http://www.roblox.com/asset/?id=5230599789" -- Bored Emote
 
-local Fall = "http://www.roblox.com/asset/?id=2510195892"
+local Fall = "http://www.roblox.com/asset/?id=507767968"
 
-local Climb = "http://www.roblox.com/asset/?id=707826056"
+local Climb = "http://www.roblox.com/asset/?id=507765644"
 
-local Swim = "http://www.roblox.com/asset/?id=657560551"
+local Swim = "http://www.roblox.com/asset/?id=507784897"
 
-local SwimIdle = "http://www.roblox.com/asset/?id=657557095"
+local SwimIdle = "http://www.roblox.com/asset/?id=507785072"
 
 local Player = game:GetService("Players").LocalPlayer
 local Bool = false
+
+game:GetService("StarterPlayer").AllowCustomAnimations = true
 
 local function Animate(Character)
     local Humanoid
