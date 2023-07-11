@@ -1,6 +1,7 @@
 -- Control Tool
 -- Made by AnthonyIsntHere
 
+-- You can select a specific tool by equipping it.
 -- Hold tool out for instant ownership when loading (optional)
 -- Movement (Flight-Based): Q, E, W, A, S, D
 -- Fling is toggleable
@@ -9,7 +10,7 @@
 -- Settings:
 local MaxSpeed = 1
 local FlingHotkey = "X"
-local FlingPower = 50000
+local FlingPower = 69420
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -22,7 +23,7 @@ local Player = Players.LocalPlayer
 local Backpack = Player.Backpack
 local Character = Player.Character or workspace:FindFirstChild(Player.Name, true)
 
-local Tool = Backpack:FindFirstChildWhichIsA("Tool") or Character:FindFirstChildWhichIsA("Tool")
+local Tool = Character:FindFirstChildWhichIsA("Tool") or Backpack:FindFirstChildWhichIsA("Tool")
 local Handle = Tool and Tool:FindFirstChild("Handle")
 
 local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
