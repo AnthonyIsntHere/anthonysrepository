@@ -1,11 +1,11 @@
--- Control Tool
+-- FE Control Tool
 -- Made by AnthonyIsntHere
 
--- You can select a specific tool by equipping it.
--- Hold tool out for instant ownership when loading (optional)
+-- You can select a specific tool by equipping it
+-- Equip your tool for instant ownership when loading script (optional)
 -- Movement (Flight-Based): Q, E, W, A, S, D
--- Fling is toggleable
--- You can reset normally using roblox menu
+-- Fling is toggleable via hotkey (Default: X key)
+-- You can reset normally using roblox menu (esc + r + enter)
 
 -- Settings:
 local MaxSpeed = 1
@@ -35,13 +35,9 @@ end
 
 local ResetBind = Instance.new("BindableEvent")
 
-if workspace.FallenPartsDestroyHeight ~= -500 then
-    workspace.FallenPartsDestroyHeight = -500
-end
-
 Player.Character = nil
 Player.Character = Character
-task.wait(Players.RespawnTime + .10)
+task.wait(Players.RespawnTime + .50)
 
 local OldRPos = RootPart.Position
 
@@ -112,6 +108,8 @@ local Control = function()
     end)
 
     task.spawn(function()
+        local i = 0
+
         while BodyPosition and BodyGyro do
             local New = BodyGyro.CFrame - BodyGyro.CFrame.p + BodyPosition.Position
 
@@ -158,7 +156,9 @@ local Control = function()
             elseif Keys.S then
                 BodyGyro.CFrame = Camera.CoordinateFrame * CFrame.Angles(math.rad(Speed * 5), 0, 0)
             else
+                i += .05
                 BodyGyro.CFrame = Camera.CoordinateFrame
+                BodyPosition.Position = New.p + Vector3.new(0, math.sin(i) / 40, 0)
             end
 
             task.wait()
