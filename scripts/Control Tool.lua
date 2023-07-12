@@ -2,13 +2,15 @@
 -- Made by AnthonyIsntHere
 
 -- You can select a specific tool by equipping it
--- Equip your tool for instant ownership when loading script (optional)
+-- Equip your tool for instant ownership when loading script (optional + not guaranteed to work everytime lol)
 -- Movement (Flight-Based): Q, E, W, A, S, D
+-- MovementPower variable can be set to 100 if you don't want to move smoothly
 -- Fling is toggleable via hotkey (Default: X key)
 -- You can reset normally using roblox menu (esc + r + enter)
 
 -- Settings:
 local MaxSpeed = 1
+local MovementPower = 10
 local FlingHotkey = "X"
 local FlingPower = 69420
 
@@ -76,6 +78,7 @@ local Control = function()
     local BodyPosition = Instance.new("BodyPosition", Handle)
     local BodyGyro = Instance.new("BodyGyro", Handle)
 
+    BodyPosition.P = MovementPower * 1000
     BodyPosition.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
     BodyPosition.Position = Handle.Position
 
