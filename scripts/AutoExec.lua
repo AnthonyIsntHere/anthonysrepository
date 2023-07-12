@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.9"
-local CurrenChangelog = "-Fixed some stuff"
+local Version = "v3.5.0"
+local CurrenChangelog = "-Added Walk Fling"
 
 local Opened = false
 
