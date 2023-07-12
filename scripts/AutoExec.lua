@@ -490,6 +490,44 @@ AddButton(function(Name)
     end)
 end, "Fling")
 
+AddButton(function(Name)
+    local ClonedButton = CreateButton(Name)
+    
+    local Player = Players.LocalPlayer
+
+    local Debounce = false
+    local TempConnection
+    local StrokeSelection
+    
+    ClonedButton.MouseButton1Click:Connect(function()
+        if not Debounce then
+            Debounce = true
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+            StrokeSelection = Instance.new("UIStroke", ClonedButton)
+            StrokeSelection.ApplyStrokeMode = "Border"
+            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Thickness = 1.5
+            TempConnection = RunService.Heartbeat:Connect(function()
+                local Character = Player.Character
+                local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
+                local RootPart = Humanoid and Humanoid.RootPart
+
+                if RootPart then
+                    local Velocity = RootPart.Velocity
+                    RootPart.Velocity = Velocity + (RootPart.CFrame.LookVector * 50000) + Vector3.new(0, 100000, 0)
+                    RunService.RenderStepped:wait()
+                    RootPart.Velocity = Velocity
+                end
+            end)
+        else
+            Debounce = false
+            StrokeSelection:Destroy()
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+            TempConnection:Disconnect()
+        end
+    end)
+end, "Walk Fling")
+
 -- AddButton(function(Name)
 --     local ClonedButton = CreateButton(Name)
     
@@ -720,6 +758,7 @@ AddButton(function(Name)
         	end
         end
         if #x > 0 then
+            Players.LocalPlayer:Kick("Serverhopping...")
             for _ = 1, 30 do
                 for i = 1, 10 do
         	        TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1,#x)])
