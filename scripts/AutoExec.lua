@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.4.8"
-local CurrenChangelog = "-Rip TKill"
+local Version = "v3.4.9"
+local CurrenChangelog = "-Fixed some stuff"
 
 local Opened = false
 
@@ -682,39 +682,31 @@ AddButton(function(Name)
         Player.Character = nil
         Player.Character = Character
         
-        wait(Players.RespawnTime - .01)
+        task.wait(Players.RespawnTime - .01)
         
-        if Humanoid.Parent == Player.Character then
-            local PosOld
-            local CamOld = workspace.CurrentCamera.CFrame
-            
-            if RootPart then
-                PosOld = RootPart.CFrame
-            else
-                PosOld = workspace.CurrentCamera.Focus
-            end
-            
-            table.foreach(Humanoid:GetAccessories(), function(_, x)
-                local Handle = x:FindFirstChild("Handle")
-                if Handle then
-                    Handle:Destroy()
-                end
-            end)
-            
-            Humanoid.Health = 0
-            Character = Player.CharacterAdded:wait()
-            
-            repeat wait() until Character.PrimaryPart
-            
-            for i = 1, 5 do
-                Character:SetPrimaryPartCFrame(PosOld)
-                task.wait()
-            end
-            
-            workspace.CurrentCamera.CFrame = CamOld
-            
-            Respawning = false
+        local PosOld
+        local CamOld = workspace.CurrentCamera.CFrame
+        
+        if RootPart then
+            PosOld = RootPart.CFrame
+        else
+            PosOld = workspace.CurrentCamera.Focus
         end
+
+        Humanoid.Health = 0
+        Character = Player.CharacterAdded:wait()
+        Humanoid = Character and Character:WaitForChild("Humanoid", 1)
+        RootPart = Humanoid and Humanoid.RootPart or Character:WaitForChild("HumanoidRootPart", 1)
+
+        for i = 1, 5 do
+            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+            RootPart.Velocity = Vector3.new()
+            RootPart.CFrame = PosOld
+            task.wait()
+        end
+        workspace.CurrentCamera.CFrame = CamOld
+        
+        Respawning = false
     end)
 end, "Instant Respawn")
 
@@ -745,24 +737,18 @@ AddButton(function(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         local Player = Players.LocalPlayer
         
-        if #Players:GetPlayers() <= 1 then
-            Player:Kick("Rejoining Experience Shortly")
-            for _ = 1, 30 do
-                for i = 1, 10 do
+        for _ = 1, 30 do
+            for i = 1, 10 do
+                if #Players:GetPlayers() <= 1 then
                     TeleportService:Teleport(game["PlaceId"])
-                end
-                task.wait()
-            end
-        else
-            for _ = 1, 30 do
-                for i = 1, 10 do
+                else
                     TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
                 end
-                task.wait()
             end
+            task.wait()
         end
         
-        syn.queue_on_teleport([[
+        queue_on_teleport([[
             game["Loaded"]:wait()
             
             local ReplicatedFirst = game:GetService("ReplicatedFirst")
@@ -794,38 +780,33 @@ AddButton(function(Name)
             OldPos = Camera.Focus
         end
         
-        if #Players:GetPlayers() <= 1 then
-            Player:Kick("...")
-            
-            task.spawn(function()
-                local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
-                local ErrorTitle = PromptGui:FindFirstChild("ErrorTitle", true)
-                local ErrorMessage = PromptGui:FindFirstChild("ErrorMessage", true)
-                ErrorTitle.Text = "Rejoining Experience Shortly"
-                while true do
-                    for i = 1, 3 do
-                        ErrorMessage.Text = "You are currently reconnecting to this game"..string.rep(".", i).."\n".."PlaceId: "..game["PlaceId"]
-                        wait(1)
-                    end
+        Player:Kick("...")
+        
+        task.spawn(function()
+            local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
+            local ErrorTitle = PromptGui:FindFirstChild("ErrorTitle", true)
+            local ErrorMessage = PromptGui:FindFirstChild("ErrorMessage", true)
+            ErrorTitle.Text = "Rejoining Experience Shortly"
+            while true do
+                for i = 1, 3 do
+                    ErrorMessage.Text = "You are currently reconnecting to this game"..string.rep(".", i).."\n".."PlaceId: "..game["PlaceId"]
+                    wait(1)
                 end
-            end)
-            
-            for _ = 1, 30 do
-                for i = 1, 10 do
-                    TeleportService:Teleport(game["PlaceId"])
-                end
-                task.wait()
             end
-        else
-            for _ = 1, 30 do
-                for i = 1, 10 do
+        end)
+        
+        for _ = 1, 30 do
+            for i = 1, 10 do
+                if #Players:GetPlayers() <= 1 then
+                    TeleportService:Teleport(game["PlaceId"])
+                else
                     TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
                 end
-                task.wait()
             end
+            task.wait()
         end
         
-        syn.queue_on_teleport(string.format([[
+        queue_on_teleport(string.format([[
             game["Loaded"]:wait()
             local Players = game:GetService("Players")
             
