@@ -11,12 +11,14 @@
 -- 4/28/2023 - Added support for Fluxus users (no hookmetamethod lol)
 -- 6/14/2023 - Added support for Evon users (checkcaller doens't work properly LOL)
 -- 7/7/2023 - Added support for Valyse users "FLAG IS NOT EXIST" LMFAO
+-- 7/22/2023 - Added global for universal scripts (mainly chat bypasses)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
 local ACL_LoadTime = tick()
+getgenv().AntiChatLogger = true
 
 local OldCoreTypeSettings = {}
 local WhitelistedCoreTypes = {
