@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.5.0"
-local CurrenChangelog = "-Added Walk Fling"
+local Version = "v3.5.1"
+local CurrenChangelog = "-Fixed Instant Respawn and Rejoin Refresh"
 
 local Opened = false
 
@@ -713,14 +713,16 @@ AddButton(function(Name)
         local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
         local RootPart = Humanoid and Humanoid.RootPart or false
         
-        if not Humanoid then return end
-        
         Respawning = true
         
         Player.Character = nil
         Player.Character = Character
+
+        if Humanoid and Humanoid.Health == 0 then
+            return
+        end
         
-        task.wait(Players.RespawnTime - .01)
+        task.wait(Players.RespawnTime - .05)
         
         local PosOld
         local CamOld = workspace.CurrentCamera.CFrame
@@ -742,8 +744,8 @@ AddButton(function(Name)
             RootPart.CFrame = PosOld
             task.wait()
         end
+
         workspace.CurrentCamera.CFrame = CamOld
-        
         Respawning = false
     end)
 end, "Instant Respawn")
@@ -818,6 +820,27 @@ AddButton(function(Name)
         elseif Camera then
             OldPos = Camera.Focus
         end
+
+        queue_on_teleport(string.format([[
+            if not game:IsLoaded() then
+                game["Loaded"]:wait()
+            end
+
+            local Players = game:GetService("Players")
+            
+            local Player = Players.LocalPlayer
+            local Character = Player.Character or Player.CharacterAppearanceLoaded:wait()
+            local RootPart = Character and Character:WaitForChild("HumanoidRootPart")
+            local CurrentPos = RootPart and RootPart.CFrame
+
+            if not CurrentPos then return end
+
+            repeat
+                RootPart.CFrame = CFrame.new(%s)
+                RootPart.Velocity = Vector3.new()
+                task.wait()
+            until RootPart.CFrame ~= CurrentPos
+        ]], tostring(OldPos)))
         
         Player:Kick("...")
         
@@ -844,16 +867,5 @@ AddButton(function(Name)
             end
             task.wait()
         end
-        
-        queue_on_teleport(string.format([[
-            game["Loaded"]:wait()
-            local Players = game:GetService("Players")
-            
-            local Player = Players.LocalPlayer
-            local Character = Player.Character or Player.CharacterAdded:wait()
-            
-            repeat task.wait() until Character and Character.PrimaryPart
-            Character:SetPrimaryPartCFrame(CFrame.new(%s))
-        ]], tostring(OldPos)))
     end)
 end, "RejoinRe")
