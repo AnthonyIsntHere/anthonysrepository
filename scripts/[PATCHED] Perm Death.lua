@@ -1,3 +1,5 @@
+-- RIP TO ONE OF THE MOST OG METHODS LOL PATCHED ON 8/1/2023
+-- It was fun while it lasted 2019-2023
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
