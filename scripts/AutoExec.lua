@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.5.1"
-local CurrenChangelog = "-Fixed Instant Respawn and Rejoin Refresh"
+local Version = "v3.5.2"
+local CurrenChangelog = "-RIP Perm Death"
 
 local Opened = false
 
@@ -702,53 +702,6 @@ AddButton(function(Name)
         end
     end)
 end, "Destroy Height")
-
-AddButton(function(Name)
-    local ClonedButton = CreateButton(Name)
-    ClonedButton.MouseButton1Click:Connect(function()
-        if Respawning then return end
-        
-        local Player = Players.LocalPlayer
-        local Character = Player.Character
-        local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
-        local RootPart = Humanoid and Humanoid.RootPart or false
-        
-        Respawning = true
-        
-        Player.Character = nil
-        Player.Character = Character
-
-        if Humanoid and Humanoid.Health == 0 then
-            return
-        end
-        
-        task.wait(Players.RespawnTime - .05)
-        
-        local PosOld
-        local CamOld = workspace.CurrentCamera.CFrame
-        
-        if RootPart then
-            PosOld = RootPart.CFrame
-        else
-            PosOld = workspace.CurrentCamera.Focus
-        end
-
-        Humanoid.Health = 0
-        Character = Player.CharacterAdded:wait()
-        Humanoid = Character and Character:WaitForChild("Humanoid", 1)
-        RootPart = Humanoid and Humanoid.RootPart or Character:WaitForChild("HumanoidRootPart", 1)
-
-        for i = 1, 5 do
-            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-            RootPart.Velocity = Vector3.new()
-            RootPart.CFrame = PosOld
-            task.wait()
-        end
-
-        workspace.CurrentCamera.CFrame = CamOld
-        Respawning = false
-    end)
-end, "Instant Respawn")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
