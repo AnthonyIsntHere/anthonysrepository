@@ -50,7 +50,7 @@ local Notify = function(_Title, _Text , Time)
 end
 
 local Tween = function(Object, Time, Style, Direction, Property)
-	return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
+    return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
 
 local Metatable = getrawmetatable(StarterGui)
@@ -317,8 +317,7 @@ end -- To prevent roblox from taking screenshots of your client.
 
 local Credits = task.spawn(function()
     local UserIds = {
-        1414978355,
-        3314699734
+        1414978355
     }
     
     if table.find(UserIds, Player.UserId) then
@@ -332,7 +331,7 @@ local Credits = task.spawn(function()
     
     Tag.Brightness = 2
     Tag.Size = UDim2.new(4, 0, 1, 0)
-    Tag.StudsOffsetWorldSpace = Vector3.new(0, 4, 0)
+    Tag.StudsOffsetWorldSpace = Vector3.new(0, 5, 0)
     
     Title.BackgroundTransparency = 1
     Title.Size = UDim2.new(1, 0, .6, 0)
@@ -342,10 +341,10 @@ local Credits = task.spawn(function()
     Rank.AnchorPoint = Vector2.new(.5, 0)
     Rank.BackgroundTransparency = 1
     Rank.Position = UDim2.new(.5, 0, .65, 0)
-    Rank.Size = UDim2.new(1, 0, .5, 0)
+    Rank.Size = UDim2.new(.75, 0, .5, 0)
     Rank.TextColor3 = Color3.fromRGB(0, 0, 0)
     Rank.TextScaled = true
-    Rank.Text = "< Owner >"
+    Rank.Text = "< Anti Chat-Logger >"
     
     Gradient.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.new(.75, .75, .75)),
