@@ -14,13 +14,8 @@ if Humanoid.RigType == Enum.HumanoidRigType.R15 then
     return
 end
 
-Player.Character = nil
-Player.Character = Character
-wait(game:GetService("Players").RespawnTime - 0.05)
-
 Humanoid.Health = 0
 Player.CharacterAdded:wait()
-Player.CharacterAppearanceLoaded:wait()
 Character = Player.Character
 
 Character.DescendantAdded:Connect(function(x)
@@ -29,11 +24,14 @@ Character.DescendantAdded:Connect(function(x)
     end
 end)
 
-if Character:FindFirstChildOfClass("Humanoid") then
-    Humanoid = Character:FindFirstChildOfClass("Humanoid")
+if Character:FindFirstChildWhichIsA("Humanoid") then
+    Humanoid = Character:FindFirstChildWhichIsA("Humanoid") or Character:WaitForChild("Humanoid")
 end
 if Humanoid and Humanoid.RootPart then
-    RootPart = Humanoid.RootPart
+    RootPart = Humanoid and Humanoid.RootPart or function()
+        repeat task.wait() until Humanoid.RootPart
+        RootPart = RootPart
+    end
 else
     return
 end
