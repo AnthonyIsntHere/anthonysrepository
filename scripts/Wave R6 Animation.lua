@@ -21,7 +21,7 @@ Anim = Humanoid:LoadAnimation(Anim)
 
 Hi.Activated:Connect(function()
     Anim:Play(.25, 1, 1)
-    Anim:AdjustSpeed(.8)
+    Anim:AdjustSpeed(1)
     Anim.TimePosition = 0
 end)
 
