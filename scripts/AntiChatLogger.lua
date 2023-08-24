@@ -12,6 +12,7 @@
 -- 6/14/2023 - Added support for Evon users (checkcaller doens't work properly LOL)
 -- 7/7/2023 - Added support for Valyse users "FLAG IS NOT EXIST" LMFAO
 -- 7/22/2023 - Added global for universal scripts (mainly chat bypasses)
+-- 8/24/2023 - Now supports Player.Chatted signal event for clientside (highly requested) 
 
 if not game:IsLoaded() then
     game.Loaded:wait()
@@ -53,11 +54,18 @@ local Tween = function(Object, Time, Style, Direction, Property)
     return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
 end
 
+if getgenv().AntiChatLogger then
+    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15)
+    return
+end
+
 local Metatable = getrawmetatable(StarterGui)
 setreadonly(Metatable, false)
 
-local CoreHook do
-    if hookmetamethod then
+local MessageEvent = Instance.new("BindableEvent")
+
+if hookmetamethod then
+    local CoreHook do
         CoreHook = hookmetamethod(StarterGui, "__namecall", newcclosure(function(self, ...)
             local Method = getnamecallmethod()
             local Arguments = {...}
@@ -83,6 +91,16 @@ local CoreHook do
             end
             
             return CoreHook(self, ...)
+        end))
+    end
+
+    local ChattedFix do
+        ChattedFix = hookmetamethod(Player, "__index", newcclosure(function(self, index)
+            if self == Player and index == "Chatted" then
+                return MessageEvent.Event
+            end
+
+            return ChattedFix(self, index)
         end))
     end
 end
@@ -299,7 +317,6 @@ if not PostMessage then
     return
 end
 
-local MessageEvent = Instance.new("BindableEvent")
 local OldFunctionHook; OldFunctionHook = hookfunction(PostMessage.fire, function(self, Message)
     if self == PostMessage then
         MessageEvent:Fire(Message)
