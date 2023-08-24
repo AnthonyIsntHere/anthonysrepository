@@ -19,7 +19,7 @@ if not game:IsLoaded() then
 end
 
 if getgenv().AntiChatLogger then
-    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15)
+    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15) --SORRY GUYS I FUCKED UP AND DIDN'T SAVE THE NEW ONE
     return
 end
 
