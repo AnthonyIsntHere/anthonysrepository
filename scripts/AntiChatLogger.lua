@@ -18,6 +18,11 @@ if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
+if getgenv().AntiChatLogger then
+    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15)
+    return
+end
+
 local ACL_LoadTime = tick()
 getgenv().AntiChatLogger = true
 
@@ -52,11 +57,6 @@ end
 
 local Tween = function(Object, Time, Style, Direction, Property)
     return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
-end
-
-if getgenv().AntiChatLogger then
-    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15)
-    return
 end
 
 local Metatable = getrawmetatable(StarterGui)
