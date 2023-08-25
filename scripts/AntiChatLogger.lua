@@ -18,11 +18,6 @@ if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
-if getgenv().AntiChatLogger then
-    Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger already loaded!", 15) --SORRY GUYS I FUCKED UP AND DIDN'T SAVE THE NEW ONE
-    return
-end
-
 local ACL_LoadTime = tick()
 getgenv().AntiChatLogger = true
 
