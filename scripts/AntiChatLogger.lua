@@ -13,13 +13,14 @@
 -- 7/7/2023 - Added support for Valyse users "FLAG IS NOT EXIST" LMFAO
 -- 7/22/2023 - Added global for universal scripts (mainly chat bypasses)
 -- 8/24/2023 - Now supports Player.Chatted signal event for clientside (highly requested) 
+-- 8/25/2023 - Fully fixed (i was high when editing it yesterday sorry guys)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
 local ACL_LoadTime = tick()
-getgenv().AntiChatLogger = true
+local NotificationTitle = "🔹Anthony's ACL🔹"
 
 local OldCoreTypeSettings = {}
 local WhitelistedCoreTypes = {
@@ -39,19 +40,29 @@ local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
 
-local PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui") do
-    if not PlayerGui then
-        repeat task.wait() until Player:FindFirstChildWhichIsA("PlayerGui")
-        PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui")
-    end
-end
-
 local Notify = function(_Title, _Text , Time)
     StarterGui:SetCore("SendNotification", {Title = _Title, Text = _Text, Icon = "rbxassetid://2541869220", Duration = Time})
 end
 
 local Tween = function(Object, Time, Style, Direction, Property)
     return TweenService:Create(Object, TweenInfo.new(Time, Enum.EasingStyle[Style], Enum.EasingDirection[Direction]), Property)
+end
+
+local PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui") do
+    if not PlayerGui then
+        local Timer = tick() + 5
+        repeat task.wait() until Player:FindFirstChildWhichIsA("PlayerGui") or (tick() > Timer)
+        PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui") or false
+        if not PlayerGui then
+            return Notify(NotificationTitle, "Failed to find PlayerGui!", 10)
+        end
+    end
+end
+
+if getgenv().AntiChatLogger then
+    return Notify(NotificationTitle, "Anti Chat and Screenshot Logger already loaded!", 15)
+else
+    getgenv().AntiChatLogger = true
 end
 
 local Metatable = getrawmetatable(StarterGui)
@@ -89,14 +100,18 @@ if hookmetamethod then
         end))
     end
 
-    local ChattedFix do
-        ChattedFix = hookmetamethod(Player, "__index", newcclosure(function(self, index)
-            if self == Player and index == "Chatted" then
-                return MessageEvent.Event
-            end
+    if not getgenv().ChattedFix then
+        getgenv().ChattedFix = true
 
-            return ChattedFix(self, index)
-        end))
+        local ChattedFix do
+            ChattedFix = hookmetamethod(Player, "__index", newcclosure(function(self, index)
+                if self == Player and index == "Chatted" then
+                    return MessageEvent.Event
+                end
+
+                return ChattedFix(self, index)
+            end))
+        end
     end
 end
 
@@ -446,5 +461,5 @@ if CoreHook then
 end
 setreadonly(Metatable, true)
 
-Notify("🔹Anthony's ACL🔹", "Anti Chat and Screenshot Logger Loaded!", 15)
+Notify(NotificationTitle, "Anti Chat and Screenshot Logger Loaded!", 15)
 print(string.format("AnthonyIsntHere's Anti Chat-Logger has loaded in %s seconds.", string.format("%.2f", tostring(tick() - ACL_LoadTime))))
