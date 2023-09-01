@@ -242,7 +242,7 @@ end, "Remote Spy")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua", true))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/peyton2465/Dex/master/out.lua", true))()
     end)
 end, "Dex")
 
