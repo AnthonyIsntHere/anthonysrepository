@@ -6,21 +6,22 @@
 
 -- 4/1/2023 - Rewritten
 -- 4/4/2023 - Fixed scrollbar visibility issue
--- 4/15/2023 - Fixed Adonis anti-cheat kicking issue (replaced line 320 with setmetatable)
+-- 4/15/2023 - Fixed Adonis anti-cheat kicking issue
 -- 4/26/2023 - Fixed tick loaded format
--- 4/28/2023 - Added support for Fluxus users (no hookmetamethod lol)
--- 6/14/2023 - Added support for Evon users (checkcaller doens't work properly LOL)
+-- 4/28/2023 - Added support for Fluxus users (hookmetamethod issue seems to have gotten fixed)
+-- 6/14/2023 - Added support for Evon users (checkcaller isuse)
 -- 7/7/2023 - Added support for Valyse users "FLAG IS NOT EXIST" LMFAO
 -- 7/22/2023 - Added global for universal scripts (mainly chat bypasses)
--- 8/24/2023 - Now supports Player.Chatted signal event for clientside (highly requested) 
+-- 8/24/2023 - Now supports Player.Chatted signal event for clientside (highly requested)
 -- 8/25/2023 - Fully fixed (i was high when editing it yesterday sorry guys)
+-- 9/1/2023 - Fixed issue with /e command not working sometimes (mainly when joining a game)
 
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
 local ACL_LoadTime = tick()
-local NotificationTitle = "🔹Anthony's ACL🔹"
+local NotificationTitle = "Anthony's ACL"
 
 local OldCoreTypeSettings = {}
 local WhitelistedCoreTypes = {
@@ -112,6 +113,28 @@ if hookmetamethod then
                 return ChattedFix(self, index)
             end))
         end
+
+        task.spawn(function()
+            local ChattedSignal = false
+
+            for _, x in next, getgc() do
+                if type(x) == "function" and tostring(getfenv(x).script) == "Animate" then
+                    if islclosure(x) then
+                        local Constants = getconstants(x)
+
+                        for _, v in next, Constants do
+                            if v == "Chatted" then
+                                ChattedSignal = x
+                            end
+                        end
+                    end
+                end
+            end
+
+            if ChattedSignal then
+                ChattedSignal() -- to prevent emote chat commands from breaking on join
+            end
+        end)
     end
 end
 
