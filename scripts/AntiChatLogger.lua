@@ -82,7 +82,7 @@ if hookmetamethod then
                     local CoreType = Arguments[1]
                     local Enabled = Arguments[2]
                     
-                    if table.find(WhitelistedCoreTypes, CoreType) and not Enabled then
+                    if table.find(WhitelistedCoreTypes, CoreType) and Enabled == false then -- Thanks Harun for correcting me on the second argument
                         OldCoreTypeSettings[CoreType] = Enabled
                         return
                     end
