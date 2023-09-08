@@ -13,8 +13,8 @@ local ProtectHook; ProtectHook = hookmetamethod(game, "__namecall", function(sel
 end)
 
 local ClassNameHook; ClassNameHook = hookmetamethod(game, "__index", function(self, index)
-    if index == "ClassName" and not checkcaller() then
-        return ""
+    if index == "ClassName" and table.find(Protected_Instances, self) and not checkcaller() then
+        return nil
     end
 
     return ClassNameHook(self, index)
