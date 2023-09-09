@@ -61,7 +61,7 @@ local PlayerGui = Player:FindFirstChildWhichIsA("PlayerGui") do
 end
 
 if getgenv().AntiChatLogger then
-    return Notify(NotificationTitle, "Anti Chat and Screenshot Logger already loaded!", 15)
+    return Notify(NotificationTitle, "Anti Chat & Screenshot Logger already loaded!", 15)
 else
     getgenv().AntiChatLogger = true
 end
@@ -106,7 +106,7 @@ if hookmetamethod then
 
         local ChattedFix do
             ChattedFix = hookmetamethod(Player, "__index", newcclosure(function(self, index)
-                if self == Player and index == "Chatted" then
+                if self == Player and tostring(index):lower():match("chatted") and MessageEvent.Event then
                     return MessageEvent.Event
                 end
 
@@ -114,11 +114,11 @@ if hookmetamethod then
             end))
         end
 
-        task.spawn(function()
+        local AnimateChattedFix = task.spawn(function()
             local ChattedSignal = false
 
             for _, x in next, getgc() do
-                if type(x) == "function" and tostring(getfenv(x).script) == "Animate" then
+                if type(x) == "function" and getfenv(x).script ~= nil and tostring(getfenv(x).script) == "Animate" then
                     if islclosure(x) then
                         local Constants = getconstants(x)
 
@@ -132,7 +132,7 @@ if hookmetamethod then
             end
 
             if ChattedSignal then
-                ChattedSignal() -- to prevent emote chat commands from breaking on join
+                ChattedSignal()
             end
         end)
     end
@@ -162,10 +162,6 @@ local WarningGuiThread = task.spawn(function()
     WarningText = Instance.new("TextLabel")
     Exit = Instance.new("TextButton")
     ImageLabel = Instance.new("ImageLabel")
-    
-    if syn then
-        syn.protect_gui(WarningUI)
-    end
     
     WarningUI.Enabled = false
     WarningUI.Name = "WarningUI"
@@ -484,5 +480,5 @@ if CoreHook then
 end
 setreadonly(Metatable, true)
 
-Notify(NotificationTitle, "Anti Chat and Screenshot Logger Loaded!", 15)
+Notify(NotificationTitle, "Anti Chat & Screenshot Logger Loaded!", 15)
 print(string.format("AnthonyIsntHere's Anti Chat-Logger has loaded in %s seconds.", string.format("%.2f", tostring(tick() - ACL_LoadTime))))
