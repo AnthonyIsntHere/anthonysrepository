@@ -2,7 +2,7 @@
 -- Script made by AnthonyIsntHere
 -- Method made by cam1494
 
--- Maintained by Anthony, cam1494, Edgar Zomboss, ionizedparticle, grudging
+-- Maintained by Anthony, cam1494
 -- Old italic unicode block + bait unicodes + cyrillic
 
 -- have fun skids!
