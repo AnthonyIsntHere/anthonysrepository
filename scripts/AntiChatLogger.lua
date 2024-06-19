@@ -20,6 +20,8 @@ if not game:IsLoaded() then
     game.Loaded:wait()
 end
 
+task.wait(5)
+
 local ACL_LoadTime = tick()
 local NotificationTitle = "Anthony's ACL"
 
