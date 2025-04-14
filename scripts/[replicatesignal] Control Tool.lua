@@ -1,6 +1,7 @@
 -- FE Control Tool
 -- Made by AnthonyIsntHere
 
+-- UPDATED TO WORK WITH REPLICATESIGNAL
 -- You can select a specific tool by equipping it
 -- Equip your tool for instant ownership when loading script (optional + not guaranteed to work everytime lol)
 -- Movement (Flight-Based): Q, E, W, A, S, D
@@ -37,9 +38,8 @@ end
 
 local ResetBind = Instance.new("BindableEvent")
 
-Player.Character = nil
-Player.Character = Character
-task.wait(Players.RespawnTime + .50)
+replicatesignal(Player.ConnectDiedSignalBackend)
+wait(Players.RespawnTime + .15) -- task.wait causes some kind of network ownership replication issue causing the tool to delay upon flight lol
 
 local OldRPos = RootPart.Position
 
@@ -51,10 +51,6 @@ repeat
     Player:Move(Vector3.new(1/0))
     task.wait()
 until Humanoid.Health == 0
-
--- RootPart.CFrame = CFrame.new(0, -499, 0)
--- repeat task.wait(.1) until (RootPart.Position - OldRPos).Magnitude > 100
--- Humanoid.Health = 0
 
 repeat task.wait() until not Character:FindFirstChildWhichIsA("BasePart")
 
@@ -106,8 +102,7 @@ local Control = function()
             BodyPosition:Destroy()
             BodyGyro:Destroy()
         end
-        Player.Character = nil
-        Player.Character = Character
+        replicatesignal(Player.ConnectDiedSignalBackend)
     end)
 
     task.spawn(function()
