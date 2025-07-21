@@ -154,13 +154,7 @@ local SkidFling = function(TargetPlayer)
         end
         
         workspace.FallenPartsDestroyHeight = 0/0
-        
-        local BV = Instance.new("BodyVelocity")
-        BV.Name = "EpixVel"
-        BV.Parent = RootPart
-        BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
-        BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
-        
+
         Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
         
         if TRootPart and THead then
@@ -179,7 +173,6 @@ local SkidFling = function(TargetPlayer)
             return Message("Error Occurred", "Target is missing everything", 5)
         end
         
-        BV:Destroy()
         Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
         workspace.CurrentCamera.CameraSubject = Humanoid
         
