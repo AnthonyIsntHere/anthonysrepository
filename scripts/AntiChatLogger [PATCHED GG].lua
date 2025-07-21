@@ -1,6 +1,7 @@
 -- This basically makes roblox unable to log your chat messages sent in-game. Meaning if you get reported for saying something bad, you won't get banned!
 -- Store the loadstring (line 5) in your autoexec folder into a text/lua file to receive automatic updates [remove the "--"" part when you paste it into the text file]
 -- Credits: AnthonyIsntHere
+-- PATCHED
 
 -- loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
 
@@ -15,6 +16,7 @@
 -- 8/24/2023 - Now supports Player.Chatted signal event for clientside (highly requested)
 -- 8/25/2023 - Fully fixed (i was high when editing it yesterday sorry guys)
 -- 9/1/2023 - Fixed issue with /e command not working sometimes (mainly when joining a game)
+-- 7/20/2025 - Sorry I've been gone. GG
 
 if not game:IsLoaded() then
     game.Loaded:wait()
