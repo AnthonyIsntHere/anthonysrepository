@@ -1,8 +1,8 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
+-- Added dot notation bypass
 local ProtectedInstances = {}
 
-local Find, Insert = table.find, table.insert
 local _Instance = Instance.new
 local _tostring = tostring
 
@@ -11,7 +11,7 @@ local InstanceHook; InstanceHook = hookfunction(_Instance, newcclosure(function(
 		local NewInstance = InstanceHook(...)
 
 		NewInstance:SetAttribute("MainVM", true)
-		Insert(ProtectedInstances, NewInstance)
+		ProtectedInstances[NewInstance] =  true
 		return NewInstance
 	end
 
@@ -23,7 +23,7 @@ local tostringHook; tostringHook = hookfunction(_tostring, newcclosure(function(
 		local Arguments = {...}
 		local String = tostringHook(...)
 
-		if Find(ProtectedInstances, Arguments[1]) then
+		if ProtectedInstances[Arguments[1]] then
 			return
 		end
 	end
@@ -36,15 +36,15 @@ local FunctionHook; FunctionHook = hookmetamethod(game, "__namecall", newcclosur
 	local Method = getnamecallmethod()
 
 	if not checkcaller() then
-		if Find(ProtectedInstances, self) and Method:match("IsA") then
+		if ProtectedInstances[self] and Method:match("IsA") then
 			return
 		end
 
 		if Method:match("^FindFirst") then
 			local Instance = self[Method](self, Arguments[1])
-
-			if Instance and Find(ProtectedInstances, Instance) then
-				return
+			
+			if Instance and ProtectedInstances[Instance] then
+				return false
 			end
 		end
 
@@ -56,12 +56,33 @@ local FunctionHook; FunctionHook = hookmetamethod(game, "__namecall", newcclosur
 	return FunctionHook(self, ...)
 end))
 
-local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosure(function(self, key)
-	if not checkcaller() and Find(ProtectedInstances, self) then
+local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosure(function(self, index)
+	if index:match("^FindFirst") and not checkcaller() then
+		local IndexFunction = self[index]
+
+		if typeof(IndexFunction) == "function" then
+			if not isfunctionhooked(IndexFunction) then
+				local IndexFunctionHook; IndexFunctionHook = hookfunction(IndexFunction, newcclosure(function(...)
+					if not checkcaller() then
+						local Arguments = {...}
+						restorefunction(IndexFunction)
+
+						local Instance = IndexFunction(self, Arguments[2])
+
+						if Instance and ProtectedInstances[Instance] then
+							return false
+						end
+					end
+				end))
+			end
+		end
+	end
+	
+	if not checkcaller() and ProtectedInstances[self] then
 		return
 	end
 
-	return PropertiesHook(self, key)
+	return PropertiesHook(self, index)
 end))
 
 print("loaded")
@@ -108,12 +129,33 @@ for _, Actor in next, getactors() do
 			return FunctionHook(self, ...)
 		end))
 
-		local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosure(function(self, key)
+		local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosure(function(self, index)
+			if index:match("^FindFirst") and not checkcaller() then
+				local IndexFunction = self[index]
+
+				if typeof(IndexFunction) == "function" then
+					if not isfunctionhooked(IndexFunction) then
+						local IndexFunctionHook; IndexFunctionHook = hookfunction(IndexFunction, newcclosure(function(...)
+							if not checkcaller() then
+								local Arguments = {...}
+								restorefunction(IndexFunction)
+
+								local Instance = IndexFunction(self, Arguments[2])
+
+								if Instance and Instance:GetAttribute("MainVM") then
+									return false
+								end
+							end
+						end))
+					end
+				end
+			end
+			
 			if not checkcaller() and self:GetAttribute("MainVM") then
 				return
 			end
 
-			return PropertiesHook(self, key)
+			return PropertiesHook(self, index)
 		end))
 		print("actor loaded")
 	]])
