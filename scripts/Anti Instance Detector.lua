@@ -1,6 +1,5 @@
 -- Made by AnthonyIsntHere
--- Basically this just allows you to hide stuff on your client
--- Common use: bypass any client anti-cheat fly/fling detection (hides bodymovers)
+-- DEPRECATED
 
 local Protected_Instances = {}
 
