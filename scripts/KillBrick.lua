@@ -1,6 +1,6 @@
 -- made by vnware/vnpleo <@968953495535362068> amazing person <3
 -- this script makes it so you can instantly void players like grippos nan lol
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/hiddenproperty.lua", true))()
+pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/hiddenproperty.lua", true))() end)
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
