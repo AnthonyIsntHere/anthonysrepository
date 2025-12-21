@@ -2,8 +2,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "v3.5.3"
-local CurrentChangelog = "-Replaced some scripts"
+local Version = "version 4.0"
+local CurrentChangelog = "-Fixed"
 
 local Opened = false
 
@@ -356,7 +356,8 @@ AddButton(function(Name)
                     if not SkipDelay then
                         for i = 1, 10 do
                             FPos(BasePart, CFrame.new(0, 10, 0) * CFrame.new(THumanoid.MoveDirection * BasePart.Velocity.Magnitude), CFrame.Angles(0, 0, 0))
-                            RunService.RenderStepped:wait()
+                            RootPart.AssemblyLinearVelocity = Vector3.zero
+							RunService.RenderStepped:wait()
                         end
                     else
                         TimeToWait = .35
@@ -364,19 +365,23 @@ AddButton(function(Name)
 
                     local Velocity = task.spawn(function()
                         repeat
-                            local CurrentVelocity = RootPart.Velocity.Magnitude < 10 and RootPart.Velocity or Vector3.new()
-                            RootPart.AssemblyLinearVelocity = Vector3.new(0, -1e20 + math.sin(tick() / math.pi), -50000)
-                            RunService.RenderStepped:wait()
+                            local CurrentVelocity = RootPart.Velocity.Magnitude < 10 and RootPart.Velocity or Vector3.zero
+							RootPart.AssemblyLinearVelocity = Vector3.new(50000, 1e20 + math.sin(tick() / math.pi), 50000)
+							RunService.RenderStepped:wait()
                             RootPart.AssemblyLinearVelocity = CurrentVelocity
-                            task.wait()
+							task.wait()
                         until ResetVelocity
 
-                        RootPart.Velocity = Vector3.new()
+                        RootPart.AssemblyLinearVelocity = Vector3.zero
                     end)
 
                     repeat
                         if RootPart and THumanoid then
-                            if THumanoid.MoveDirection.Magnitude > 0 then
+							sethiddenproperty(RootPart, "PhysicsRepRootPart", BasePart)
+							sethiddenproperty(Humanoid, "MoveDirectionInternal", Vector3.new(0/0))
+							RootPart.AssemblyAngularVelocity = Vector3.new(9e7)
+                            
+							if THumanoid.MoveDirection.Magnitude > 0 then
                                 PPos(BasePart, (BasePart.Velocity * (THumanoid.MoveDirection.Magnitude * .785)))
                                 task.wait()
 
@@ -386,6 +391,9 @@ AddButton(function(Name)
                         
                             FPos(BasePart, CFrame.new(0, 1.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
                             task.wait()
+
+							FPos(BasePart, CFrame.new(0, -2.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
+                            task.wait()
                         else
                             break
                         end
@@ -394,37 +402,25 @@ AddButton(function(Name)
                     ResetVelocity = true
                 end
 
-                settings().Physics.AllowSleep = false
-                settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Disabled
-                
                 if workspace.FallenPartsDestroyHeight ~= 0/0 then
                     workspace.FallenPartsDestroyHeight = 0/0
                 end
                 
-                local BAV = Instance.new("BodyAngularVelocity")
-                BAV.Name = "EpixAngVel"
-                BAV.Parent = RootPart
-                BAV.AngularVelocity = Vector3.new(9e7, 9e7, 9e7)
-                BAV.MaxTorque = Vector3.new(1/0, 1/0, 1/0)
-                BAV.P = 10000
-                
-                Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+				Humanoid:ChangeState(Enum.HumanoidStateType.Ragdoll)
                 Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
                 
                 SFBasePart(TRootPart)
-
-                BAV:Destroy()
                 workspace.CurrentCamera.CameraSubject = Humanoid
                 
                 if not SkipDelay then
                     repeat
                         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-                        RootPart.AssemblyLinearVelocity = Vector3.new()
-                        RootPart.AssemblyAngularVelocity = Vector3.new()
+                        RootPart.AssemblyLinearVelocity = Vector3.zero
+                        RootPart.AssemblyAngularVelocity = Vector3.zero
                         RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
                         Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
                         task.wait()
-                    until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25 and RootPart.Velocity.Magnitude < 10
+                    until getgenv().OldPos and (RootPart.Position - getgenv().OldPos.p).Magnitude < 25 and RootPart.Velocity.Magnitude < 10
                     Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
                     if workspace.FallenPartsDestroyHeight ~= getgenv().FPDH then
                         workspace.FallenPartsDestroyHeight = getgenv().FPDH
@@ -437,7 +433,7 @@ AddButton(function(Name)
         
         if not Welcome then Message("Script by AnthonyIsntHere", "Enjoy!", 5) end
         getgenv().Welcome = true
-        if Targets[1] then for _,x in next, Targets do GetPlayer(x) end else return end
+        if Targets[1] then for _, x in next, Targets do GetPlayer(x) end else return end
         
         if AllBool then
             local CurrentPlayers = Players:GetPlayers()
@@ -484,7 +480,45 @@ AddButton(function(Name)
             StrokeSelection.ApplyStrokeMode = "Border"
             StrokeSelection.Color = Color3.fromRGB(255,255,255)
             StrokeSelection.Thickness = 1.5
-            TempConnection = RunService.Heartbeat:Connect(function()
+            TempConnection = RunService.PostSimulation:Connect(function()
+				local Player = Players.LocalPlayer
+				local Character = Player.Character
+				local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
+				local RootPart = Humanoid and Humanoid.RootPart
+
+				if Humanoid and RootPart then
+					if RootPart.AssemblyLinearVelocity.Magnitude > .1 then
+						sethiddenproperty(Humanoid, "MoveDirectionInternal", Vector3.new(0/0))
+					end
+				end
+            end)
+        else
+            Debounce = false
+            StrokeSelection:Destroy()
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+            TempConnection:Disconnect()
+        end
+    end)
+end, "Walk Void")
+
+AddButton(function(Name)
+    local ClonedButton = CreateButton(Name)
+    
+    local Player = Players.LocalPlayer
+
+    local Debounce = false
+    local TempConnection
+    local StrokeSelection
+    
+    ClonedButton.MouseButton1Click:Connect(function()
+        if not Debounce then
+            Debounce = true
+            ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+            StrokeSelection = Instance.new("UIStroke", ClonedButton)
+            StrokeSelection.ApplyStrokeMode = "Border"
+            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Thickness = 1.5
+            TempConnection = RunService.PostSimulation:Connect(function()
                 local Character = Player.Character
                 local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
                 local RootPart = Humanoid and Humanoid.RootPart
@@ -528,8 +562,8 @@ AddButton(function(Name)
                         for _,v in next, x.Character:GetDescendants() do
                             if v:IsA("BasePart") and v.CanCollide then
                                 v.CanCollide = false
-                                v.Velocity = Vector3.new()
-                                v.RotVelocity = Vector3.new()
+                                v.Velocity = Vector3.zero
+                                v.RotVelocity = Vector3.zero
                                 v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
                             end
                         end
@@ -647,6 +681,52 @@ end, "Refresh")
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
+		local Camera = workspace.CurrentCamera
+
+		local Player = Players.LocalPlayer
+		local Character = Player.Character or Player.CharacterAdded:wait()
+
+		local Humanoid = Character:WaitForChild("Humanoid", 5)
+		local RootPart = Humanoid and Humanoid.RootPart or Character:WaitForChild("HumanoidRootPart", 5)
+
+		local OldCF = false
+
+		if Humanoid then
+			replicatesignal(Player.ConnectDiedSignalBackend)
+			task.wait(Players.RespawnTime - .1)
+
+			OldCF = RootPart and RootPart.CFrame
+
+			local FocusCF = Camera.Focus
+
+			local CamPart = Instance.new("Part", workspace)
+			CamPart.Anchored = true
+			CamPart.CFrame = FocusCF
+			CamPart.Transparency = 1
+
+			Camera.CameraSubject = CamPart
+			CamPart:Destroy()
+
+			repeat
+				Player:Move(Vector3.new(9e99))
+				RootPart.AssemblyLinearVelocity = Vector3.new(0, -50000, 0)
+				task.wait()
+			until Humanoid.Health <= 0
+		end
+
+		Character = Player.CharacterAdded:wait()
+		Humanoid = Character:WaitForChild("Humanoid", 5)
+		RootPart = Humanoid and Humanoid.RootPart or Character:WaitForChild("HumanoidRootPart", 5)
+
+		if OldCF then
+			RootPart.CFrame = OldCF
+		end
+    end)
+end, "Instant Respawn")
+
+AddButton(function(Name)
+    local ClonedButton = CreateButton(Name)
+    ClonedButton.MouseButton1Click:Connect(function()
         local x = {}
         for _,v in next, HttpService:JSONDecode(game:HttpGet(string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", game["PlaceId"]))).data do
         	if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game["JobId"] then
@@ -733,7 +813,7 @@ AddButton(function(Name)
 
             repeat
                 RootPart.CFrame = CFrame.new(%s)
-                RootPart.Velocity = Vector3.new()
+                RootPart.Velocity = Vector3.zero
                 task.wait()
             until RootPart.CFrame ~= CurrentPos
         ]], tostring(OldPos)))
