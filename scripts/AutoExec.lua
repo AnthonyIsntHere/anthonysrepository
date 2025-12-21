@@ -378,7 +378,7 @@ AddButton(function(Name)
                     repeat
                         if RootPart and THumanoid then
 							sethiddenproperty(RootPart, "PhysicsRepRootPart", BasePart)
-							sethiddenproperty(Humanoid, "MoveDirectionInternal", Vector3.new(0/0))
+							--sethiddenproperty(Humanoid, "MoveDirectionInternal", Vector3.new(0/0))
 							RootPart.AssemblyAngularVelocity = Vector3.new(9e7)
                             
 							if THumanoid.MoveDirection.Magnitude > 0 then
