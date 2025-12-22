@@ -389,7 +389,7 @@ AddButton(function(Name)
                                 task.wait()
                             end
                         
-                            FPos(BasePart, CFrame.new(0, 2.5, 1.5), CFrame.Angles(-math.rad(90), 0, 0))
+                            FPos(BasePart, CFrame.new(0, 2.5, -1.5), CFrame.Angles(-math.rad(90), 0, 0))
                             task.wait()
 
 							FPos(BasePart, CFrame.new(0, -2.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
