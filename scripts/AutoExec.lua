@@ -3,7 +3,7 @@
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
 local Version = "version 4.0"
-local CurrentChangelog = "-Fixed"
+local CurrentChangelog = "-Fixed fling"
 
 local Opened = false
 
@@ -366,9 +366,9 @@ AddButton(function(Name)
                     local Velocity = task.spawn(function()
                         repeat
                             local CurrentVelocity = RootPart.Velocity.Magnitude < 10 and RootPart.Velocity or Vector3.zero
-							RootPart.AssemblyLinearVelocity = Vector3.new(50000, 1e20 + math.sin(tick() / math.pi), 50000)
+							RootPart.AssemblyLinearVelocity = Vector3.new(0, -1e20 + math.sin(tick() / math.pi), 0)
 							RunService.RenderStepped:wait()
-                            RootPart.AssemblyLinearVelocity = CurrentVelocity
+                            RootPart.AssemblyLinearVelocity = Vector3.zero
 							task.wait()
                         until ResetVelocity
 
@@ -389,7 +389,7 @@ AddButton(function(Name)
                                 task.wait()
                             end
                         
-                            FPos(BasePart, CFrame.new(0, 1.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
+                            FPos(BasePart, CFrame.new(0, 2.5, 1.5), CFrame.Angles(-math.rad(90), 0, 0))
                             task.wait()
 
 							FPos(BasePart, CFrame.new(0, -2.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
