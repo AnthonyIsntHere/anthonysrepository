@@ -1,6 +1,10 @@
 -- Script made by AnthonyIsntHere
 -- I don't think I'm the first one to discover this but making the script made my brain explode lol
 -- It's literally a force right-to-left but for roblox chat :exploding-head:
+
+-- use the loadstring below for automatic updates lol
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/refs/heads/main/scripts/Kasra%20Chat%20Bypass.lua", true))()
+
 if not game:IsLoaded() then
     game.Loaded:wait()
 end
