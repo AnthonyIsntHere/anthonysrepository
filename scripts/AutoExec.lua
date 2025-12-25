@@ -1,9 +1,10 @@
+
 -- // Auto Exec Gui by AnthonyIsntHere // --
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
 local Version = "version 4.0"
-local CurrentChangelog = "-Fixed fling"
+local CurrentChangelog = "-Fixed fling again..."
 
 local Opened = false
 
@@ -353,13 +354,7 @@ AddButton(function(Name)
 
                     local ResetVelocity = false
 
-                    if not SkipDelay then
-                        for i = 1, 10 do
-                            FPos(BasePart, CFrame.new(0, 10, 0) * CFrame.new(THumanoid.MoveDirection * BasePart.Velocity.Magnitude), CFrame.Angles(0, 0, 0))
-                            RootPart.AssemblyLinearVelocity = Vector3.zero
-							RunService.RenderStepped:wait()
-                        end
-                    else
+                    if SkipDelay then
                         TimeToWait = .35
                     end
 
@@ -379,21 +374,26 @@ AddButton(function(Name)
                         if RootPart and THumanoid then
 							sethiddenproperty(RootPart, "PhysicsRepRootPart", BasePart)
 							--sethiddenproperty(Humanoid, "MoveDirectionInternal", Vector3.new(0/0))
-							RootPart.AssemblyAngularVelocity = Vector3.new(9e7)
+							RootPart.AssemblyAngularVelocity = Vector3.new(-1e20)
                             
-							if THumanoid.MoveDirection.Magnitude > 0 then
-                                PPos(BasePart, (BasePart.Velocity * (THumanoid.MoveDirection.Magnitude * .785)))
-                                task.wait()
+							-- if THumanoid.MoveDirection.Magnitude > 0 then
+                            --     PPos(BasePart, (BasePart.Velocity * (THumanoid.MoveDirection.Magnitude * .785)))
+                            --     task.wait()
 
-                                FPos(BasePart, CFrame.new(0, 1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
-                                task.wait()
-                            end
-                        
-                            FPos(BasePart, CFrame.new(0, 2.5, -1.5), CFrame.Angles(-math.rad(90), 0, 0))
-                            task.wait()
+                            --     FPos(BasePart, CFrame.new(0, 1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+                            --     task.wait()
+                            -- end
 
-							FPos(BasePart, CFrame.new(0, -2.5, 1.5), CFrame.Angles(math.rad(90), 0, 0))
-                            task.wait()
+							FPos(BasePart, CFrame.new(0, 2, -2), CFrame.Angles(-math.rad(90), 0, 0))
+							task.wait()
+					
+							for i = 1, 20 do
+								FPos(BasePart, CFrame.new(0, -1.5, 2), CFrame.Angles(math.rad(90), 0, 0))
+								task.wait()
+							end
+
+							FPos(BasePart, CFrame.new(0, 2.5, -2), CFrame.Angles(-math.rad(90), 0, 0))
+							task.wait()
                         else
                             break
                         end
