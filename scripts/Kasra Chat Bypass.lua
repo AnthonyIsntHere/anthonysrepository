@@ -42,6 +42,8 @@ local WordList = {
 	--misc
 	["discord"] = "ﹺrdﹺoﹺcﹺisﹺd",
 	["kys"] = "ﹺsﹺyﹺk",
+	["lmao"] = "ﹺoﹺaﹺlm",
+	["lmfao"] = "ﹺoﹺaﹺmfﹺl",
 	["wtf"] = "ﹺfﹺtﹺw",
 	["yourself"] = "ﹺlfﹺseﹺurﹺyo",
 }
