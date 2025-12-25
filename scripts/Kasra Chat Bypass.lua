@@ -143,3 +143,5 @@ ChatBar.FocusLost:Connect(function(Entered)
 		end
 	end
 end)
+
+Notify("Kasra Chat Bypass", "Script made by AnthonyIsntHere", 10)
