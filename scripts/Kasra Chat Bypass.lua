@@ -48,6 +48,7 @@ local WordList = {
 	["kys"] = "ﹺsﹺyﹺk",
 	["lmao"] = "ﹺoﹺaﹺlm",
 	["lmfao"] = "ﹺoﹺaﹺmfﹺl",
+	["stfu"] = "uﹺfﹺtﹺs",
 	["wtf"] = "ﹺfﹺtﹺw",
 	["yourself"] = "ﹺlfﹺseﹺurﹺyo",
 }
