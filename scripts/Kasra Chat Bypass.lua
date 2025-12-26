@@ -49,6 +49,7 @@ local WordList = {
 	["kys"] = "ﹺsﹺyﹺk",
 	["lmao"] = "ﹺoﹺaﹺlm",
 	["lmfao"] = "ﹺoﹺaﹺmfﹺl",
+	["pedo"] = "ﹺdoﹺpe",
 	["porn"] = "ﹺnﹺrﹺoﹺp",
 	["rape"] = "ﹺeﹺpﹺaﹺr",
 	["raping"] = "gﹺnﹺiﹺpﹺaﹺr",
