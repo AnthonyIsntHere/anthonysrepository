@@ -10,7 +10,8 @@
 
 ## Socials
 - My Roblox account is [AnthonyIsntHere](https://www.roblox.com/users/1414978355/profile)
-
+- My Discord Id is <@459112026514653194>
+  
 ## Goals
 - To assist scripters in lego hacking by sharing my knowledge
 
