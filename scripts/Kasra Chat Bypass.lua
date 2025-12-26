@@ -50,6 +50,7 @@ local WordList = {
 	["lmfao"] = "ﹺoﹺaﹺmfﹺl",
 	["porn"] = "ﹺnﹺrﹺoﹺp",
 	["rape"] = "ﹺeﹺpﹺaﹺr",
+	["raping"] = "gﹺnﹺiﹺpﹺaﹺr",
 	["sex"] = "ﹺxﹺeﹺs",
 	["sexy"] = "ﹺyﹺxﹺse",
 	["stfu"] = "uﹺfﹺtﹺs",
