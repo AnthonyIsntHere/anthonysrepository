@@ -71,7 +71,7 @@ CameraPart.CFrame = Camera.Focus
 
 Debris:AddItem(CameraPart)
 
-for _, Accessory in pairs(Humanoid:GetAccessories()) do
+for _, Accessory in next, Humanoid:GetAccessories() do
 	sethiddenproperty(Accessory, "BackendAccoutrementState", 3)
 end
 
@@ -102,13 +102,13 @@ end)
 
 local SetPos = task.spawn(function()
 	while Player.Character == Character do
-		for _, Accessory in pairs(Character:GetChildren()) do
+		for _, Accessory in next, Humanoid:GetAccessories() do
 			if Accessory:IsA("Accessory") then
 				local Handle = Accessory:FindFirstChild("Handle")
 
 				if Handle and Handle.CanCollide then
-					Accessory.Handle.CFrame = OldCFrame
-					Accessory.Handle.Velocity = Vector3.new(0, 30, 0)
+					Handle.CFrame = OldCFrame
+					Handle.Velocity = Vector3.new(0, 30, 0)
 				end
 			end
 		end
