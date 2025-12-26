@@ -145,6 +145,7 @@ ChatBar.FocusLost:Connect(function(Entered)
 
 			if FoundWord then
 				local ExtraLetters = Word:sub(#MatchedKey + 1) or ""
+				
 				FoundWord = Kasra .. ExtraLetters .. FoundWord
 				FoundWord = (FoundWord:gsub("%a", function(x)
 					for y in Word:gmatch("%a") do
@@ -153,7 +154,11 @@ ChatBar.FocusLost:Connect(function(Entered)
 						end
 					end
 				end))
-				FinalMessage = FinalMessage:gsub("^" .. Word, FoundWord .. Kasra)
+
+				FinalMessage = FinalMessage:gsub("(%f[%a]" .. Word .. "%a*)", function(match)
+					return FoundWord .. Kasra
+				end)	
+
 				Bypassed = true
 			end
 		end
