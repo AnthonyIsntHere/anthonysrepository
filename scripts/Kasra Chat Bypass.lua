@@ -14,6 +14,7 @@ local WordList = {
 	["ass"] = "ﹺsﹺsﹺa",
 	["asshole"] = "ﹺleﹺhoﹺsﹺsﹺa",
 	["bastard"] = "ﹺrdﹺtaﹺbas",
+	["beaner"] = "ﹺrﹺneﹺaﹺbe",
 	["bitch"] = "ﹺhﹺcﹺitﹺb",
 	["blowjob"] = "ﹺobﹺjﹺowﹺbl",
 	["bullshit"] = "ﹺitﹺhﹺsﹺllﹺbu",
@@ -54,6 +55,7 @@ local WordList = {
 	["sex"] = "ﹺxﹺeﹺs",
 	["sexy"] = "ﹺyﹺxﹺse",
 	["stfu"] = "uﹺfﹺtﹺs",
+	["virgin"] = "ﹺinﹺrgﹺvi",
 	["wtf"] = "ﹺfﹺtﹺw",
 	["yourself"] = "ﹺlfﹺseﹺurﹺyo",
 }
@@ -155,10 +157,7 @@ ChatBar.FocusLost:Connect(function(Entered)
 					end
 				end))
 
-				FinalMessage = FinalMessage:gsub("(%f[%a]" .. Word .. "%a*)", function(match)
-					return FoundWord .. Kasra
-				end)	
-
+				FinalMessage = FinalMessage:gsub("(%f[%a]" .. Word .. "%a*)", FoundWord .. Kasra)
 				Bypassed = true
 			end
 		end
