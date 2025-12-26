@@ -8,6 +8,8 @@
 - Creator of one of the fastest void scripts [Void Script Showcase](https://www.youtube.com/watch?v=ob38okcMLK8) (Credits to [Scotty](https://www.roblox.com/users/2040633702/profile) for inspiring me) [PATCHED]
 - Creator of [AutoExecGui](https://github.com/AnthonyIsntHere/anthonysrepository/blob/main/scripts/AutoExec.lua) 💗
 
+![9a46e49aedecb4fca51f7e85dd2f3474](https://github.com/user-attachments/assets/58002fdb-24bb-4128-8dd7-2149d86ca400)
+
 ## Socials
 - My Roblox account is [AnthonyIsntHere](https://www.roblox.com/users/1414978355/profile)
 - My Discord Id is `<@459112026514653194>`
