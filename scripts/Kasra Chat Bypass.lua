@@ -95,10 +95,21 @@ ChatBar.FocusLost:Connect(function(Entered)
 		ChatBar:ReleaseFocus()
 
 		local Bypassed = false
-		local Words = Message:split(" ")
 
 		local Reversed = {}
 		local Positions = {}
+
+		local Words = Message:split(" ")
+
+		local MatchWord = function(str)
+			str = str:lower()
+
+			for k, v in next, WordList do
+				if str:match(k) then
+					return v, k
+				end
+			end
+		end
 
 		for i = #Words, 1, -1 do
 			Reversed[#Reversed + 1] = Words[i]
@@ -110,7 +121,7 @@ ChatBar.FocusLost:Connect(function(Entered)
 			if i < #Reversed then
 				FinalMessage = FinalMessage .. " " .. Kasra
 
-				local Matched = WordList[Reversed[i]:lower()]
+				local Matched = MatchWord(Reversed[i])
 				if Matched then
 					Positions[#Positions + 1] = i
 				end
@@ -129,8 +140,11 @@ ChatBar.FocusLost:Connect(function(Entered)
 		end
 
 		for Index, Word in next, Words do
-			local FoundWord = WordList[Word:lower()]
+			local FoundWord, MatchedKey = MatchWord(Word)
+
 			if FoundWord then
+				local ExtraLetters = Word:sub(#MatchedKey + 1) or ""
+				FoundWord = Kasra .. ExtraLetters .. FoundWord
 				FoundWord = (FoundWord:gsub("%a", function(x)
 					for y in Word:gmatch("%a") do
 						if y:match("%u") and y:lower():match(x) then
