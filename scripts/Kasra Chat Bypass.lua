@@ -106,7 +106,7 @@ ChatBar.FocusLost:Connect(function(Entered)
 			str = str:lower()
 
 			for k, v in next, WordList do
-				if str:match(k) then
+				if str:match("^" .. k) then
 					return v, k
 				end
 			end
@@ -153,7 +153,7 @@ ChatBar.FocusLost:Connect(function(Entered)
 						end
 					end
 				end))
-				FinalMessage = FinalMessage:gsub(Word, FoundWord .. Kasra)
+				FinalMessage = FinalMessage:gsub("^" .. Word, FoundWord .. Kasra)
 				Bypassed = true
 			end
 		end
