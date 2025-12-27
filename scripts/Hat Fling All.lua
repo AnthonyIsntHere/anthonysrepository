@@ -1,4 +1,5 @@
 -- Made by AnthonyIsntHere
+-- Flings everyone using hats
 local PermDeath = false -- if set to true you can reset like normal to actually reset
 
 local Players = game:GetService("Players")
@@ -76,7 +77,7 @@ CameraPart.CFrame = Camera.Focus
 
 Debris:AddItem(CameraPart)
 
-for _, Accessory in pairs(Humanoid:GetAccessories()) do
+for _, Accessory in next, Humanoid:GetAccessories() do
 	sethiddenproperty(Accessory, "BackendAccoutrementState", 3)
 end
 
@@ -110,36 +111,48 @@ local Float = task.spawn(function()
 	end
 end)
 
+local Offset = 0
 SetPos = task.spawn(function()
 	while Player.Character == Character do
-		for _, x in next, Players:GetPlayers() do
-			if x ~= Player then
-				for i = 1, 10 do
-					local _Character = x.Character
-					local _RootPart = _Character and _Character:FindFirstChild("HumanoidRootPart")
+		local PlayerList = Players:GetPlayers()
+		local PlayerCount = #PlayerList
 
-					if _RootPart then
-						for _, Accessory in pairs(Character:GetChildren()) do
-							if Accessory:IsA("Accessory") then
-								local Handle = Accessory:FindFirstChild("Handle")
+		if PlayerCount >= 1 then
+			local Hats = Humanoid:GetAccessories()
+			for HatIndex = 1, #Hats do
+				local PlayerIndex = ((HatIndex + Offset - 1) % PlayerCount) + 1
+				local TargetPlayer = PlayerList[PlayerIndex]
 
-								if Handle and Handle.CanCollide then
-									sethiddenproperty(Handle, "PhysicsRepRootPart", _RootPart)
-									Handle.CFrame = _RootPart.CFrame
-									Handle.Velocity = Vector3.new(0, -1e10, 0)
-									Handle.RotVelocity = Vector3.new(0, 1e20, 0)
-								end
+				local Hat = Hats[HatIndex]
+				local TargetCharacter = TargetPlayer.Character
+				local RootPart = TargetCharacter and TargetCharacter:FindFirstChild("HumanoidRootPart")
+
+				if Hat and RootPart then
+					local Handle = Hat:FindFirstChild("Handle")
+					if Handle and Handle.CanCollide then
+						task.spawn(function()
+							for i = 1, 20 do
+								sethiddenproperty(Handle, "PhysicsRepRootPart", RootPart)
+								Handle.CFrame = RootPart.CFrame
+								Handle.Velocity = Vector3.new(0, -1e20, 0)
+								Handle.RotVelocity = Vector3.new(1e20, 1e20, 1e20)
+								task.wait()
 							end
-						end
+						end)
 					end
-					task.wait()
 				end
+			end
+
+			Offset += 1
+			if Offset > PlayerCount then
+				Offset = 1
 			end
 		end
 
 		task.wait()
 	end
 end)
+
 
 task.wait(.20)
 
