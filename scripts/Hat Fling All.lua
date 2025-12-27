@@ -134,8 +134,8 @@ SetPos = task.spawn(function()
 							for i = 1, 20 do
 								sethiddenproperty(Handle, "PhysicsRepRootPart", RootPart)
 								Handle.CFrame = RootPart.CFrame
-								Handle.Velocity = Vector3.new(0, -1e20, 0)
-								Handle.RotVelocity = Vector3.new(1e20, 1e20, 1e20)
+								Handle.Velocity = Vector3.new(1e20, 1e20, 1e20)
+								Handle.RotVelocity = Vector3.new(1e10, 1e10, 1e10)
 								task.wait()
 							end
 						end)
