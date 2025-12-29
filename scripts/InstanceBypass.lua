@@ -1,6 +1,6 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- Needs fixing...
+-- Needs fixing... lines 150-178
 local ProtectedInstances = {}
 local RunningScripts = {}
 
