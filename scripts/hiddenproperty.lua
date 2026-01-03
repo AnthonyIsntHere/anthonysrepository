@@ -19,5 +19,6 @@ getgenv().sethiddenproperty = sethiddenproperty or newcclosure(function(_Instanc
 	else
 		setscriptable(_Instance, _Property, true)
 		_Instance[_Property] = _Value
+		setscriptable(_Instance, _Property, false)
 	end
 end)
