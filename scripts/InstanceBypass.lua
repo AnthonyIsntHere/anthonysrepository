@@ -96,8 +96,9 @@ end
 
 print("AnthonyIsntHere's Instance-Spoofer has loaded!")
 
-for _, Actor in next, getactors() do
-	run_on_actor(Actor, [[
+local Actor = false
+for _, Thread in next, getactorthreads() do
+	run_on_thread(Thread, [[
 		local _tostring = tostring
 
 		local tostringHook; tostringHook = hookfunction(_tostring, newcclosure(function(...)
@@ -185,7 +186,13 @@ for _, Actor in next, getactors() do
 				end
 			end
 		end
-
-		print("Actor bypass loaded")
 	]])
+
+	if not Actor then
+		Actor = true
+	end
+end
+
+if Actor then
+	print("Actor bypass has loaded!")
 end
