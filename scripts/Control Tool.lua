@@ -2,6 +2,8 @@
 -- Made by AnthonyIsntHere
 
 -- UPDATED TO WORK WITH REPLICATESIGNAL
+-- Instant control is now fixed
+
 -- You can select a specific tool by equipping it
 -- Equip your tool for instant ownership when loading script (optional + not guaranteed to work everytime lol)
 -- Movement (Flight-Based): Q, E, W, A, S, D
@@ -39,13 +41,15 @@ end
 local ResetBind = Instance.new("BindableEvent")
 
 replicatesignal(Player.ConnectDiedSignalBackend)
-wait(Players.RespawnTime + .15) -- task.wait causes some kind of network ownership replication issue causing the tool to delay upon flight lol
+task.wait(Players.RespawnTime + .15)
 
 local OldRPos = RootPart.Position
 
-Humanoid:EquipTool(Tool)
-repeat task.wait() until Character:FindFirstChildWhichIsA("Tool")
-Humanoid:UnequipTools()
+for i = 1, 2 do -- Needed to ensure Network Ownership by radius validation
+	Humanoid:EquipTool(Tool)
+	repeat task.wait() until Character:FindFirstChildWhichIsA("Tool")
+	Humanoid:UnequipTools()
+end
 
 repeat
     Player:Move(Vector3.new(1/0))
