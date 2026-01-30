@@ -1,10 +1,16 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- Fully Fixed 1.5.2026
+-- In process of fixing 1.29.2026
 local ProtectedInstances = {}
 
 local _Instance = Instance.new
 local _tostring = tostring
+
+if not hookmetamethod and hookfunction then --> XD
+    getgenv().hookmetamethod = function(userdata, method, f)
+        return hookfunction(getrawmetatable(userdata)[method], f)
+    end
+end
 
 local InstanceHook; InstanceHook = hookfunction(Instance.new, newcclosure(function(...)
 	if checkcaller() then
@@ -79,19 +85,12 @@ local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosu
 	return PropertiesHook(self, index)
 end))
 
-for _, x in next, getgc() do
-	if type(x) == "function" and islclosure(x) then
-		local Script = getfenv(x).script
+for _, x in next, getreg() do -- Anbubu <3
+    local Function = type(x) == "thread" and coroutine.status(x) == "suspended" and debug.info(x, 1, "f")
+    local ScriptInstance = Function and getfenv(Function) and typeof(getfenv(Function).script) == "Instance"
 
-		if typeof(Script) == "Instance" and Script:IsA("BaseScript") then
-			for _, y in next, getconstants(x) do
-				if y == "WaitForChild" then
-					Script.Enabled = false
-					Script.Enabled = true
-				end
-			end
-		end
-	end
+    if not Function or not ScriptInstance then continue end
+    task.cancel(x)
 end
 
 print("AnthonyIsntHere's Instance-Spoofer has loaded!")
@@ -99,6 +98,9 @@ print("AnthonyIsntHere's Instance-Spoofer has loaded!")
 local Actor = false
 for _, Thread in next, getactorthreads() do
 	run_on_thread(Thread, [[
+        local RawMT = getrawmetatable(game)
+        local PreviousIndex = RawMT.__index
+
 		local _tostring = tostring
 
 		local tostringHook; tostringHook = hookfunction(_tostring, newcclosure(function(...)
@@ -108,7 +110,7 @@ for _, Thread in next, getactorthreads() do
 				local Arguments = {...}
 				local String = tostringHook(...)
 
-				if Arguments[1] and gethiddenproperty(Arguments[1], "DefinesCapabilities") == true then
+				if Arguments[1] and PreviousIndex(Arguments[1], "DefinesCapabilities") == true then
 					return
 				end
 			end
@@ -123,14 +125,14 @@ for _, Thread in next, getactorthreads() do
 			if not checkcaller() then
 				setthreadidentity(8)
 
-				if gethiddenproperty(self, "DefinesCapabilities") == true then
+				if PreviousIndex(self, "DefinesCapabilities") == true then
 					return
 				end
 
 				if Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
 					local Instance = FunctionHook(self, ...)
 
-					if Instance and gethiddenproperty(Instance, "DefinesCapabilities") == true then
+					if Instance and PreviousIndex(Instance, "DefinesCapabilities") == true then
 						return
 					end
 				end
@@ -141,8 +143,9 @@ for _, Thread in next, getactorthreads() do
 
 		local PropertiesHook; PropertiesHook = hookmetamethod(game, "__index", newcclosure(function(self, index)		
 			if not checkcaller() then
-				setthreadidentity(8)
-				local ProtectedInstance = gethiddenproperty(self, "DefinesCapabilities")
+                setthreadidentity(8)
+
+				local ProtectedInstance = PreviousIndex(self, "DefinesCapabilities")
 
 				if type(index) == "string" and index ~= "DefinesCapabilities" then
 					if index:lower():match("^is") or index:lower():match("^findfirst") then
@@ -155,7 +158,7 @@ for _, Thread in next, getactorthreads() do
 									restorefunction(IndexFunction)
 
 									local Instance = IndexFunction(self, Arguments[2])
-									if Instance or ProtectedInstance == true then
+									if Instance or ProtectedInstance then
 										return
 									end
 								end))
@@ -172,27 +175,16 @@ for _, Thread in next, getactorthreads() do
 			return PropertiesHook(self, index)
 		end))
 
-		for _, x in next, getgc() do
-			if type(x) == "function" and islclosure(x) then
-				local Script = getfenv(x).script
+        for _, x in next, getreg() do -- Anbubu <3
+            local Function = type(x) == "thread" and coroutine.status(x) == "suspended" and debug.info(x, 1, "f")
+            local ScriptInstance = Function and getfenv(Function) and typeof(getfenv(Function).script) == "Instance"
 
-				if typeof(Script) == "Instance" and Script:IsA("BaseScript") then
-					for _, y in next, getconstants(x) do
-						if y == "WaitForChild" then
-							Script.Enabled = false
-							Script.Enabled = true
-						end
-					end
-				end
-			end
-		end
+            if not Function or not ScriptInstance then continue end
+            task.cancel(x)
+        end
 	]])
 
-	if not Actor then
-		Actor = true
-	end
+	Actor = not Actor or true
 end
 
-if Actor then
-	print("Actor bypass has loaded!")
-end
+if Actor then print("Actor bypass has loaded!") end
