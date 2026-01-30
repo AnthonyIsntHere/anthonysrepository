@@ -1,6 +1,6 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- In process of fixing 1.29.2026
+-- In the process of fixing 1.29.2026
 local ProtectedInstances = {}
 
 local _Instance = Instance.new
