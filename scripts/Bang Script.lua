@@ -45,9 +45,9 @@ while Player.Character == Character and TPlayer.Parent == Players and TPlayer.Ch
     end
     
     if THumanoid.SeatPart == nil then
-        Humanoid:MoveTo((TRootPart.CFrame * CFrame.new(0, 0, 1.5 + math.sin(i) * 1.5)).p)
+        Humanoid:MoveTo((TRootPart.CFrame * CFrame.new(0, 0, 1.5 + math.sin(i / 5) * 2)).p)
     else
-        Humanoid:MoveTo((TRootPart.CFrame * CFrame.new(0, 0, -1.5 + math.sin(i) * 1.5)).p)
+        Humanoid:MoveTo((TRootPart.CFrame * CFrame.new(0, 0, -1.5 + math.sin(i / 5) * 2)).p)
     end
     RootPart.CFrame = CFrame.new(RootPart.Position, Vector3.new(TRootPart.Position.X, RootPart.Position.Y, TRootPart.Position.Z))
     task.wait()
