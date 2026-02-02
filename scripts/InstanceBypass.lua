@@ -100,7 +100,7 @@ local GetConstant = function(f, v)
     return false
 end
 
-for _, x in next, getreg() do -- Anbubu <3
+for _, x in next, getreg() do -- Anbubu and Secment are amazing people <3
     local Function = type(x) == "thread" and coroutine.status(x) == "suspended" and debug.info(x, 1, "f")
     local ScriptInstance = Function and getfenv(Function) and typeof(getfenv(Function).script) == "Instance"
 
@@ -202,7 +202,7 @@ for _, Thread in next, getactorthreads() do
             return false
         end
 
-        for _, x in next, getreg() do -- Anbubu <3
+        for _, x in next, getreg() do
             local Function = type(x) == "thread" and coroutine.status(x) == "suspended" and debug.info(x, 1, "f")
             local ScriptInstance = Function and getfenv(Function) and typeof(getfenv(Function).script) == "Instance"
 
