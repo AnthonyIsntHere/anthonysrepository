@@ -23,6 +23,7 @@ local WordList = {
 	["dick"] = "ﹺkﹺcﹺdi",
 	["dickhead"] = "ﹺadﹺheﹺkﹺcﹺdi",
 	["dumbass"] = "ﹺsﹺsﹺaﹺmbﹺdu",
+    ["dogshit"] = "ﹺitﹺhﹺsﹺgﹺoﹺd",
 	["fatass"] = "ﹺsﹺsﹺaﹺtﹺfa",
 	["fag"] = "ﹺgﹺaﹺf",
 	["faggot"] = "ﹺotﹺggﹺaﹺf",
@@ -44,9 +45,16 @@ local WordList = {
 	["tranny"] = "ﹺyﹺnnﹺaﹺtr",
 	["whore"] = "ﹺreﹺoﹺhﹺw",
 
+    -- anti roblox automod
+    ["hack"] = "ﹺkﹺcﹺaﹺh",
+    ["kill"] = "ﹺlﹺlﹺiﹺk",
+    ["script"] = "ﹺtﹺpﹺiﹺrﹺcﹺs",
+
 	--misc
+    ["diddy"] = "ﹺyﹺdﹺdﹺiﹺd",
 	["discord"] = "ﹺrdﹺoﹺcﹺisﹺd",
 	["epstein"] = "ﹺinﹺeﹺtﹺeps",
+    ["heil"] = "ﹺlﹺiﹺeﹺh",
 	["hitler"] = "ﹺerﹺtlﹺhi",
 	["kys"] = "ﹺsﹺyﹺk",
 	["lmao"] = "ﹺoﹺaﹺlm",
