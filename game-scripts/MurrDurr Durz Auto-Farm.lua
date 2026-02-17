@@ -17,16 +17,17 @@ local TouchPart = function()
     local Character = Player.Character
     local RootPart = Character and Character:FindFirstChild("HumanoidRootPart")
 
-    if not RootPart then return end
-    local CurrentCoordinates = RootPart.CFrame
-    repeat
-        CurrentCoordinates = RootPart.CFrame
-        local Response, OverlapError = pcall(function()
-            firetouchinterest(RootPart, HardestAwardPart, 0); firetouchinterest(RootPart, HardestAwardPart, 1)
-        end)
-        task.wait()
-    until (RootPart.Position - HardestTeleportPart.Position).Magnitude < 20
-    RootPart.CFrame = CurrentCoordinates
+    if RootPart then
+        local CurrentCoordinates = RootPart.CFrame
+        repeat
+            CurrentCoordinates = RootPart.CFrame
+            local Response, OverlapError = pcall(function()
+                firetouchinterest(RootPart, HardestAwardPart, 0); firetouchinterest(RootPart, HardestAwardPart, 1)
+            end)
+            task.wait()
+        until (RootPart.Position - HardestTeleportPart.Position).Magnitude < 20
+        RootPart.CFrame = CurrentCoordinates
+    end
 end
 
 if not HardestAwardPart or not HardestTeleportPart then
