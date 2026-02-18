@@ -1,4 +1,5 @@
 -- Made by AnthonyIsntHere
+-- can disable serverside .Touched events
 -- replicates to da server
 for _, x in next, workspace:GetDescendants() do
     if x:IsA("TouchTransmitter") then
