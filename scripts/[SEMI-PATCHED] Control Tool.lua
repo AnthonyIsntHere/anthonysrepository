@@ -1,7 +1,7 @@
 -- FE Control Tool
 -- Made by AnthonyIsntHere
 
--- UPDATED TO WORK WITH REPLICATESIGNAL
+-- UPDATED TO WORK WITH REPLICATESIGNAL [PERM DEATH HAS BEEN PATCHED]
 -- Instant control is now fixed
 
 -- You can select a specific tool by equipping it
