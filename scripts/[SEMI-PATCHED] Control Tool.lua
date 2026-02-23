@@ -40,8 +40,8 @@ end
 
 local ResetBind = Instance.new("BindableEvent")
 
-replicatesignal(Player.ConnectDiedSignalBackend)
-task.wait(Players.RespawnTime + .15)
+-- replicatesignal(Player.ConnectDiedSignalBackend)
+-- task.wait(Players.RespawnTime + .15)
 
 local OldRPos = RootPart.Position
 
