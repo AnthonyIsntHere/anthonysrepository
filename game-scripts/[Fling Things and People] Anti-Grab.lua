@@ -1,5 +1,6 @@
+-- Made by AnthonyIsntHere
 -- No one will be able to grab or fling you
--- Game: https://www.roblox.com/games/6961824067/Fling-Things-and-People
+-- Game Link: https://www.roblox.com/games/6961824067/Fling-Things-and-People
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
