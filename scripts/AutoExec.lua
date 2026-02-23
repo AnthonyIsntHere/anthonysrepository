@@ -3,8 +3,8 @@
 --loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AutoExec.lua", true))()
 if not game:IsLoaded() then game["Loaded"]:wait() end
 
-local Version = "version 4.0"
-local CurrentChangelog = "-Fixed fling again..."
+local Version = "version 4.1"
+local CurrentChangelog = "-removed instant respawn, few changes to ui"
 
 local Opened = false
 
@@ -20,24 +20,19 @@ local MainGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local Holder = Instance.new("ScrollingFrame")
 local TemplateButton = Instance.new("TextButton")
-local UICorner = Instance.new("UICorner", CoreGui)
-local UIListLayout = Instance.new("UIListLayout")
-local UIPadding = Instance.new("UIPadding")
 local Utilities = Instance.new("Frame")
-local BoxExtension = Instance.new("Frame")
-local UICorner_2 = Instance.new("UICorner")
 local Search = Instance.new("ImageLabel")
 local SearchBox = Instance.new("TextBox")
-local UICorner_3 = Instance.new("UICorner")
 local Title = Instance.new("TextLabel")
+local UICorner = Instance.new("UICorner")
+local UICorner_2 = Instance.new("UICorner")
+local UIPadding = Instance.new("UIPadding")
+local UIPadding_2 = Instance.new("UIPadding")
+local UIListLayout = Instance.new("UIListLayout")
 
 --Anthony watermark
 local Frame = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
-
-if syn then
-    syn.protect_gui(MainGui)
-end
 
 MainGui.Name = "MainGui"
 MainGui.Parent = CoreGui
@@ -56,7 +51,7 @@ MainFrame.Size = UDim2.new(0, 151, 0, 274)
 Holder.Name = "Holder"
 Holder.Parent = MainFrame
 Holder.Active = true
-Holder.BackgroundColor3 = Color3.fromRGB(13,13,13)
+Holder.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
 Holder.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Holder.BorderSizePixel = 0
 Holder.Position = UDim2.new(0, 0, 0, 20)
@@ -66,7 +61,7 @@ Holder.ScrollBarThickness = 2
 
 TemplateButton.Name = "TemplateButton"
 TemplateButton.Parent = Holder
-TemplateButton.BackgroundColor3 = Color3.fromRGB(32,32,32)
+TemplateButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 TemplateButton.Position = UDim2.new(0, 8, 0, 11)
 TemplateButton.Size = UDim2.new(0, 134, 0, 17)
 TemplateButton.Font = Enum.Font.SourceSansItalic
@@ -77,7 +72,7 @@ TemplateButton.TextSize = 15.000
 TemplateButton.TextWrapped = true
 TemplateButton.Visible = false
 
-UICorner.CornerRadius = UDim.new(0, 15)
+UICorner.CornerRadius = UDim.new(1, 0)
 UICorner.Parent = TemplateButton
 
 UIListLayout.Parent = Holder
@@ -90,52 +85,49 @@ UIPadding.PaddingTop = UDim.new(0, 5)
 
 Utilities.Name = "Utilities"
 Utilities.Parent = MainFrame
-Utilities.BackgroundColor3 = Color3.fromRGB(10,10,10)
+Utilities.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 Utilities.BorderColor3 = Color3.fromRGB(27, 42, 53)
 Utilities.BorderSizePixel = 0
 Utilities.Position = UDim2.new(0, 0, 0, 241)
 Utilities.Size = UDim2.new(0, 151, 0, 30)
 
-BoxExtension.Name = "BoxExtension"
-BoxExtension.Parent = Utilities
-BoxExtension.BackgroundColor3 = Color3.fromRGB(32,32,32)
-BoxExtension.BorderSizePixel = 0
-BoxExtension.Position = UDim2.new(0, 32, 0, 4)
-BoxExtension.Size = UDim2.new(0, 110, 0, 20)
-
-UICorner_2.Parent = BoxExtension
-
 Search.Name = "Search"
 Search.Parent = Utilities
+Search.AnchorPoint = Vector2.new(1, .5)
 Search.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Search.BackgroundTransparency = 1.000
-Search.Position = UDim2.new(0, 6, 0, 4)
-Search.Rotation = 90.000
-Search.Size = UDim2.new(0, 20, 0, 20)
-Search.Image = "rbxassetid://3229196465"
+Search.Position = UDim2.new(1, -8, 0.5, 0)
+Search.Size = UDim2.new(0, 16, 0, 16)
+Search.Image = "rbxassetid://96049338298945"
+Search.ZIndex = 1337
 
 SearchBox.Name = "SearchBox"
 SearchBox.Parent = Utilities
-SearchBox.BackgroundColor3 = Color3.fromRGB(38,38,38)
+SearchBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 SearchBox.BorderColor3 = Color3.fromRGB(129, 159, 255)
 SearchBox.BorderSizePixel = 0
-SearchBox.Position = UDim2.new(0, 42, 0, 4)
-SearchBox.Size = UDim2.new(0, 100, 0, 20)
+SearchBox.Position = UDim2.new(0, 6, 0, 4)
+SearchBox.Size = UDim2.new(1, -12, 0, 20)
 SearchBox.ClearTextOnFocus = false
 SearchBox.Font = Enum.Font.SourceSansLight
 SearchBox.PlaceholderText = "User/Display Name"
-SearchBox.PlaceholderColor3 = Color3.fromRGB(200,200,200)
+SearchBox.PlaceholderColor3 = Color3.fromRGB(200, 200, 200)
 SearchBox.Text = ""
-SearchBox.TextColor3 = Color3.fromRGB(255,255,255)
+SearchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 SearchBox.TextSize = 14.000
 SearchBox.TextWrapped = true
 SearchBox.TextXAlignment = Enum.TextXAlignment.Left
 
-UICorner_3.Parent = SearchBox
+UICorner_2.CornerRadius = UDim.new(0, 5)
+UIPadding_2.PaddingLeft = UDim.new(0, 5)
+UIPadding_2.PaddingRight = UDim.new(0, 20)
+
+UICorner_2.Parent = SearchBox
+UIPadding_2.Parent = SearchBox
 
 Title.Name = "Title"
 Title.Parent = MainFrame
-Title.BackgroundColor3 = Color3.fromRGB(10,10,10)
+Title.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 Title.BorderColor3 = Color3.fromRGB(255, 255, 255)
 Title.BorderSizePixel = 0
 Title.Size = UDim2.new(0, 151, 0, 20)
@@ -260,7 +252,7 @@ AddButton(function(Name)
         local Targets = {}
         
         if SearchBox.Text ~= "" then
-            for _,x in next, string.split(SearchBox.Text, " ") do
+            for _, x in next, string.split(SearchBox.Text, " ") do
                 table.insert(Targets, x)
             end
         else
@@ -284,7 +276,7 @@ AddButton(function(Name)
             elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
                 local PlayersHolder = {}
 
-                for _,x in next, Players:GetPlayers() do
+                for _, x in next, Players:GetPlayers() do
                     if x ~= Player then
                         if x.Name:lower():match("^" .. Name) then
                             table.insert(PlayersHolder, x)
@@ -319,10 +311,10 @@ AddButton(function(Name)
                 end
                 
                 if not getgenv().OldPos then
-                    if RootPart.Velocity.Magnitude < 100 then
+                    if RootPart.AssemblyLinearVelocity.Magnitude < 100 then
                         getgenv().OldPos = RootPart.CFrame
                     else
-                        if TRootPart.Velocity.Magnitude < 100 then
+                        if TRootPart.AssemblyLinearVelocity.Magnitude < 100 then
                             getgenv().OldPos = TRootPart.CFrame
                         else
                             getgenv().OldPos = workspace.CurrentCamera.Focus
@@ -360,7 +352,7 @@ AddButton(function(Name)
 
                     local Velocity = task.spawn(function()
                         repeat
-                            local CurrentVelocity = RootPart.Velocity.Magnitude < 10 and RootPart.Velocity or Vector3.zero
+                            local CurrentVelocity = RootPart.AssemblyLinearVelocity.Magnitude < 10 and RootPart.AssemblyLinearVelocity or Vector3.zero
 							RootPart.AssemblyLinearVelocity = Vector3.new(0, -1e20 + math.sin(tick() / math.pi), 0)
 							RunService.RenderStepped:wait()
                             RootPart.AssemblyLinearVelocity = Vector3.zero
@@ -377,7 +369,7 @@ AddButton(function(Name)
 							RootPart.AssemblyAngularVelocity = Vector3.new(-1e20)
                             
 							-- if THumanoid.MoveDirection.Magnitude > 0 then
-                            --     PPos(BasePart, (BasePart.Velocity * (THumanoid.MoveDirection.Magnitude * .785)))
+                            --     PPos(BasePart, (BasePart.AssemblyLinearVelocity * (THumanoid.MoveDirection.Magnitude * .785)))
                             --     task.wait()
 
                             --     FPos(BasePart, CFrame.new(0, 1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
@@ -397,7 +389,7 @@ AddButton(function(Name)
                         else
                             break
                         end
-                    until (BasePart.Velocity.Magnitude > 500 and THumanoid:GetState() ~= Enum.HumanoidStateType.Running) or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.SeatPart ~= nil or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+                    until (BasePart.AssemblyLinearVelocity.Magnitude > 500 and THumanoid:GetState() ~= Enum.HumanoidStateType.Running) or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.SeatPart ~= nil or Humanoid.Health <= 0 or tick() > Time + TimeToWait
                 
                     ResetVelocity = true
                 end
@@ -420,7 +412,7 @@ AddButton(function(Name)
                         RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
                         Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
                         task.wait()
-                    until getgenv().OldPos and (RootPart.Position - getgenv().OldPos.p).Magnitude < 25 and RootPart.Velocity.Magnitude < 10
+                    until getgenv().OldPos and (RootPart.Position - getgenv().OldPos.p).Magnitude < 25 and RootPart.AssemblyLinearVelocity.Magnitude < 10
                     Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
                     if workspace.FallenPartsDestroyHeight ~= getgenv().FPDH then
                         workspace.FallenPartsDestroyHeight = getgenv().FPDH
@@ -447,7 +439,7 @@ AddButton(function(Name)
             getgenv().OldPos = false
         end
         
-        for _,x in next, Targets do
+        for _, x in next, Targets do
             if GetPlayer(x) and GetPlayer(x) ~= Player then
                 local TPlayers = GetPlayer(x)
                 if TPlayers[1] then
@@ -478,7 +470,7 @@ AddButton(function(Name)
             ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
-            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Color = Color3.fromRGB(255, 255, 255)
             StrokeSelection.Thickness = 1.5
             TempConnection = RunService.PostSimulation:Connect(function()
 				local Player = Players.LocalPlayer
@@ -516,7 +508,7 @@ AddButton(function(Name)
             ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
-            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Color = Color3.fromRGB(255, 255, 255)
             StrokeSelection.Thickness = 1.5
             TempConnection = RunService.PostSimulation:Connect(function()
                 local Character = Player.Character
@@ -524,10 +516,10 @@ AddButton(function(Name)
                 local RootPart = Humanoid and Humanoid.RootPart
 
                 if RootPart then
-                    local Velocity = RootPart.Velocity
-                    RootPart.Velocity = Velocity + (RootPart.CFrame.LookVector * 50000) + Vector3.new(0, -1e12 + 1, 0)
+                    local Velocity = RootPart.AssemblyLinearVelocity
+                    RootPart.AssemblyLinearVelocity = Velocity + (RootPart.CFrame.LookVector * 50000) + Vector3.new(0, -1e12 + 1, 0)
                     RunService.RenderStepped:wait()
-                    RootPart.Velocity = Velocity
+                    RootPart.AssemblyLinearVelocity = Velocity
                 end
             end)
         else
@@ -554,15 +546,15 @@ AddButton(function(Name)
             ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
-            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Color = Color3.fromRGB(255, 255, 255)
             StrokeSelection.Thickness = 1.5
             TempConnection = RunService.Stepped:Connect(function()
-                for _,x in next, Players:GetPlayers() do
+                for _, x in next, Players:GetPlayers() do
                     if x and x ~= Player and x.Character then
-                        for _,v in next, x.Character:GetDescendants() do
+                        for _, v in next, x.Character:GetDescendants() do
                             if v:IsA("BasePart") and v.CanCollide then
                                 v.CanCollide = false
-                                v.Velocity = Vector3.zero
+                                v.AssemblyLinearVelocity = Vector3.zero
                                 v.RotVelocity = Vector3.zero
                                 v.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
                             end
@@ -570,7 +562,7 @@ AddButton(function(Name)
                     end
                 end
                 if Player.Character then
-                    for _,x in next, Player.Character:GetChildren() do
+                    for _, x in next, Player.Character:GetChildren() do
                         if x:IsA("BasePart") then
                             x.CustomPhysicalProperties = PhysicalProperties.new(1/0, 1/0, 1/0, 1/0, 1/0)
                         end
@@ -595,9 +587,9 @@ AddButton(function(Name)
                     Player.Character:FindFirstChildWhichIsA("Humanoid"):SetStateEnabled("FallingDown", true)
                 end
             end
-            for _,x in next, Players:GetPlayers() do
+            for _, x in next, Players:GetPlayers() do
                 if x and x ~= Player and x.Character then
-                    for _,v in next, x.Character:GetChildren() do
+                    for _, v in next, x.Character:GetChildren() do
                         if v:IsA("BasePart") and v.CanCollide then
                             v.CustomPhysicalProperties = nil
                         end
@@ -619,7 +611,7 @@ AddButton(function(Name)
             ClonedButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
             StrokeSelection = Instance.new("UIStroke", ClonedButton)
             StrokeSelection.ApplyStrokeMode = "Border"
-            StrokeSelection.Color = Color3.fromRGB(255,255,255)
+            StrokeSelection.Color = Color3.fromRGB(255, 255, 255)
             StrokeSelection.Thickness = 1.5
             workspace.FallenPartsDestroyHeight = 0/0
             TempConnection = workspace:GetPropertyChangedSignal("FallenPartsDestroyHeight"):Connect(function()
@@ -665,18 +657,26 @@ AddButton(function(Name)
             if Humanoid.Sit then
                 Humanoid.Sit = false
             end
-            RootPart.Velocity = Vector3.new(0, -50000, 0)
+            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+            RootPart.AssemblyLinearVelocity = Vector3.zero
+            task.wait()
+            RootPart.AssemblyLinearVelocity = Vector3.new(0, -10000, 0)
             Player:Move(Vector3.new(9e99))
+            Humanoid:Move(Vector3.new(9e99))
             task.wait()
         until Humanoid.Health == 0 or tick() > Timer
 
+        if Humanoid.Health ~= 0 then
+            Camera.CameraSubject = Humanoid
+            return
+        end
         Character = Player.CharacterAdded:wait()
         Humanoid = Character:WaitForChild("Humanoid")
         repeat task.wait() until Humanoid.RootPart ~= nil
         RootPart = Humanoid.RootPart
         RootPart.CFrame = RootCF
     end)
-end, "Refresh")
+end, "Void Refresh")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
@@ -692,8 +692,8 @@ AddButton(function(Name)
 		local OldCF = false
 
 		if Humanoid then
-			replicatesignal(Player.ConnectDiedSignalBackend)
-			task.wait(Players.RespawnTime - .1)
+			replicatesignal(Player.Kill)
+			task.wait(Players.RespawnTime)
 
 			OldCF = RootPart and RootPart.CFrame
 
@@ -722,25 +722,23 @@ AddButton(function(Name)
 			RootPart.CFrame = OldCF
 		end
     end)
-end, "Instant Respawn")
+end, "Respawn")
 
 AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         local x = {}
-        for _,v in next, HttpService:JSONDecode(game:HttpGet(string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", game["PlaceId"]))).data do
+        for _, v in next, HttpService:JSONDecode(game:HttpGet(string.format("https://games.roblox.com/v1/games/%s/servers/Public?sortOrder=Asc&limit=100", game["PlaceId"]))).data do
         	if type(v) == "table" and v.maxPlayers > v.playing and v.id ~= game["JobId"] then
         		x[#x + 1] = v.id
         	end
         end
         if #x > 0 then
             Players.LocalPlayer:Kick("Serverhopping...")
-            for _ = 1, 30 do
-                for i = 1, 10 do
-        	        TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1,#x)])
-                end
-    	        task.wait()
-    	    end
+            for i = 1, 10 do
+                TeleportService:TeleportToPlaceInstance(game["PlaceId"], x[math.random(1, #x)])
+                task.wait(.25)
+            end
         else
             Message("Error", "No available servers.", 5)
         end
@@ -754,20 +752,16 @@ AddButton(function(Name)
 
         Player:Kick("Rejoining...")
         
-        for _ = 1, 30 do
-            for i = 1, 10 do
-                if #Players:GetPlayers() <= 1 then
-                    TeleportService:Teleport(game["PlaceId"])
-                else
-                    TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
-                end
+        for i = 1, 10 do
+            if #Players:GetPlayers() <= 1 then
+                TeleportService:TeleportReconnect()
+            else
+                TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
             end
-            task.wait()
+            task.wait(.25)
         end
         
         queue_on_teleport([[
-            game["Loaded"]:wait()
-            
             local ReplicatedFirst = game:GetService("ReplicatedFirst")
             ReplicatedFirst:RemoveDefaultLoadingScreen()
         ]])
@@ -778,24 +772,14 @@ AddButton(function(Name)
     local ClonedButton = CreateButton(Name)
     ClonedButton.MouseButton1Click:Connect(function()
         local Player = Players.LocalPlayer
-        local Character = Player.Character or false
-        local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid") or false
-        local RootPart = Humanoid and Humanoid.RootPart or false
-        local PrimaryPart = Character and Character.PrimaryPart or false
-        local BasePart = Character and Character:FindFirstChildWhichIsA("BasePart", true) or false
-        local Camera = workspace:FindFirstChildWhichIsA("Camera") or false
+        local Character = Player.Character
+        local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
+        local RootPart = Humanoid and Humanoid.RootPart or Character and Character:FindFirstChild("HumanoidRootPart")
+        local PrimaryPart = Character and Character.PrimaryPart
+        local BasePart = Character and Character:FindFirstChildWhichIsA("BasePart", true)
+        local Camera = workspace.CurrentCamera
 
-        local OldPos
-        
-        if RootPart then
-            OldPos = RootPart.CFrame
-        elseif PrimaryPart then
-            OldPos = PrimaryPart.CFrame
-        elseif BasePart then
-            OldPos = BasePart.CFrame
-        elseif Camera then
-            OldPos = Camera.Focus
-        end
+        local OldPos = RootPart and RootPart.CFrame or PrimaryPart and PrimaryPart.CFrame or BasePart and BasePart.CFrame or Camera and Camera.Focus
 
         queue_on_teleport(string.format([[
             if not game:IsLoaded() then
@@ -813,12 +797,12 @@ AddButton(function(Name)
 
             repeat
                 RootPart.CFrame = CFrame.new(%s)
-                RootPart.Velocity = Vector3.zero
+                RootPart.AssemblyLinearVelocity = Vector3.zero
                 task.wait()
             until RootPart.CFrame ~= CurrentPos
         ]], tostring(OldPos)))
         
-        Player:Kick("...")
+        Player:Kick()
         
         task.spawn(function()
             local PromptGui = CoreGui:WaitForChild("RobloxPromptGui")
@@ -828,20 +812,18 @@ AddButton(function(Name)
             while true do
                 for i = 1, 3 do
                     ErrorMessage.Text = "You are currently reconnecting to this game"..string.rep(".", i).."\n".."PlaceId: "..game["PlaceId"]
-                    wait(1)
+                    task.wait(1)
                 end
             end
         end)
         
-        for _ = 1, 30 do
-            for i = 1, 10 do
-                if #Players:GetPlayers() <= 1 then
-                    TeleportService:Teleport(game["PlaceId"])
-                else
-                    TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
-                end
+        for i = 1, 10 do
+            if #Players:GetPlayers() <= 1 then
+                TeleportService:TeleportReconnect()
+            else
+                TeleportService:TeleportToPlaceInstance(game["PlaceId"], game["JobId"])
             end
-            task.wait()
+            task.wait(.25)
         end
     end)
 end, "RejoinRe")
