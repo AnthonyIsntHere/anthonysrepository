@@ -1,6 +1,6 @@
 -- Made by AnthonyIsntHere
 -- Flings everyone using hats
-local PermDeath = false -- if set to true you can reset like normal to actually reset
+local PermDeath = false -- perm death has been patched so just ignore this lol
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
