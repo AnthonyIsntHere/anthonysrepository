@@ -11,3 +11,15 @@ for _, x in next, workspace:GetDescendants() do
         x.CanTouch, x.CanQuery = false, false
     end
 end
+
+workspace.DescendantAdded:Connect(function(x)
+    if x:IsA("TouchTransmitter") then
+        repeat task.wait() until x:IsDescendantOf(workspace)
+        x:Destroy()
+        continue
+    end
+
+    if x:IsA("BasePart") and (x.CanTouch or x.CanQuery) then
+        x.CanTouch, x.CanQuery = false, false
+    end
+end
