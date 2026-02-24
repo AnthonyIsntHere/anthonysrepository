@@ -18,12 +18,12 @@
 
 ![9a46e49aedecb4fca51f7e85dd2f3474](https://github.com/user-attachments/assets/58002fdb-24bb-4128-8dd7-2149d86ca400)
 
+## sizeof.cat archive
+[data-leaks](https://gist.github.com/fvariable/fa77b53ea7faf901d86bc4262ceab055)
+
 ## Socials
 - My Roblox account is [AnthonyIsntHere](https://www.roblox.com/users/1414978355/profile)
-- My Discord Id is `<@459112026514653194>`
-  
-## Goals
-- To assist scripters in lego hacking by sharing my knowledge
+- My Discord Id is `<@1137899835048083466>`
 
 ## My best friend is [ArianWhite](https://www.roblox.com/users/3765830855/profile)
 <img width="587" height="514" alt="Screenshot_1" src="https://github.com/user-attachments/assets/078468b8-ef0d-4fe8-b38e-c92917e3bea1" />
