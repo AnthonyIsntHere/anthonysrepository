@@ -1,11 +1,11 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- In the process of fixing 2.1.2026
+-- Working as of 3.6.2026
 local ProtectedInstances = {}
 
 local _Instance = Instance.new
 local _tostring = tostring
-local MetatableInfo, MetatableInfo
+local Metatable, Metamethods
 
 local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newcclosure(function(...)
 	if checkcaller() then
