@@ -1,6 +1,6 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- Working as of 3.6.2026
+-- Working as of 3.7.2026
 local ProtectedInstances = {}
 
 local _Instance = Instance.new
@@ -31,14 +31,14 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
                 local Method = getnamecallmethod()
 
                 if ProtectedInstances[self] then
-                    return
+                    return false
                 end
 
                 if typeof(Method) == "string" and Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
                     local Instance = Metamethods.__namecall(self, ...)
 
                     if Instance and ProtectedInstances[Instance] then
-                        return
+                        return false
                     end
                 end
             end
@@ -58,7 +58,7 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
 
                             local Instance = IndexFunction(self, Arguments[2])
                             if Instance and ProtectedInstances[Instance] or ProtectedInstances[self] then
-                                return
+                                return false
                             end
                         end)))
                     end
@@ -66,7 +66,7 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
             end
 
             if ProtectedInstances[self] and typeof(Metamethods.__index(self, index)) ~= "function" and not checkcaller() then
-                return
+                return false
             end
 
             return Metamethods.__index(self, index)
@@ -84,7 +84,7 @@ local tostringHook; tostringHook = hookfunction(_tostring, clonefunction(newcclo
 		local String = tostringHook(...)
 
 		if ProtectedInstances[Arguments[1]] then
-			return
+			return ""
 		end
 	end
 
@@ -126,8 +126,8 @@ for _, Thread in next, getactorthreads() do
                 local Arguments = {...}
                 local String = tostringHook(...)
 
-                if Arguments[1] and PreviousIndex(Arguments[1], "DefinesCapabilities") == true then
-                    return
+                if Arguments[1] and typeof(Arguments[1]) == "Instance" and gethiddenproperty(Arguments[1], "DefinesCapabilities") then
+                    return false
                 end
             end
 
@@ -142,14 +142,14 @@ for _, Thread in next, getactorthreads() do
             if not checkcaller() then
                 setthreadidentity(8)
 
-                if PreviousIndex(self, "DefinesCapabilities") then
+                if gethiddenproperty(self, "DefinesCapabilities") then
                     return
                 end
 
                 if typeof(Method) == "string" and Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
                     local Instance = PreviousNamecall(self, ...)
 
-                    if Instance and PreviousIndex(Instance, "DefinesCapabilities") then
+                    if Instance and gethiddenproperty(Instance, "DefinesCapabilities") then
                         return
                     end
                 end
