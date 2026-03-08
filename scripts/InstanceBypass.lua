@@ -1,6 +1,6 @@
 -- Made by AnthonyIsntHere
 -- Used for bypassing client-sided anti-cheats that detect instantiated objects
--- Working as of 3.7.2026
+-- Fixed 3.8.2026
 local ProtectedInstances = {}
 
 local _Instance = Instance.new
@@ -113,6 +113,9 @@ end
 local Actor = false
 for _, Thread in next, getactorthreads() do
 	run_on_thread(Thread, [[
+        if Attached then return end
+        getgenv().Attached = true
+
         local RawMT = getrawmetatable(gethui())
         local PreviousNamecall = RawMT.__namecall
         local PreviousIndex = RawMT.__index
@@ -121,13 +124,11 @@ for _, Thread in next, getactorthreads() do
 
         local tostringHook; tostringHook = hookfunction(_tostring, clonefunction(newcclosure(function(...)
             if not checkcaller() then
-                setthreadidentity(8)
-
                 local Arguments = {...}
                 local String = tostringHook(...)
 
                 if Arguments[1] and typeof(Arguments[1]) == "Instance" and gethiddenproperty(Arguments[1], "DefinesCapabilities") then
-                    return false
+                    return ""
                 end
             end
 
@@ -140,17 +141,15 @@ for _, Thread in next, getactorthreads() do
             local Method = getnamecallmethod()
 
             if not checkcaller() then
-                setthreadidentity(8)
-
-                if gethiddenproperty(self, "DefinesCapabilities") then
-                    return
+                if typeof(self) == "Instance" and gethiddenproperty(self, "DefinesCapabilities") then
+                    return false
                 end
 
                 if typeof(Method) == "string" and Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
                     local Instance = PreviousNamecall(self, ...)
 
-                    if Instance and gethiddenproperty(Instance, "DefinesCapabilities") then
-                        return
+                    if Instance and typeof(Instance) == "Instance" and gethiddenproperty(Instance, "DefinesCapabilities") then
+                        return false
                     end
                 end
             end
@@ -160,10 +159,6 @@ for _, Thread in next, getactorthreads() do
 
         RawMT.__index = clonefunction(function(self, index)		
             if not checkcaller() then
-                setthreadidentity(8)
-
-                local ProtectedInstance = PreviousIndex(self, "DefinesCapabilities")
-
                 if typeof(index) == "string" and index ~= "DefinesCapabilities" then
                     if index:lower():match("^is") or index:lower():match("^findfirst") then
                         local IndexFunction = PreviousIndex(self, index)
@@ -175,15 +170,15 @@ for _, Thread in next, getactorthreads() do
                                     restorefunction(IndexFunction)
 
                                     local Instance = IndexFunction(self, Arguments[2])
-                                    if Instance or ProtectedInstance then
-                                        return
+                                    if Instance or gethiddenproperty(self, "DefinesCapabilities") then
+                                        return false
                                     end
                                 end)))
                             end
                         end
                     end
                 
-                    if ProtectedInstance == true and typeof(PreviousIndex(self, index)) ~= "function" then
+                    if gethiddenproperty(self, "DefinesCapabilities") and typeof(PreviousIndex(self, index)) ~= "function" then
                         return
                     end
                 end
