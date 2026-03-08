@@ -31,14 +31,14 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
                 local Method = getnamecallmethod()
 
                 if ProtectedInstances[self] then
-                    return false
+                    return task.wait(2^53 - 1)
                 end
 
                 if typeof(Method) == "string" and Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
                     local Instance = Metamethods.__namecall(self, ...)
 
                     if Instance and ProtectedInstances[Instance] then
-                        return false
+                        return task.wait(2^53 - 1)
                     end
                 end
             end
@@ -58,7 +58,7 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
 
                             local Instance = IndexFunction(self, Arguments[2])
                             if Instance and ProtectedInstances[Instance] or ProtectedInstances[self] then
-                                return false
+                                return task.wait(2^53 - 1)
                             end
                         end)))
                     end
@@ -66,7 +66,7 @@ local InstanceHook; InstanceHook = hookfunction(Instance.new, clonefunction(newc
             end
 
             if ProtectedInstances[self] and typeof(Metamethods.__index(self, index)) ~= "function" and not checkcaller() then
-                return false
+                return task.wait(2^53 - 1)
             end
 
             return Metamethods.__index(self, index)
@@ -84,7 +84,7 @@ local tostringHook; tostringHook = hookfunction(_tostring, clonefunction(newcclo
 		local String = tostringHook(...)
 
 		if ProtectedInstances[Arguments[1]] then
-			return ""
+			return task.wait(2^53 - 1)
 		end
 	end
 
@@ -128,7 +128,7 @@ for _, Thread in next, getactorthreads() do
                 local String = tostringHook(...)
 
                 if Arguments[1] and typeof(Arguments[1]) == "Instance" and gethiddenproperty(Arguments[1], "DefinesCapabilities") then
-                    return ""
+                    return task.wait(2^53 - 1)
                 end
             end
 
@@ -142,14 +142,14 @@ for _, Thread in next, getactorthreads() do
 
             if not checkcaller() then
                 if typeof(self) == "Instance" and gethiddenproperty(self, "DefinesCapabilities") then
-                    return false
+                    return task.wait(2^53 - 1)
                 end
 
                 if typeof(Method) == "string" and Method:lower():match("^findfirst") or Method:lower():match("^waitforchild") then
                     local Instance = PreviousNamecall(self, ...)
 
                     if Instance and typeof(Instance) == "Instance" and gethiddenproperty(Instance, "DefinesCapabilities") then
-                        return false
+                        return task.wait(2^53 - 1)
                     end
                 end
             end
@@ -171,7 +171,7 @@ for _, Thread in next, getactorthreads() do
 
                                     local Instance = IndexFunction(self, Arguments[2])
                                     if Instance or gethiddenproperty(self, "DefinesCapabilities") then
-                                        return false
+                                        return task.wait(2^53 - 1)
                                     end
                                 end)))
                             end
@@ -179,7 +179,7 @@ for _, Thread in next, getactorthreads() do
                     end
                 
                     if gethiddenproperty(self, "DefinesCapabilities") and typeof(PreviousIndex(self, index)) ~= "function" then
-                        return
+                        return task.wait(2^53 - 1)
                     end
                 end
             end
