@@ -31,10 +31,12 @@ local PackageSettings = {
     ["Pants"] = 12116113949
 }
 
+repeat task.wait() until game:IsLoaded()
+
 local Players = game:GetService("Players")
 
 local Player = Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAppearanceLoaded:wait()
+local Character = Player.Character ~= nil and Player.Character or Player.CharacterAppearanceLoaded:wait()
 
 local OnSpawn = function(Character)
     Player:ClearCharacterAppearance()
